@@ -44,4 +44,4 @@ In the main repo directory run:
 
 1. `bundle install --path vendor/bundle`
 2. `bundle exec jekyll server` (run the web server)
-3. View web page, probably at: http://127.0.0.1:4000/hpc_training/
+3. View web page, probably at: http://127.0.0.1:4000/perf-training/
