@@ -1,0 +1,59 @@
+---
+layout: default
+---
+
+<div class="home">
+
+    <h2 class="page-heading">{{ page.title }}</h2>
+
+    {{ content }}
+
+    {% assign numpre = 0 %}
+    {% for lesson in site.lessons %}
+        {% if lesson.chapter == page.chapter %}
+            {% if lesson.tags contains 'prerequisite' %}
+                {% assign numpre = numpre | plus:1 %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% if numpre > 0 %}
+        Prerequisites:
+        <ol>
+            {% for lesson in site.lessons  %}
+                {% if lesson.chapter == page.chapter %}
+                    {% if lesson.tags contains 'prerequisite' %}
+                        <li>
+                            <a href="{{ lesson.url | relative_url }}">{{ lesson.title | escape }}</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </ol>
+    {% endif %}
+
+    Lessons:
+    <ol>
+        {% for lesson in site.lessons  %}
+            {% if lesson.chapter == page.chapter %}
+                {% unless lesson.tags contains 'prerequisite' %}
+                    <li>
+                        <a href="{{ lesson.url | relative_url }}">{{ lesson.title | escape }}</a>
+                    </li>
+                {% endunless %}
+            {% endif %}
+        {% endfor %}
+    </ol>
+
+    <ul class="post-list">
+        {% for item in site.code  %}
+            {% if item.chapter == page.chapter %}
+                <li>
+                    <h4>
+                        <a class="post-link" href="{{ item.url | relative_url }}">{{ item.title | escape }}</a>
+                    </h4>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>

@@ -1,0 +1,19 @@
+---
+layout: default
+---
+
+<div class="home">
+
+  <h2 class="page-heading">Sections</h2>
+
+  {{ content }}
+
+  <ul>
+    {% assign sorted_sections = site.pages | where:"layout", "section" | sort: 'order' %}
+    {% for section in sorted_sections %}
+        <li>
+            <a href="{{ section.url | relative_url }}">{{ section.title | escape }}</a>
+        </li>
+    {% endfor %}
+  </ul>
+</div>

@@ -1,0 +1,40 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
+  <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
+
+<!--  <link rel="stylesheet" type="text/css" href="{{ page.url | replace:'index.html','' | absolute_url }}/assets/main.css" />  -->
+<!--  <link rel="stylesheet" href="https://nesi.github.io/hpc_training/assets/main.css">  -->
+<link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/assets/main.css" />
+
+
+  <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ "/feed.xml" | relative_url }}">
+
+    <!-- add border around tables -->
+    <style>
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            border:2px solid #000000;
+        }
+
+        th {
+            border:2px solid #000000;
+        }
+
+        td {
+            border:1px solid #000000;
+        }
+    </style>
+
+  {% if jekyll.environment == 'production' and site.google_analytics %}
+  {% include google-analytics.html %}
+  {% endif %}
+  <!-- Start of nesi Zendesk Widget script -->
+  <script async="async" id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=27bb1239-2f9a-4a04-b53f-b92f22560adc"> </script>
+  <!-- End of nesi Zendesk Widget script -->
+</head>
