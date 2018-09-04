@@ -24,7 +24,7 @@ View the content here:
 3. Make sure `chapter` matches the chapter that was set in the corresponding
    section file.
 
-### Viewing locally
+### Viewing HTML pages locally
 
 Ruby and bundler are required.
 
