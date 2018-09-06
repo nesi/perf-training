@@ -60,7 +60,7 @@ Now view *output.png* by copying it to your local machine or running
 
 It should look something like this:
 
-![profiling-results](images/scatter-profile.png)
+[![profiling-results](images/scatter-profile.png)](images/scatter-profile.png)
 
 ### Interpreting the *gprof2dot* output
 
