@@ -18,7 +18,7 @@ View the content here:
 
 ### Adding a new lesson
 
-1. Create a new file in the *sections/<section_name>/* folder, based on files
+1. Create a new file in the *_lessons/<section_name>/* folder, based on files
    that are already there.
 2. Make sure the `permalink` is unique.
 3. Make sure `chapter` matches the chapter that was set in the corresponding
