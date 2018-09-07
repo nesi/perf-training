@@ -19,8 +19,8 @@ The training will be based on the *scatter* code.
 Clone and switch to the repository:
 
 ```
-git clone https://github.com/pletzer/scatter.git ~/scatter
-cd ~/scatter
+git clone https://github.com/pletzer/scatter.git scatter
+cd scatter
 ```
 
 This code uses Python. On Mahuika load the Python module:
