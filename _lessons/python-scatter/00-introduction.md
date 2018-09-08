@@ -21,6 +21,7 @@ Clone and switch to the repository:
 ```
 git clone https://github.com/pletzer/scatter.git scatter
 cd scatter
+git fetch --all
 ```
 
 This code uses Python. On Mahuika load the Python module:

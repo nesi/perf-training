@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Profiling
-permalink: /python-scatter/profiling
+title: Vectorising
+permalink: /python-scatter/vectorising
 chapter: python-scatter
 ---
 
@@ -58,15 +58,16 @@ The aim here is to replace the above `for` loop by a set of `numpy` calls, which
 
 First start by replacing scalar quantities with arrays of dimensions `n` and 3-vectors with arrays of size `n` times 3. Next apply element by element operations and reduction operations (e.g. `numpy.sum`) to compute each individual contribution. 
 
-The branch `vectorized` 
+Switch to the `vectorise` branch:
 ```
-git pull https://github.com/pletzer/scatter vectorized
-git checkout vectorized
+git checkout vectorise
 ```
-has a modified version of the scatter code.  
+which has a modified version of the scatter code.  
 
 ## Exercise
 
-Report the performance improvement of the vectorized branch over master. 
+ * In scatter.py, vectorise the `isInsideContour` function by eliminating the loop and working directly on the `xc` and `yc` arrays
+ 
+ * Report the performance improvement of the vectorized branch over master. 
 
 

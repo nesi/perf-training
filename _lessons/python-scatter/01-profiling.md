@@ -29,7 +29,7 @@ Need to add content
 Gather profiling information and store in the file *output.pstats*:
 
 ```
-python -m cProfile -o output.pstats scatter.py -nx 100 -ny 200 -ns 64 -xc "cos(2*pi*t)" -yc "sin(2*pi*t)" -lambda 0.3
+python -m cProfile -o output.pstats scatter.py -nx 100 -ny 200 -nc 64 -xc "cos(2*pi*t)" -yc "sin(2*pi*t)" -lambda 0.3
 ```
 
 **Note:** the code will take longer to run when profiling is enabled.
@@ -137,7 +137,7 @@ identified as hotspots.
    ```
 2. Run *line_profiler*:
    ```
-   kernprof -l -v scatter.py -nx 100 -ny 200 -ns 64 -xc "cos(2*pi*t)" -yc "sin(2*pi*t)" -lambda 0.3
+   kernprof -l -v scatter.py -nx 100 -ny 200 -nc 64 -xc "cos(2*pi*t)" -yc "sin(2*pi*t)" -lambda 0.3
    ```
    The `-l` flag tells *line_profiler* to do line-by-line profiling and `-v`
    tells it to print the profiling information out at the end of the run.
