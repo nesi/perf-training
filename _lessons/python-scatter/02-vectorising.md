@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Profiling
-permalink: /python-scatter/profiling
+title: Vectorising
+permalink: /python-scatter/vectorising
 chapter: python-scatter
 ---
 
