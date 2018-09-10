@@ -32,6 +32,10 @@ This involves the following steps:
  2. Describe the interface. To call the C/C++ function you need to specify argument types and the return type. 
  3. Call the function in the shared library
 
+### Writing the external function 
+
+### Writing the `setup.py` file to compile the shared library
+
 ## Invoking C/C++ using ctypes
 
 ## Examples
