@@ -13,7 +13,7 @@ You will:
 
 * understand what vectorisation is
 * learn to recognise code that can benefit from vectorisation
-* leanr how to vectorise a loop
+* learn how to vectorise a loop
 
 ## What is vectorisation
 
@@ -21,18 +21,52 @@ Vectorisation is a programming style where operations are applied to multiple ar
 
 Vectorisation is applicable to loops and scripting languages are notoriously slow when it comes to executing loops. Hence the benefit of vectorisation is even greater for scripting languages since it replaces loops with procedure calls that run at the speed of compiled code. 
 
-## Identifying code for potential vectorisation
+## Identifying code sections for vectorisation
 
-Start by looking for loops in your code. The larger the loop the better. Moreover:
+Start by looking for loops in your code. The larger the loop the better.
 
  * the loop should have a pre-defined number of iterations with no premature exit condition. `For` loops are good, `while` loops are not good candidates. 
  * iterations should not depend on the previous iteration. Time stepping loops are typically not appropriate because each time step depends on the previous time step.
  * the loop should not have many if statements, which could cause some iterations to take longer than others
+ * there should be a significant number of iterations, ideally hundreds or more
 
- Good candidates are loops where the same function is applied to each element or a reduction operation is applied to the array. For instance the sum of all the elements of an array can be vectorised. (The sum does not depend on the order in which the elements are added.) The "dot" product between matrices is another good example of a reduction operation that can be vectorised. 
+ Good candidates are loops where the same function is applied to each element or a reduction operation is applied to the array. When considering nested loops, start by vectorising the inner most loop.
 
- When considering nested loops, start by vectorising the inner most loop.
 
+### Example 1: function applied to each array element
+
+Consider
+```
+import numpy
+n = 10000000
+a = numpy.zeros((n,), numpy.float64)
+for i in range(n):
+  a[i] = numpy.sin(i)
+```
+This can be rewritten as
+```
+import numpy
+n = 10000000
+a = numpy.sin(numpy.linspace(0, n))
+```
+The second, vectorised version will run about 10 times faster.
+
+### Example 2: total sum
+
+```
+import numpy
+n = 10000000
+s = 0
+for i in range(n):
+  sum += i
+```
+can be rewritten as
+```
+import numpy
+n = 10000000
+s = numpy.linspace(0, n).sum()
+```
+As in the previous case, the vectorised code is more concise. The `for` loop has disappeared from the Python code, having been moved to C code.
 
 ## Vectorising the scatter code
 
