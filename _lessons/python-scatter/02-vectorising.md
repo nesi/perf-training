@@ -107,6 +107,6 @@ where `dsdt`, `g`, etc. are all arrays of size `n - 1`.
 
  * In scatter.py, vectorise the `isInsideContour` function by eliminating the loop and working directly on the `xc` and `yc` arrays
  
- * Report the performance improvement of the vectorized branch over master. 
+ * Report the performance improvement of the vectorised branch over the non-vectorised, master branch. 
 
 
