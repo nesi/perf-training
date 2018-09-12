@@ -17,18 +17,20 @@ You will:
 
 ## What is vectorisation
 
-Vectorisation is a programming style where operations are applied to multiple array elements at one time. Modern computer hardware is designed to work very efficiently on arrays through native support for vector operations (e.g. AVX-512). In the case of AVX-512, up to 8 instructions can be executed simultaneously and this provide a first level or parallelism, before other approaches (OpenMP, GPU) are attempted. 
+Vectorisation is a programming style where loops are replaced by operations on arrays.
 
-Vectorisation is applicable to loops and scripting languages are notoriously slow when it comes to executing loops. Hence the benefit of vectorisation is even greater for scripting languages since it replaces loops with procedure calls that run at the speed of compiled code. 
+In scripting languages, loops can be slow to execute because of the overhead of the interpreter which needs to parse each instruction. Vectorisation removes the loop and replaces it with a set of array operations, which are exectuted once. This can significantly boost performance. 
+
+Modern computer hardware is highly optimised to work on arrays. Depending on the hardware, up to 8 or more instructions can be executed simultaneously on different array elements for every CPU clock tick. This provides a first level or parallelism, before other approaches (OpenMP, GPU) are to be attempted.
 
 ## Identifying code sections for vectorisation
 
 Start by looking for loops in your code. The larger the loop the better.
 
- * the loop should have a pre-defined number of iterations with no premature exit condition. `For` loops are good, `while` loops are not good candidates. 
- * iterations should not depend on the previous iteration. Time stepping loops are typically not appropriate because each time step depends on the previous time step.
- * the loop should not have many if statements, which could cause some iterations to take longer than others
- * there should be a significant number of iterations, ideally hundreds or more
+ * the loop should have a pre-defined number of iterations with no premature exit condition. `For` loops, as opposed to `while` loops, are good candidates. 
+ * each iteration in the loop should not depend on any previous iteration.
+ * it is best not to have many `if` statements inside the loop as these could cause some iterations to take longer than others
+ * the more iterations the better
 
  Good candidates are loops where the same function is applied to each element or a reduction operation is applied to the array. When considering nested loops, start by vectorising the inner most loop.
 
@@ -66,9 +68,14 @@ import numpy
 n = 10000000
 s = numpy.linspace(0, n).sum()
 ```
-As in the previous case, the vectorised code is more concise. The `for` loop has disappeared from the Python code, having been moved to C code.
+As in the previous case, the vectorised code is more concise.
 
 ## Vectorising the scatter code
+
+We have written a partially vectorised version of `scatter`
+```
+git checkout vectorise
+```
 
 There are three nested loops: (1) iteration over the y cells, (2) iteration over the x cells and (3) adding the contributions from each segment:
 ```python
@@ -78,7 +85,7 @@ for j in range(ny + 1):
     ...
     scat[j, i] = wave.computeScatteredWave(kvec, xc, yc, p)
 ```
-in scatter.py.  The inner most loop `wave.computeScatteredWave` is:
+in scatter.py.  The inner most loop is in `wave.computeScatteredWave`:
 ```python
   res = 0j
   n = len(xc)
@@ -86,17 +93,15 @@ in scatter.py.  The inner most loop `wave.computeScatteredWave` is:
     ...
     res += computeScatteredWaveElement(kvec, p0, p1, point)
 ```
-where `n - 1` is the number of segments. We see that `res` adds the scattered wave contributions from each segment. These contributions can be added in any order. 
-
-The aim here is to replace the above `for` loop by a set of `numpy` calls, which work with arrays instead of scalar numbers. 
-
-First start by replacing scalar quantities with arrays of dimensions `n` and 3-vectors with arrays of size `n` times 3. Next apply element by element operations and reduction operations (e.g. `numpy.sum`) to compute each individual contribution. 
-
-Switch to the `vectorise` branch:
+Here `n - 1` is the number of segments. We see that `res` adds the scattered wave contributions from each segment and these can be added in any order. The trick is to 
+remove the loop is index `i0` by a sum:
 ```
-git checkout vectorise
+    ...
+    return numpy.sum( dsdt * (-g * gradIncident(kvec, nDotK, pmid) + \
+                              shadow * dgdn * incident(kvec, pmid)) )  
 ```
-which has a modified version of the scatter code.  
+where `dsdt`, `g`, etc. are all arrays of size `n - 1`. 
+
 
 ## Exercise
 
