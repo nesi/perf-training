@@ -21,16 +21,15 @@ Vectorisation is a programming style where loops are replaced by operations on a
 
 In scripting languages, loops can be slow to execute because of the overhead of the interpreter which needs to parse each instruction, often many times when executed within a loop. Vectorisation removes the loop and replaces it with a set of array operations, which are exectuted once. This can significantly boost performance. 
 
-Even in the case of a compiled language, vectorisation can significantly accelerate a code because modern computer hardware tends to be highly optimised for array operations. Depending on the hardware, up to 8 or more instructions can be executed simultaneously on different array elements for every CPU clock cycle. This provides a first level or parallelism, a first step before trying other approaches (OpenMP, GPU).
+Even in the case of a compiled language, vectorisation can significantly accelerate a code because modern computer hardware tends to be highly optimised for array operations. Depending on the hardware, up to 8 or more instructions can be executed simultaneously on different array elements for every CPU clock cycle. This provides a first level or parallelism, a step before trying other approaches (OpenMP, GPU).
 
 ## Identifying code sections for vectorisation
 
-Start by looking for loops in your code. The larger the loop the better.
+Start by looking for loops in your code. The more iterations the better. 
 
  * the loop should have a pre-defined number of iterations with no premature exit condition. `For` loops can more easily be vectorised than `while` loops. 
- * each iteration in the loop should not depend on any previous iteration (no loop dependence). One should be able to execute a loop in any order.
- * it is best not to have many `if` statements inside the loop as these could cause some iterations to take longer than others
- * the more iterations the better
+ * each iteration in the loop should not depend on any previous iteration (no loop dependence). One should be able to execute the iterations in any order.
+ * it is best not to have `if` statements inside the loop as these could cause some iterations to take longer than others
 
 Good candidates are loops where the same function is applied to each element or a reduction operation is applied to the array. When considering nested loops, start by vectorising the inner most loop.
 
@@ -39,7 +38,7 @@ Array operations are available through the `numpy` Python module. Numpy arrays d
  * numpy arrays require each element of the array to have the same type
  * numpy arrays have a fixed size and are not suited for cases where elements are added or removed
 
-On the other hand numpy arrays support elementwise operations and Python code using large numpy arrays can expect to run in par with C code. 
+On the other hand numpy arrays support elementwise operations and Python code using large numpy arrays can expect to run on par with C code. 
 
 ### Example 1: function applied to each array element
 
@@ -85,7 +84,7 @@ git checkout vectorise
 
 There are several nested loops:
 ```python
-# iteration of y cells
+# iteration over y cells
 for j in range(ny + 1):
   ...
   # iteration over x cells
@@ -103,7 +102,7 @@ The inner most loop is in `wave.computeScatteredWave`:
     ...
     res += computeScatteredWaveElement(kvec, p0, p1, point)
 ```
-Here `n - 1` is the number of segments. We see that `res` adds the scattered wave contributions from each segment describing the geometry of the obstacle. These contributions can be added in any order. The vectorised version replaced the loop with index `i0` by a sum:
+Here `n - 1` is the number of segments describing the geometry of the obstacle. We see that `res` adds the scattered wave contributions from each segment. These contributions can be added in any order. The vectorised version replaced the loop with index `i0` by a sum:
 ```python
     ...
     return numpy.sum( dsdt * (-g * gradIncident(kvec, nDotK, pmid) + \

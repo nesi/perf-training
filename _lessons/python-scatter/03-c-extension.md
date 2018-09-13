@@ -22,7 +22,7 @@ There are multiple ways this can be achieved - we encourage you to look at *Cyth
 
 ## Learn the basics 
 
-As an example, we'll assume that you have to compute the sum of all the elements of a very large array. Let's assume you have written a C++ extension
+As an example, we'll assume that you have to compute the sum of all the elements of a very large array. Let's assume you have written a C++ extension for that purpose
 ```C++
 extern "C"
 double mysum(int n, double* array) {
