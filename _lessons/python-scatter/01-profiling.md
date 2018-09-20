@@ -23,13 +23,17 @@ Need to add content
 * suitable cases for profiling...
 * general profiling advice...
 
+We'll use the code in directory `original`. Start by
+```
+cd original
+```
 
 ## Profiling Python code with *cProfile*
 
 Gather profiling information and store in the file *output.pstats*:
 
 ```
-python -m cProfile -o output.pstats scatter.py -nx 100 -ny 200 -nc 64 -xc "cos(2*pi*t)" -yc "sin(2*pi*t)" -lambda 0.3
+python -m cProfile -o output.pstats scatter.py
 ```
 
 **Note:** the code will take longer to run when profiling is enabled.
@@ -87,11 +91,11 @@ What to look for:
 
 * Typically you would look for functions that have a lot of *self* time (the
   number in brackets). We call these functions *hotspots*.
-  - 38.94% of total time is spent in `computeScatteredWaveElement` (the red
+  - 58.31% of total time is spent in `computeScatteredWaveElement` (the red
     box), so this would be a good place to start when trying to optimise this
     code.
 * Sometimes functions show up from libraries that you call (e.g. *scipy* or
-  *numpy*), for example the green box calling `cross` that takes 21.19% total
+  *numpy*), for example the green box calling `dot` that takes 10.82% total
   time.
   - Usually you don't want to change code from external libraries, but you can
     look at your functions that call that function, by going back along the
@@ -115,7 +119,7 @@ functions.
 **Note:** *line_profiler* is installed in the Python module we loaded earlier.
 You can check it is installed by running `kernprof --help`, which should print
 help information for the `kernprof` (*line_profiler*) program that we are going
-to use.
+to use. (If not then `pip install line_profiler`.)
 
 To demonstrate the use of *line_profiler* we will use it to profile the
 `isInsideContour` function.
@@ -137,7 +141,7 @@ identified as hotspots.
    ```
 2. Run *line_profiler*:
    ```
-   kernprof -l -v scatter.py -nx 100 -ny 200 -nc 64 -xc "cos(2*pi*t)" -yc "sin(2*pi*t)" -lambda 0.3
+   kernprof -l -v scatter.py
    ```
    The `-l` flag tells *line_profiler* to do line-by-line profiling and `-v`
    tells it to print the profiling information out at the end of the run.
@@ -150,32 +154,45 @@ Detailed documentation about *line_profiler* can be found
 You should see something like this after *line_profiler* has run:
 
 ```
+
 Wrote profile results to scatter.py.lprof
 Timer unit: 1e-06 s
 
-Total time: 14.9237 s
+Total time: 16.5079 s
 File: scatter.py
-Function: isInsideContour at line 26
+Function: isInsideContour at line 28
 
 Line #      Hits         Time  Per Hit   % Time  Line Contents
 ==============================================================
-    26                                           @profile
-    27                                           def isInsideContour(p, xc, yc):
-    28     20301        24264      1.2      0.2  	tot = 0.0
-    29   1319565       930299      0.7      6.2  	for i0 in range(len(xc) - 1):
-    30   1299264       889747      0.7      6.0  		i1 = i0 + 1
-    31   1299264      4746461      3.7     31.8  		a = numpy.array([xc[i0], yc[i0]]) - p[:2]
-    32   1299264      4402325      3.4     29.5  		b = numpy.array([xc[i1], yc[i1]]) - p[:2]
-    33   1299264      3889319      3.0     26.1  		tot += math.atan2(a[0]*b[1] - a[1]*b[0], a.dot(b))
-    34     20301        17385      0.9      0.1  	tot /= twoPi
-    35     20301        23947      1.2      0.2  	return (abs(tot) > 0.1)
-```
+    28                                           @profile
+    29                                           def isInsideContour(p, xc, yc, tol=0.01):
+    30                                               """
+    31                                               Check is a point is inside closed contour by summing the 
+    32                                               the angles between point p, (xc[i], yc[i]) and (xc[i+1], yc[i+1]).
+    33                                               Point p id declared to be inside if the total angle amounts to 
+    34                                               2*pi.
+    35                                           
+    36                                               @param p point (2d array)
+    37                                               @param xc array of x points, anticlockwise and must close
+    38                                               @param yc array of y points, anticlockwise and must close
+    39                                               @param tol tolerance
+    40                                               @return True if p is inside, False otherwise
+    41                                               """
+    42     16641      14072.0      0.8      0.1      tot = 0.0
+    43   2146689     984225.0      0.5      6.0      for i0 in range(len(xc) - 1):
+    44   2130048     971130.0      0.5      5.9          i1 = i0 + 1
+    45   2130048    5104259.0      2.4     30.9          a = numpy.array([xc[i0], yc[i0]]) - p[:2]
+    46   2130048    4860154.0      2.3     29.4          b = numpy.array([xc[i1], yc[i1]]) - p[:2]
+    47   2130048    4548639.0      2.1     27.6          tot += math.atan2(a[0]*b[1] - a[1]*b[0], a.dot(b))
+    48     16641      10751.0      0.6      0.1      tot /= twoPi
+    49     16641      14653.0      0.9      0.1      return (abs(tot) > tol)
+    ```
 
 * Line numbers and the contents of each line are shown
 * The "% Time" column is useful; it shows the percentage of time in that
   function that was spent on that line
 * "Hits" shows the number of times that line was run
-* We can see that lines 31, 32 and 33 each take around 30% of the time spent
+* We can see that lines 45, 46 and 47 each take around 30% of the time spent
   in this function.
 
 ## Do we want a section on memory_profiler too?
