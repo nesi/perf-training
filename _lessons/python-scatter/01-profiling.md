@@ -154,7 +154,6 @@ Detailed documentation about *line_profiler* can be found
 You should see something like this after *line_profiler* has run:
 
 ```
-
 Wrote profile results to scatter.py.lprof
 Timer unit: 1e-06 s
 
@@ -186,7 +185,7 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
     47   2130048    4548639.0      2.1     27.6          tot += math.atan2(a[0]*b[1] - a[1]*b[0], a.dot(b))
     48     16641      10751.0      0.6      0.1      tot /= twoPi
     49     16641      14653.0      0.9      0.1      return (abs(tot) > tol)
-    ```
+```
 
 * Line numbers and the contents of each line are shown
 * The "% Time" column is useful; it shows the percentage of time in that
