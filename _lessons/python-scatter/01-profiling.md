@@ -30,13 +30,18 @@ cd original
 
 ## Profiling Python code with *cProfile*
 
-Gather profiling information and store in the file *output.pstats*:
+Run the following command to profile the code:
 
 ```
 python -m cProfile -o output.pstats scatter.py
 ```
 
-**Note:** the code will take longer to run when profiling is enabled.
+Notice the `-m cProfile -o output.pstats` in the above command. This enables
+profiling and stores the profiling results in a file called *output.pstats*.
+If you leave out these options the code will just run normally.
+
+**Note:** the code will take longer to run when profiling is enabled, due to
+the overhead involved in collecting the profiling information.
 
 A nice way to visualise the  *output.pstats* file is with *gprof2dot*.
 
