@@ -11,38 +11,45 @@ chapter: python-scatter
 
 You will:
 
-* understand what vectorisation is
-* learn to recognise code that can benefit from vectorisation
-* learn how to vectorise a loop
+* understand what vectorisation is...
+* learn to recognise code that can benefit from vectorisation...
+* learn how to vectorise a loop...
+
+We'll use the code in directory `original`. Start by
+```
+cd vect
+```
 
 ## What is vectorisation
 
-Vectorisation is a programming style where loops are replaced by operations on arrays. Vectorisation typically improves the performance of a code.
+Vectorisation is a programming style where loops are replaced by operations on arrays. Vectorisation typically improves the performance of a code and can make the code more concise and easier to maintain.
 
-In scripting languages, loops can be slow to execute because of the overhead of the interpreter which needs to parse each instruction, often many times when executed within a loop. Vectorisation removes the loop and replaces it with a set of array operations, which are exectuted once. This can significantly boost performance. 
+In scripting languages, loops can be slow to execute because of the overhead of the interpreter, which needs to parse each instruction, often many times when executed within a loop. Vectorisation removes the loop and replaces it with array operations, which are exectuted once in Python. This can significantly boost performance. 
 
-Even in the case of a compiled language, vectorisation can significantly accelerate a code because modern computer hardware tends to be highly optimised for array operations. Depending on the hardware, up to 8 or more instructions can be executed simultaneously on different array elements for every CPU clock cycle. This provides a first level or parallelism, a step before trying other approaches (OpenMP, GPU).
+Even in the case of a compiled language, vectorisation can significantly accelerate a code because modern computer hardware tends to be highly optimised for array operations. Depending on the hardware, up to 8 or more instructions can be executed simultaneously for every CPU clock cycle. This provides a first level or parallelism, a step before trying other approaches (OpenMP, GPU).
 
 ## Identifying code sections for vectorisation
 
 Start by looking for loops in your code. The more iterations the better. 
 
  * the loop should have a pre-defined number of iterations with no premature exit condition. `For` loops can more easily be vectorised than `while` loops. 
- * each iteration in the loop should not depend on any previous iteration (no loop dependence). One should be able to execute the iterations in any order.
+ * each iteration in the loop should not depend on any previous iteration. One should be able to execute the iterations in any order.
  * it is best not to have `if` statements inside the loop as these could cause some iterations to take longer than others
 
-Good candidates are loops where the same function is applied to each element or a reduction operation is applied to the array. When considering nested loops, start by vectorising the inner most loop.
+Good candidates are loops where the same function is applied to each element or a reduction operation is applied to the entire array. 
 
-Array operations are available through the `numpy` Python module. Numpy arrays don't have all the flexibility of Python lists:
+When considering nested loops, start by vectorising the inner most loop.
 
- * numpy arrays require each element of the array to have the same type
- * numpy arrays have a fixed size and are not suited for cases where elements are added or removed
+Array operations are available through the `numpy` Python module. Numpy arrays in many respects behave like lists with the following caveats
 
-On the other hand numpy arrays support elementwise operations and Python code using large numpy arrays can expect to run on par with C code. 
+ * all array elements must have the same type (integer, float, etc.)
+ * the size of the array is no t altered, array elements cannot be easily added or removed
+
+On the other hand numpy arrays support elementwise operations and Python code using large numpy arrays can expect to run as fast as C code. 
 
 ### Example 1: function applied to each array element
 
-Consider computing the sine function of 10 million elements
+Consider computing the sine function of 10 million elements and storing the result in a list
 ```python
 import numpy
 n = 10000000
@@ -50,13 +57,14 @@ a = numpy.zeros((n,), numpy.float64)
 for i in range(n):
   a[i] = numpy.sin(i)
 ```
-This can be rewritten as
+
+The equivalent, vectorised version
 ```python
 import numpy
 n = 10000000
 a = numpy.sin(numpy.linspace(0, n - 1, n))
 ```
-The second, vectorised version will run about 10 times faster.
+runs about 10 times faster.
 
 ### Example 2: total sum
 
