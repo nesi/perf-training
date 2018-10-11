@@ -5,7 +5,6 @@ permalink: /python-scatter/vectorising
 chapter: python-scatter
 ---
 
-**Work in progress**
 
 ## Objectives
 
