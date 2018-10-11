@@ -5,7 +5,6 @@ permalink: /python-scatter/profiling
 chapter: python-scatter
 ---
 
-**Work in progress**
 
 ## Objectives
 
