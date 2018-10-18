@@ -31,13 +31,13 @@ In other scenarios, process 0 might communicate with process 1, process 1 with p
 
 ### Pros
 
- * suitable for distributed memory computers, including massively parallel architectures
- * viable approach if you don't have enough memory on a node
- * can be used in combination with OpenMP and other acceleration methods
+ * suitable for distributed memory computers, including massively parallel architectures with thousands of cores
+ * a viable approach if you don't have enough memory on a node
+ * can be used in combination with OpenMP and other parallelisation methods
 
 ### Cons
 
- * processes start at the begginning of the execution and terminate at the end - there are no serial sections in MPI code
+ * there are no serial sections in MPI code and hence MPI programs tend to be written to run in parallel from the beginning to the end
 
 ## How to use MPI to accelerate `scatter.py`
 
@@ -47,7 +47,10 @@ In other scenarios, process 0 might communicate with process 1, process 1 with p
 
 ## Exercises
 
- 1. 
- 2. 
+ 1. Implement the field computation in scatter.py after line `IMPLEMENT FIELD COMPUTATION HERE`. 
+
+ 2. Implement the field gather operation where all the fields values are assembled onto the root process. This is required for the checksum and save operations to work. 
+
+ 3. Measure the speedup compared to a single process execution
 
 
