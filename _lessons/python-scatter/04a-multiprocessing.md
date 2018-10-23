@@ -25,11 +25,11 @@ Multiprocessing is suitable when you have a large number of tasks to be executed
 ### Pros
 
  * A way to leverage multiple CPU cores for increased performance
- * Can handle different work loads
+ * Can handle different work load
 
 ### Cons
 
- * All processes must share memory - not suitable on different cluster nodes
+ * Processes must typically run on the same node
 
 ## Learn the basics 
 
