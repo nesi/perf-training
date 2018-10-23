@@ -56,7 +56,7 @@ How it works: each input value of array `input_values` is put in a queue and han
 
 ## Exercises
 
-We've created a version of `scatter.py` which takes `-nproc`, the number of processes, as command line argument.  In this version, the computation of the field values takes place in function 
+We've created a version of `scatter.py` which takes `-nproc`, the number of processes, as a command line argument.  In this version, the computation of the field values takes place in function 
 ```python
 def  computeField(k):
 	...
@@ -72,5 +72,5 @@ scat = numpy.array([r[1] for r in res], numpy.complex64).reshape((ny1, nx1))
 ```
 in parallel.
 
- 1. adapt the code in scatter.py to evaluate `computeField` in parallel
- 2. show the speedup with increasing number of processes
+1. adapt the code in scatter.py to evaluate `computeField` in parallel
+2. show the speedup with increasing number of processes
