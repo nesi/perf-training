@@ -21,12 +21,12 @@ cd openmp
 
 ## Why implement OpenMP parallelization
 
-On way to speed up your application is using the available resources more efficiently. This approach we used while porting our python code to C++ by removing the interpreter's overhead.
+On way to speed up your application is using the available resources more efficiently. This approach was used while porting our python code to C++ by removing the interpreter's overhead.
 Another way of improving performance is by using more resources. Most of modern computers have multi-core CPUs. Each of these cores can in principle compute instructions in parallel. All cores can access the same, shared memory so we will need to be careful about instructions stepping over each other (race condition).
 
 ## What is OpenMP
 
-OpenMP (Open Multi-Processing) is an application programming interface (API) for shared memory multiprocessing programming on various platforms in C, C++ and Fortran.  An OpenMP parallelized application starts as a serial application (on a single compute core). When defined by the programmer, the application spawns a certain amount of threads (which run on multiple cores). Thus, work can be distributed to a larger amount of resources. Just to note, OpenMP is also capable to parallelize on other architectures, like GPUs.
+OpenMP (Open Multi-Processing) is an application programming interface (API) for shared memory multiprocessing programming on various platforms in C, C++ and Fortran.  An OpenMP parallelised application starts as a serial application (on a single compute core). When defined by the programmer, the application spawns a number of threads (which run on multiple cores). Thus, work can be distributed to leverage more resources. Just to note, OpenMP can also parallelise on other architectures, like GPUs.
 
 ### Pros
 
@@ -51,7 +51,7 @@ OpenMP parallelisation is applied by the compiler and is controlled by the follo
 * Cray: OpenMP is enabled by default, use `-noopenmp` to disable OpenMP
 
 ### Directives
-OpenMP can be implemented using directives or/and the OpenMP Application Program Interface (API). The OpenMP API allows the programmer detailed control and provides extended functionality. Therefore, the programmer needs to refer and link the OpenMP library. For more information have a look to the latest [OpenMP standard](https://www.openmp.org/wp-content/uploads/openmp-4.5.pdf). Here we focus on OpenMP directives.
+OpenMP can be implemented using directives or/and the OpenMP Application Program Interface (API). The OpenMP API gives the programmer detailed control and provides extended functionality. Therefore, the programmer needs to refer and link the OpenMP library. For more information have a look at the latest [OpenMP standard](https://www.openmp.org/wp-content/uploads/openmp-4.5.pdf). Here we focus on OpenMP directives.
 
 Directives are comments in the source code, which can be interpreted by the compiler. Thus the same source code can be used to build a serial or threaded version of the application, distinguished by a compiler switch.
 
@@ -59,14 +59,13 @@ The OpenMP directives always start with:
 * C/C++: `#pragma omp`
 * Fortran (free form): `!$omp`
 
-These are followed by the _directive names_ and _clauses_, controlling parallelization and data handling. OpenMP directives can consist of multiple statements and can also be extended to multiple lines using line continuation statements (C/C++ using '\' at the end of the line; Fortran not described here).
+These are followed by the _directive names_ and _clauses_, controlling parallelization and data handling. OpenMP directives can consist of multiple statements and can also be extended to multiple lines using line continuation statements (C/C++ using '\' at the end of the line).
 There are various ways to distribute the workloads. The most common procedure is parallelising a loop. This is schematically presented in the following figure:
 [![example-mpi-gather](images/example_omp_threads.png)](images/example_omp_threads.png)
-The application always starts in serial. When requested, multiple threads are created/spawned. The amount of threads is determined by the environment variable `$OMP_NUM_THREADS`.
+The application always starts in serial. When requested, multiple threads are created/spawned. The number of threads is determined by the environment variable `$OMP_NUM_THREADS`.
 
 ### Data handling
-Because OpenMP is based upon the shared memory programming model, most variables are shared by default. Other variables like loop index are meant to be private. Thus every thread can have its own copy with a different value.
-These data scoping can be defined/corrected by the programmer.  
+Because OpenMP is based upon the shared memory programming model, most variables are shared by default. Other variables like loop index are meant to be private. By private we mean that every thread gets its own copy of the variable - the variable takes can take a different value for each thread. The programer determines which variables are private and which are shared.
 
 ### Example
 In the following, we parallelise a loop with data mapping and computation.
