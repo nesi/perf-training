@@ -1,7 +1,7 @@
 ---
 layout: post
-title: C/C++ Extension
-permalink: /python-scatter/c-extension
+title: Calling C/C++ extensions with ctypes
+permalink: /python-scatter/ctypes
 chapter: python-scatter
 ---
 
@@ -19,9 +19,18 @@ cd cext
 
 ## Why extend Python with C/C++
 
-Python code typically runs 10-100 times slower than compiled C/C++ code. Sometimes numpy vectorisation is not enough to get the performance boost you need. In this case you will need to implement some parts of your code as C/C++ functions. We'll show how to invoke C/C++ functions from your Python script. 
+You want to call a function implemented in C, C++ or Fortran. Here we'll write custom code, build the code in a shared library and tell Python how to call the C/C++ functions. 
 
-There are multiple ways this can be achieved - we encourage you to look at *Cython* and *numba* as alternative approaches. Here we'll write custom code, build the code in a shared library and tell Python how to call the C/C++ functions. 
+### Pros
+
+ * A good way to glue Python with an external library
+ * Can be used to incrementally migrate code to C/C++
+ * Very flexible
+ * Simpler and easier to maintain than custom C extensions 
+
+### Cons
+
+ * Significant learning curve, must understand how Python and C work
 
 ## Learn the basics 
 
@@ -54,7 +63,7 @@ To call  `mysum` from Python we'll use the `ctypes` module:
 import ctypes
 ```
 
-Because C/C++ is a strongly typed language and Python is not, we need to tell Python what the arguments are and make sure the Python variables we provide can be passed to the C/C++ routine safely. (Any mistake will likely cause a segmentation fault.) 
+Because C/C++ is a strongly typed language and Python is not, we need to tell Python what the arguments are and make sure the Python variables we provide can be passed to the C/C++ routine safely. Note that any mistake will likely cause a segmentation fault.
 
 The process is the following:
 
