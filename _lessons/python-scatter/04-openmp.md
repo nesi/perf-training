@@ -59,7 +59,7 @@ The OpenMP directives always start with:
 * C/C++: `#pragma omp`
 * Fortran (free form): `!$omp`
 
-These are followed by the _directive name_ and _clauses_, controlling parallelization and data handling. OpenMP directives can consist of multiple statements and can also be extended to multiple lines using line continuation statements (C/C++ using '\' at the end of the line; Fortran not described here).
+These are followed by the _directive names_ and _clauses_, controlling parallelization and data handling. OpenMP directives can consist of multiple statements and can also be extended to multiple lines using line continuation statements (C/C++ using '\' at the end of the line; Fortran not described here).
 There are various ways to distribute the workloads. The most common procedure is parallelising a loop. This is schematically presented in the following figure:
 [![example-mpi-gather](images/example_omp_threads.png)](images/example_omp_threads.png)
 The application always starts in serial. When requested, multiple threads are created/spawned. The amount of threads is determined by the environment variable `$OMP_NUM_THREADS`.
