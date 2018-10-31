@@ -10,9 +10,9 @@ chapter: python-scatter
 
 You will:
 
-* understand what vectorisation is...
-* learn to recognise code that can benefit from vectorisation...
-* learn how to vectorise a loop...
+* understand what vectorisation is
+* learn to recognise code that can benefit from vectorisation
+* learn how to vectorise a loop
 
 We'll use the code in directory `vect`. Start by
 ```
@@ -21,11 +21,13 @@ cd vect
 
 ## What is vectorisation
 
-Vectorisation is a programming style where loops are replaced by operations on arrays. Vectorisation typically improves the performance of a code and can make the code more concise and easier to maintain.
+Vectorisation is a programming style where operations on a single piece of data, typically in a loop, are replaced by operations on entire arrays. Vectorisation can improve the performance of a code, and can make the code more concise and easier to maintain.
 
-In scripting languages, loops can be slow to execute because of the overhead of the interpreter, which needs to parse each instruction, often many times when executed within a loop. Vectorisation removes the loop and replaces it with array operations, which are exectuted once. This can significantly boost performance. 
+In scripting languages, loops can be slow to execute because of the overhead of the interpreter, which may need to parse each expression, perform various input data checks and more. These overheads add up when expressions are repeated many times in a loop. Vectorisation avoids the issue by replacing the loop with a single array operation, which can significantly boost performance. 
 
-Even in the case of a compiled language, vectorisation can significantly accelerate a code because modern computer hardware tends to be highly optimised for array operations. Depending on the hardware, up to 8 or more instructions can be executed simultaneously for every CPU clock cycle. This provides a first level or parallelism, use this before trying other approaches (OpenMP, GPU, ...).
+Vectorisation has a second meaning in the context of modern CPUs, which can apply the same basic operation to 8 or more pieces of data for every clock cycle, depending on the hardware. This is also often called `SIMD` (single instruction multiple data), and it is a low-level parallelisation method (distinct from other methods, such as OpenMP parallelisation).
+
+Compilers can make use of such SIMD instructions when they generate machine code for loops (or the vectorised expressions that we just discussed), which can provide very significant performance improvements. Large parts of the algorithms implemented in the `numpy` package that we will introduce in this lesson use SIMD instructions as well if supported by the hardware. GPUs also use a form of SIMD to reach their enormous compute performance.
 
 ## Identifying code sections for vectorisation
 
@@ -37,14 +39,14 @@ Start by looking for **loops** in your code. The more iterations the better.
 
 Good candidates are loops where the same function is applied to each element. Reduction operations (for example sum or product of all array elements) are also good candidates. 
 
-When considering nested loops, start by vectorising the inner most loop.
+When considering nested loops, start by vectorising the innermost loop, unless the innermost loop only performs very few iterations.
 
-Array operations are available through the `numpy` Python module. Numpy arrays in many respects behave like lists with the following caveats
+Array operations are available through the `numpy` Python module. `numpy` arrays in many respects behave like lists with the following caveats:
 
  * all array elements must have the **same type** (integer, float, etc.)
  * array elements cannot be added or removed
 
-On the other hand numpy arrays support elementwise operations. Python code using large numpy arrays can expect to run as fast as C code. 
+On the other hand, `numpy` arrays support elementwise operations. Python code using large `numpy` arrays can run as fast as C code in some cases. A typical exception is an algorithm that performs a large number of operations on the same data, where each data element should be kept inside the processor for as long as possible to avoid the waiting times associated with accessing memory. In such cases, writing a loop can be better than vectorisation with `numpy`, but you may need to use `numba` or write your code in a compiled language to do this efficiently for the reasons that we discussed at the beginning.
 
 ### Example 1: function applied to each array element
 
