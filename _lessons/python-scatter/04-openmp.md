@@ -5,8 +5,6 @@ permalink: /python-scatter/openmp
 chapter: python-scatter
 ---
 
-**Content coming soon**
-
 ## Objectives
 
 You will:
