@@ -35,7 +35,7 @@ OpenMP (Open Multi-Processing) is an application programming interface (API) for
 
 ### Cons
 
-* limited to the resources of single compute node
+* limited to the resources of a single compute node
 
 ## How to use OpenMP
 
@@ -55,7 +55,7 @@ Use the following compiler switches:
 
 OpenMP can be implemented using directives or/and the OpenMP Application Program Interface (API). The OpenMP API gives the programmer detailed control and provides extended functionality. For more information have a look at the latest [OpenMP standard](https://www.openmp.org/wp-content/uploads/openmp-4.5.pdf). 
 
-Here we focus on OpenMP directives, which are comments (in Fortran)  and pragmas (in C/C++) in the source code that are interpreted by the compiler. The same source code can be used to build a serial or threaded version of the application by turning off/on the OpenMP compiler switch.
+Here we focus on OpenMP directives, which are comments (in Fortran) and pragmas (in C/C++) in the source code that are interpreted by the compiler. The same source code can be used to build a serial or threaded version of the application by turning off/on the OpenMP compiler switch.
 
 OpenMP directives always start with:
 * C/C++: `#pragma omp`
@@ -80,4 +80,11 @@ for (int i = 0; i < nc - 1; ++i) {
    res += computeProperty(arr);
 }
 ```
-With the `parallel` statement we spawn threads. The number of threads is set by the environment variable `OMP_NUM_THREADS`, which can be set to anything from 1 to the number of cores on a node, e.g. `export OMP_NUM_THREADS=36`. The `for` loop construct specifies what to parallelise. As a result the different iterations of the loop can be handled by multiple threads. Therefore, each thread gets its own copy of the loop index variable. Arrays `x` and `y` are shared - each thread has access to the same arrays `x` and `y`. Array `arr` is declared as `private` with each thread getting its own copy to prevent race conditions. The sum across iterations is stored in `res`, the value of which is collected from all thread. This is indicated by the `reduction(+:res)` directive.
+With the `parallel` statement we spawn threads. The number of threads is set by the environment variable `OMP_NUM_THREADS`, which can be set to anything from 1 to the number of cores on a node, e.g. `export OMP_NUM_THREADS=36`. The `for` loop construct specifies what to parallelise. As a result the different iterations of the loop can be handled by multiple threads. Each thread gets its own copy of the loop index variable. Arrays `x` and `y` are shared - each thread has access to the same arrays `x` and `y`. Array `arr` is declared as `private` with each thread getting its own copy to prevent race conditions. The sum across iterations is stored in `res`, the value of which is collected from all thread. This is indicated by the `reduction(+:res)` directive.
+
+## Exercises
+
+ 1. Add OpenMP pragma at line indicated by `// ADD OPENMP PRAGMA HERE` in `src/wave.cpp`
+
+ 2. Measure the speedup vs the number of threads (`OMP_NUM_THREADS` values) using problem size `-nx 256 -ny 256 -nc 1024`
+
