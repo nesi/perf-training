@@ -39,6 +39,19 @@ In other scenarios, process 0 might communicate with process 1, process 1 with p
 
  * there are no serial sections in MPI code and hence MPI programs tend to be written to run in parallel from the beginning to the end
 
+## Running the scatter code using multiple MPI processes
+
+To submit a parallel job on Mahuika, type
+```
+srun --account="myAccount" --ntasks=4 python scatter.py
+```
+where "myAccount" is your account on Mahuika (e.g. nesi12345). This will launch a single task with 4 processes.  
+
+To run interactively using 4 processes, type
+```
+mpiexec -n 4 python scatter.py
+```
+
 ## How to use MPI to accelerate `scatter.py`
 
  * At the top: `from mpi4py import MPI`. This will initialise MPI. The number of processes is `nprocs`.

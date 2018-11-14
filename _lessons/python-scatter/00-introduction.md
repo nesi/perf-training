@@ -37,7 +37,7 @@ The code computes the scattering of a plane wave against a two-dimensional obsta
 [Click here to see the incident wave in action](https://youtu.be/FIKSUGk68z8)
 
 As the incoming wave moves from left to right, it encounters the obstacle and gets reflected. 
-The obstacle is represented by a list of segments, each responsible for partially reflecting and scattering the wave. 
+The obstacle is represented by segments, each responsible for partially reflecting and scattering the wave. 
 The sum of the contributions from each segments gives the total scattered wave. 
 
 [Click here to see the scattered wave](https://youtu.be/7ds4S5DCTB8)
@@ -54,24 +54,20 @@ python scatter.py
 ```
 or by submitting a job to the scheduler. On Mahuika
 ```
-srun --account="myAccount>" python scatter.py
+srun --account="myAccount" python scatter.py
 ```
 where "myAccount" is your account on Mahuika (e.g. nesi12345). This will launch a single task. 
-
-As you progress through the training, you will want to run on multiple processing elements, for instance
-```
-srun --account="myAccount>" --ntasks=8 python scatter.py
-```
-or use multiple OpenMP threads, e.g.,
-```
-srun --account="myAccount>" --ntasks=1 --cpus-per-task=8 python scatter.py
-```
 
 ### Adjusting the domain size and contour resolution
 
 As you improve the performance of the code, you'll find it useful to increase the problem size. This can be done by passing command line options to `scatter.py`. Type `python scatter.py -h` to see the full list of options. The options that control the grid size are `-nx # -ny #` for the number of cells in the x and y direction. Option `-nc #` sets the number of segments. 
 
-The larger the values supplied to options `-nx`, `-ny` and `-nc`, the longer the code takes to execute. 
+The default values are `-nx 128`, `-ny 128` and `-nc 128`. The execution time scales linearly with the values of options `-nx`, `-ny` and `-nc`. For example:
+```
+python scatter.py -nx 256 -ny 256 -nc 512
+```
+will take `2*2*4 = 16` times longer.
+
 
 ### How to check if the results have changed
 
