@@ -60,13 +60,13 @@ where "myAccount" is your account on Mahuika (e.g. nesi12345). This will launch 
 
 ### Adjusting the domain size and contour resolution
 
-As you improve the performance of the code, you'll find it useful to increase the problem size. This can be done by passing command line options to `scatter.py`. Type `python scatter.py -h` to see the full list of options. The options that control the grid size are `-nx # -ny #` for the number of cells in the x and y direction. Option `-nc #` sets the number of segments. 
+As you improve the performance of the code, you'll find it useful to increase the problem resolution. This can be done by passing command line options to `scatter.py`. Type `python scatter.py -h` to see the full list of options. The options that control the grid size are `-nx # -ny #` for the number of cells in the x and y direction. Option `-nc #` sets the number of segments. 
 
 The default values are `-nx 128`, `-ny 128` and `-nc 128`. The execution time scales linearly with the values of options `-nx`, `-ny` and `-nc`. For example:
 ```
 python scatter.py -nx 256 -ny 256 -nc 512
 ```
-will take `2*2*4 = 16` times longer.
+will run the code using 256x256 cells and 512 obstacle segments and we expect the code to run `2*2*4 = 16` times longer compare to the default resolution.
 
 
 ### How to check if the results have changed
