@@ -80,7 +80,7 @@ can be rewritten as
 ```python
 import numpy
 n = 10000000
-s = numpy.linspace(0, n).sum()
+s = numpy.linspace(0, n-1, n).sum()
 ```
 As in the previous case, the vectorised code is more concise.
 
