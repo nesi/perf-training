@@ -59,6 +59,8 @@ setup(
 	ext_modules=[Extension('mysum', ['mysum.cpp'],), ...],
 )
 ```
+An example of a `setup.py` file can be found [here](https://raw.githubusercontent.com/pletzer/scatter/master/cext/setup.py). 
+
 You might have to add *include* directories and libraries if your C++ extension depends on external packages. Calling `python setup.py build` will compile the code and produce a shared library, something like `mysum.cpython-36m-x86_64-linux-gnu.so`.
 
 The extension `.so` indicates that the above is a shared library (also called dynamic-link library or shared object). The advantage of creating a shared library over a static library is that in the former the Python interpreter needs not be be recompiled. The good news is that `setuptools` knows how to compile shared library. 
@@ -70,12 +72,24 @@ import ctypes
 
 Because C/C++ is a strongly typed language and Python is not, we need to tell Python what the arguments are and make sure the Python variables we provide can be passed to the C/C++ routine safely. 
 
-The process is the following:
+The Python code to call the above `mysum` function is:
+```python
+import ctypes
+import numpy
 
- 1. open the shared library `mylib = ctypes.CDLL('build/lib.linux-x86_64-3.6/wave.cpython-36m-x86_64-linux-gnu.so')` (the name of the shared library is platform dependent)
- 2. specify the function return type, `mylib.mysum.restype = ctypes.c_double` in our case
- 3. specify the dummy argument types, `mylib.mysum.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_double)]` to match the function's signature `double mysum(int, double*)`
- 4. call the C/C++ function, `mylib.mysum(n, array.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))` where `array` is a `numpy` array. 
+# open the shared library
+libfile = 'build/lib.linux-x86_64-3.6/wave.cpython-36m-x86_64-linux-gnu.so'
+mylib = ctypes.CDLL(libfile)
+
+# tell Python the return type of function mysum
+mylib.mysum.restype = ctypes.c_double
+
+# tell Python the argument types of fucntion mysum
+mylib.mysum.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_double)]
+
+# call the function
+mylib.mysum(n, array.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+```
 
 By default, arguments will be passed by value. To pass a pointer (`double*`) you need to declare the argument to be of type `ctypes.POINTER(ctypes.c_double)`. You can declare `int*` similarly using `ctypes.POINTER(ctypes.c_int)`.
 
@@ -103,6 +117,7 @@ The following summarises the translation between Python and C for some common da
 
 
 For a complete list of C to ctypes type mapping see the Python [documentation](https://docs.python.org/3/library/ctypes.html).
+
 
 
 ## Exercises
