@@ -84,7 +84,7 @@ mylib = ctypes.CDLL(libfile)
 # tell Python the return type of function mysum
 mylib.mysum.restype = ctypes.c_double
 
-# tell Python the argument types of fucntion mysum
+# tell Python the argument types of function mysum
 mylib.mysum.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_double)]
 
 # call the function
@@ -112,8 +112,8 @@ The following summarises the translation between Python and C for some common da
 | `str(...).encode('ascii')`                | `char*`           |                                               |
 | `ctypes.c_int(...)`                       | `int`             | No need to cast                               |
 | `ctypes.c_double(...)`                    | `double`          |                                               |
-| `(...).ctypes.POINTER(ctypes.c_double)`   | `double*`         | ... is a numpy array of type float64          |
-| `ctypes.byref(...)`                       | `int&`            | ... is a variable of type ctypes.c_int        |      
+| `(...).ctypes.POINTER(ctypes.c_double)`   | `double*`         | pass a numpy array of type float64            |
+| `ctypes.byref(...)`                       | `&`               | pass by reference                             |      
 
 
 For a complete list of C to ctypes type mapping see the Python [documentation](https://docs.python.org/3/library/ctypes.html).
