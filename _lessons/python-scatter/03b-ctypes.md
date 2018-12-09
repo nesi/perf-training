@@ -59,18 +59,19 @@ setup(
 	ext_modules=[Extension('mysum', ['mysum.cpp'],), ...],
 )
 ```
+You might have to add *include* directories and libraries if your C++ extension depends on external packages. 
 An example of a `setup.py` file can be found [here](https://raw.githubusercontent.com/pletzer/scatter/master/cext/setup.py). 
 
-You might have to add *include* directories and libraries if your C++ extension depends on external packages. Calling `python setup.py build` will compile the code and produce a shared library, something like `mysum.cpython-36m-x86_64-linux-gnu.so`.
+Calling `python setup.py build` will compile the code and produce a shared library, something like `mysum.cpython-36m-x86_64-linux-gnu.so`.
 
-The extension `.so` indicates that the above is a shared library (also called dynamic-link library or shared object). The advantage of creating a shared library over a static library is that in the former the Python interpreter needs not be be recompiled. The good news is that `setuptools` knows how to compile shared library. 
+The extension `.so` indicates that the above is a shared library (also called dynamic-link library or shared object). The advantage of creating a shared library over a static library is that in the former the Python interpreter needs not be recompiled. The good news is that `setuptools` knows how to compile shared library so you won't have to worry about the details.
 
 To call  `mysum` from Python we'll use the `ctypes` module:
 ```python
 import ctypes
 ```
 
-Because C/C++ is a strongly typed language and Python is not, we need to tell Python what the arguments are and make sure the Python variables we provide can be passed to the C/C++ routine safely. 
+Because C/C++ is a strongly typed language and Python is not, we need to tell Python what the arguments are and make sure the Python variables we provide can be passed to the C/C++ function safely. 
 
 The Python code to call the above `mysum` function is:
 ```python
@@ -91,12 +92,12 @@ mylib.mysum.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_double)]
 mylib.mysum(n, array.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
 ```
 
-By default, arguments will be passed by value. To pass a pointer (`double*`) you need to declare the argument to be of type `ctypes.POINTER(ctypes.c_double)`. You can declare `int*` similarly using `ctypes.POINTER(ctypes.c_int)`.
+By default, arguments will be passed by value. To pass an array of doubles (`double*`) you need to declare the argument as `ctypes.POINTER(ctypes.c_double)`. You can declare `int*` similarly by using `ctypes.POINTER(ctypes.c_int)`.
 
-In the above example, the C++ routine expects a pointer to a double as argument. Numpy arrays have a `ctypes.data_as()` method which can be used to adapt the numpy array into a `double*` pointer. For a `float64` numpy array, the pointer is `array.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))`.
+In the above example, the C++ routine expects a pointer to a double as argument. Numpy arrays have a `ctypes.data_as()` method which can be used to adapt numpy arrays into a `double*` pointer. For a `float64` numpy array named `arr`, the pointer is `arr.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))`.
 
 Except for `int` types and strings, you will need to cast the arguments into corresponding `ctypes`. 
-For instance, if you need to pass `myvar = 2.3` to a C function expecting `double`, then you will need to pass `ctypes.c_double(myvar)` to the function.
+For instance, if you need to pass the floating point value `myvar` to a C function expecting `float`, then you will need to pass `ctypes.c_float(myvar)` to the function.
 
 Strings will need to be converted to byte strings in Python 3 (`str(mystring).encode('ascii')`).
 
@@ -113,7 +114,7 @@ The following summarises the translation between Python and C for some common da
 | `ctypes.c_int(...)`                       | `int`             | No need to cast                               |
 | `ctypes.c_double(...)`                    | `double`          |                                               |
 | `(...).ctypes.POINTER(ctypes.c_double)`   | `double*`         | pass a numpy array of type float64            |
-| `ctypes.byref(...)`                       | `&`               | pass by reference                             |      
+| `ctypes.byref(...)`                       | `&`               | pass by reference (suitable for output arguments)                             |      
 
 
 For a complete list of C to ctypes type mapping see the Python [documentation](https://docs.python.org/3/library/ctypes.html).
