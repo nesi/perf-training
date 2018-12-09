@@ -67,6 +67,8 @@ a = numpy.sin(numpy.linspace(0, n - 1, n))
 ```
 runs about 10 times faster.
 
+Note that the vectorised version requires more memory, since a temporary array containing all the inputs must be created, so a trade-off must be made between memory usage and performance.
+
 ### Example 2: total sum
 
 ```python
