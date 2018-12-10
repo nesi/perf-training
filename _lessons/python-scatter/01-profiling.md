@@ -23,6 +23,7 @@ Need to add content
 * general profiling advice...
 
 We'll use the code in directory `original`. Start by
+
 ```
 cd original
 ```
@@ -46,13 +47,8 @@ A nice way to visualise the  *output.pstats* file is with *gprof2dot*.
 
 ### Visualising the profiling output with *gprof2dot*
 
-Install *gprof2dot*:
-
-```
-pip install --user gprof2dot
-```
-
-**TODO**: install it in the Python module.
+Note, `gprof2dot` is installed on Mahuika already. If you need to install it
+elsewhere you can try `pip install gprof2dot`.
 
 Run `gprof2dot` to generate a PNG image file:
 
@@ -198,9 +194,11 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
 * We can see that lines 45, 46 and 47 each take around 30% of the time spent
   in this function.
 
-## Do we want a section on memory_profiler too?
+## Memory Profiler
+
+
 
 ## Summary
 
-Need to add content
+**Need to add content**
 
