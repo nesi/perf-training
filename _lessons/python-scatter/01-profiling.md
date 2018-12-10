@@ -196,7 +196,14 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
 
 ## Memory Profiler
 
+There is another useful Python profiling tool called [memory_profiler](https://pypi.org/project/memory_profiler/),
+which can monitor memory consumption of a Python script on a line-by-line basis.
+The memory profiler tool is used in a similar way to the line profiler we
+already covered, i.e. you have to use the `@profile` decorator to explicitly
+tell profiler which functions you wish to profile.
 
+We will not cover memory profiler in detail here but more details can be found
+at the page linked above.
 
 ## Summary
 
