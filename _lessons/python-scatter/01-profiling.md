@@ -15,14 +15,14 @@ Learn how to profile Python code:
 
 ## Introduction to profiling
 
-Profiling tools help you to understand how much time is spent in different
+Profiling tools help you understand how much time is spent in different
 parts of your code when it runs. This is important for optimising code, as it
 enables you to focus your efforts on improving the parts of the code that
 will result in the biggest gains in performance.
 
 When you profile your code it can sometimes run much slower than when you run
-it without profiling. Therefore it is generally advisable to choose a small
-but representative case to profile, i.e. something that representative of what
+it normally. Therefore it is generally advisable to choose a small but
+representative case to profile, i.e. something that is representative of what
 you eventually want to run but completes in a short time frame.
 
 Here we are going to profile the scatter code to understand where we should
@@ -203,12 +203,12 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
 ## Memory Profiler
 
 There is another useful Python profiling tool called [memory_profiler](https://pypi.org/project/memory_profiler/),
-which can monitor memory consumption of a Python script on a line-by-line basis.
-The memory profiler tool is used in a similar way to the line profiler we
+which can monitor memory consumption in a Python script on a line-by-line basis.
+The memory profiler tool is used in a similar way to the *line_profiler* tool we
 already covered, i.e. you have to use the `@profile` decorator to explicitly
-tell profiler which functions you wish to profile.
+tell *memory_profiler* which functions you wish to profile.
 
-We will not cover memory profiler in detail here but more details can be found
+We will not cover memory profiler in detail here but more information can be found
 at the page linked above.
 
 ## Summary
