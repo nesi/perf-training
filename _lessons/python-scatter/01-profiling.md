@@ -5,7 +5,6 @@ permalink: /python-scatter/profiling
 chapter: python-scatter
 ---
 
-
 ## Objectives
 
 Learn how to profile Python code:
@@ -16,13 +15,21 @@ Learn how to profile Python code:
 
 ## Introduction to profiling
 
-Need to add content
+Profiling tools help you understand how much time is spent in different
+parts of your code when it runs. This is important for optimising code, as it
+enables you to focus your efforts on improving the parts of the code that
+will result in the biggest gains in performance.
 
-* what is profiling...
-* suitable cases for profiling...
-* general profiling advice...
+When you profile your code it can sometimes run much slower than when you run
+it normally. Therefore it is generally advisable to choose a small but
+representative case to profile, i.e. something that is representative of what
+you eventually want to run but completes in a short time frame.
+
+Here we are going to profile the scatter code to understand where we should
+focus our efforts when we try to improve its performance.
 
 We'll use the code in directory `original`. Start by
+
 ```
 cd original
 ```
@@ -46,21 +53,16 @@ A nice way to visualise the  *output.pstats* file is with *gprof2dot*.
 
 ### Visualising the profiling output with *gprof2dot*
 
-Install *gprof2dot*:
-
-```
-pip install --user gprof2dot
-```
-
-**TODO**: install it in the Python module.
+Note, `gprof2dot` is installed on Mahuika already. If you need to install it
+elsewhere you can try `pip install gprof2dot` or search online for documentation.
 
 Run `gprof2dot` to generate a PNG image file:
 
 ```
-~/.local/bin/gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | dot -Tpng -o output.png
+gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | dot -Tpng -o output.png
 ```
 
-The `dot` program comes from Graphviz, which is already installed on
+The `dot` program comes from *Graphviz*, which is already installed on
 Mahuika.
 
 Now view *output.png* by copying it to your local machine or running
@@ -198,9 +200,18 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
 * We can see that lines 45, 46 and 47 each take around 30% of the time spent
   in this function.
 
-## Do we want a section on memory_profiler too?
+## Memory Profiler
+
+There is another useful Python profiling tool called [memory_profiler](https://pypi.org/project/memory_profiler/),
+which can monitor memory consumption in a Python script on a line-by-line basis.
+The memory profiler tool is used in a similar way to the *line_profiler* tool we
+already covered, i.e. you have to use the `@profile` decorator to explicitly
+tell *memory_profiler* which functions you wish to profile.
+
+We will not cover memory profiler in detail here but more information can be found
+at the page linked above.
 
 ## Summary
 
-Need to add content
-
+You should now be able to profile code to help understand where time is being
+spent in a Python code.
