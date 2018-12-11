@@ -5,7 +5,6 @@ permalink: /python-scatter/profiling
 chapter: python-scatter
 ---
 
-
 ## Objectives
 
 Learn how to profile Python code:
@@ -16,11 +15,18 @@ Learn how to profile Python code:
 
 ## Introduction to profiling
 
-Need to add content
+Profiling tools help you to understand how much time is spent in different
+parts of your code when it runs. This is important for optimising code, as it
+enables you to focus your efforts on improving the parts of the code that
+will result in the biggest gains in performance.
 
-* what is profiling...
-* suitable cases for profiling...
-* general profiling advice...
+When you profile your code it can sometimes run much slower than when you run
+it without profiling. Therefore it is generally advisable to choose a small
+but representative case to profile, i.e. something that representative of what
+you eventually want to run but completes in a short time frame.
+
+Here we are going to profile the scatter code to understand where we should
+focus our efforts when we try to improve its performance.
 
 We'll use the code in directory `original`. Start by
 
@@ -48,15 +54,15 @@ A nice way to visualise the  *output.pstats* file is with *gprof2dot*.
 ### Visualising the profiling output with *gprof2dot*
 
 Note, `gprof2dot` is installed on Mahuika already. If you need to install it
-elsewhere you can try `pip install gprof2dot`.
+elsewhere you can try `pip install gprof2dot` or search online for documentation.
 
 Run `gprof2dot` to generate a PNG image file:
 
 ```
-~/.local/bin/gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | dot -Tpng -o output.png
+gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | dot -Tpng -o output.png
 ```
 
-The `dot` program comes from Graphviz, which is already installed on
+The `dot` program comes from *Graphviz*, which is already installed on
 Mahuika.
 
 Now view *output.png* by copying it to your local machine or running
@@ -207,5 +213,5 @@ at the page linked above.
 
 ## Summary
 
-**Need to add content**
-
+You should now be able to profile code to help understand where time is being
+spent in a Python code.
