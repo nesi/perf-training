@@ -92,9 +92,9 @@ mylib.mysum.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_double)]
 mylib.mysum(n, array.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
 ```
 
-By default, arguments will be passed by value. To pass an array of doubles (`double*`) you need to declare the argument as `ctypes.POINTER(ctypes.c_double)`. You can declare `int*` similarly by using `ctypes.POINTER(ctypes.c_int)`.
+By default, arguments will be passed by value. To pass an array of doubles (`double*`), declare the argument as `ctypes.POINTER(ctypes.c_double)`. You can declare `int*` similarly by using `ctypes.POINTER(ctypes.c_int)`.
 
-In the above example, the C++ routine expects a pointer to a double as argument. Numpy arrays have a `ctypes.data_as()` method which can be used to adapt numpy arrays into a `double*` pointer. For a `float64` numpy array named `arr`, the pointer is `arr.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))`.
+In the above example, the C++ routine expects a pointer to a double as argument. Numpy arrays have a `ctypes.data_as()` method which can be used to adapt numpy arrays into `double*` pointers. For a `float64` numpy array named `arr`, the pointer is `arr.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))`.
 
 Except for `int` types and strings, you will need to cast the arguments into corresponding `ctypes`. 
 For instance, if you need to pass the floating point value `myvar` to a C function expecting `float`, then you will need to pass `ctypes.c_float(myvar)` to the function.
@@ -114,7 +114,7 @@ The following summarises the translation between Python and C for some common da
 | `ctypes.c_int(...)`                       | `int`             | No need to cast                               |
 | `ctypes.c_double(...)`                    | `double`          |                                               |
 | `(...).ctypes.POINTER(ctypes.c_double)`   | `double*`         | pass a numpy array of type float64            |
-| `ctypes.byref(...)`                       | `&`               | pass by reference (suitable for output arguments)                             |      
+| `ctypes.byref(...)`                       | `&`               | pass by reference (suitable for returning results)                             |      
 
 
 For a complete list of C to ctypes type mapping see the Python [documentation](https://docs.python.org/3/library/ctypes.html).
