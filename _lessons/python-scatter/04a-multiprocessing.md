@@ -45,7 +45,7 @@ res = [f(x) for x in input_values]
 In its original form, function `f` is called sequentially for each value of `x`. The modified version using 8 processes reads:
 ```python
 import multiprocessing
-
+import time
 def f(x):
 	# expensive function
 	time.sleep(10)
