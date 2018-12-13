@@ -15,7 +15,9 @@ You have learned that the execution time of a program can be influenced by your 
 
  * vectorisation
  * using numba
- * rewriting some parts in C++ 
+ * rewriting some parts in C++
+
+
 
  In other cases, we applied more resources to achieve higher performance:
 
