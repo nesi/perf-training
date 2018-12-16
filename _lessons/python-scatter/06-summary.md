@@ -13,9 +13,9 @@ Additional improvements were achieved by migrating some parts of the code to C/C
 
 Throwing more resources at the problem is another way to reduce wall clock time. For our problem, we obtained a 4x speedup with 8 multiprocessing threads. Higher parallel efficiency resulted with MPI (7x speedup for 8 processes). 
 
-The above strategies can be combined. For our test problem, the best results were obtained by applying OpenMP threading to the loops coded in C/C++, yielding a 95x speedup for 8 threads over the original code. 
+The above strategies can be combined. For our test problem, the best results were obtained by applying OpenMP threading to the loops coded in C/C++, yielding a 95x speedup for 8 threads over the original code. Higher performance could potentially be achieved by combining MPI with C++ extensions and OpenMP, or one could also consider offloading computations to a graphical processing unit (GPU). It is good to keep in mind the law of diminishing return, however. There is a point where we are no longer able to offset the benefits gained from additional tuning against the labour investment to produce the gains.
 
-Your mileage may vary - all optimisation techniques presented here are problem type and problem size dependent. Higher performance could potentially be achieved by combining MPI with C++ extensions and OpenMP, or one could also consider offloading computations to a graphical processing unit (GPU). It is good to keep in mind the law of diminishing return, however. There is a point where we are no longer able to offset the benefits gained from additional tuning against the labour investment to produce the gains. 
+Your mileage may vary - all optimisation techniques presented here are problem type and size dependent. You should not expect the same speedup values for other problems.
 
 ![Speedup achieved by applying different high performance computing strategies](https://github.com/pletzer/perf-training/raw/summary/_lessons/python-scatter/images/speedup.png)
 
