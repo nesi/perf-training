@@ -22,7 +22,7 @@ Your mileage may vary - all optimisation techniques presented here are problem t
 
 ## Additional material
 
-Want to learn more? Here are some sites' material which we have found useful:
+Want to learn more? Here are some material which we have found useful:
 
  * [Python in high performance computing](https://events.prace-ri.eu/event/669/material/slides/0.pdf)
 
