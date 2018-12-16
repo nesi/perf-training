@@ -12,14 +12,14 @@ df = pd.DataFrame(
 print(df)
 
 #Set descriptions:
-plt.title('Mahuika: python scatter.py -nx 256 -ny 256 -nc 256')
 
 my_colors = ['red', 'blue', 'blue', 'blue', 'cyan', 'cyan', 'cyan']
 
 df.plot.bar(y='speedup',
-    color=my_colors, rot=0, legend=False,
+    color=my_colors, rot=0, legend=False, fontsize=12,
 )
-plt.ylabel('Speedup')
+plt.ylabel('Speedup', fontsize=12)
+plt.title('Mahuika: python scatter.py -nx 256 -ny 256 -nc 256')
 
 plt.show()
 
