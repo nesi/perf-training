@@ -92,8 +92,14 @@ mylib.mysum.restype = ctypes.c_double
 # tell Python the argument types of function mysum
 mylib.mysum.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_double)]
 
+# create an array 
+array = numpy.linspace(0., 1., 100000)
+
 # call the function
-array_sum = mylib.mysum(n, array.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+array_sum = mylib.mysum(len(array), array.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+
+# print sum
+print('sum of array: {}'.format(array_sum))
 ```
 
 By default, arguments will be passed by value. To pass an array of doubles (`double*`), declare the argument as `ctypes.POINTER(ctypes.c_double)`. You can declare `int*` similarly by using `ctypes.POINTER(ctypes.c_int)`.
