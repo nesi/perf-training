@@ -81,15 +81,18 @@ To call  `mysum` from Python we'll use the `ctypes` module. Use function `CDLL` 
 ```python
 import ctypes
 import numpy
+import glob
+
+# find the shared library, the path depends on the platform and Python version
+libfile = glob.glob('build/*/*.so')[0]
 
 # open the shared library
-libfile = 'build/lib.linux-x86_64-3.6/mysum.cpython-36m-x86_64-linux-gnu.so'
 mylib = ctypes.CDLL(libfile)
 
 # tell Python the return type of function mysum
 mylib.mysum.restype = ctypes.c_double
 
-# tell Python the argument types of function mysum
+# tell Python the argument types of mysum
 mylib.mysum.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_double)]
 
 # create an array 
