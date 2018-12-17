@@ -38,14 +38,20 @@ cd cext
 ## Learn the basics 
 
 As an example, we'll assume that you have to compute the sum of all the elements of an array. Let's assume you have written a C++ extension for that purpose
-```C++
+```cpp
+/** 
+ * Compute the sum an array
+ * @param n number of elements
+ * @param array input array
+ * @return sum
+ */
 extern "C"
 double mysum(int n, double* array) {
-	double res = 0;
-	for (int i = 0; i < n; ++i) {
-		res += array[i];
-	}
-	return res;
+    double res = 0;
+    for (int i = 0; i < n; ++i) {
+        res += array[i];
+    }
+    return res;
 }
 ```
 in file *mysum.cpp*. The `extern "C"` line is required if you compile the above in C++.
@@ -54,32 +60,30 @@ The easiest way to compile *mysum.cpp* is to write a *setup.py* file, which list
 ```python
 from setuptools import setup, Extension
 
+# Compile mysum.cpp into a shared library 
 setup(
-	...
-	ext_modules=[Extension('mysum', ['mysum.cpp'],), ...],
+    #...
+    ext_modules=[Extension('mysum', ['mysum.cpp'],),],
 )
 ```
 You might have to add *include* directories and libraries if your C++ extension depends on external packages. 
 An example of a `setup.py` file can be found [here](https://raw.githubusercontent.com/pletzer/scatter/master/cext/setup.py). 
 
-Calling `python setup.py build` will compile the code and produce a shared library, something like `mysum.cpython-36m-x86_64-linux-gnu.so`.
+Calling 
+```
+python setup.py build
+```
+will compile the code and produce a shared library under `build/lib.linux-x86_64-3.6`, something like `mysum.cpython-36m-x86_64-linux-gnu.so`.
 
 The extension `.so` indicates that the above is a shared library (also called dynamic-link library or shared object). The advantage of creating a shared library over a static library is that in the former the Python interpreter needs not be recompiled. The good news is that `setuptools` knows how to compile shared library so you won't have to worry about the details.
 
-To call  `mysum` from Python we'll use the `ctypes` module:
-```python
-import ctypes
-```
-
-Because C/C++ is a strongly typed language and Python is not, we need to tell Python what the arguments are and make sure the Python variables we provide can be passed to the C/C++ function safely. 
-
-The Python code to call the above `mysum` function is:
+To call  `mysum` from Python we'll use the `ctypes` module. Use function `CDLL` to open the shared library by passing the location of the file. Because C/C++ is a strongly typed language, we need to tell Python what the arguments are. Finally we call function `mysum`.
 ```python
 import ctypes
 import numpy
 
 # open the shared library
-libfile = 'build/lib.linux-x86_64-3.6/wave.cpython-36m-x86_64-linux-gnu.so'
+libfile = 'build/lib.linux-x86_64-3.6/mysum.cpython-36m-x86_64-linux-gnu.so'
 mylib = ctypes.CDLL(libfile)
 
 # tell Python the return type of function mysum
@@ -89,7 +93,7 @@ mylib.mysum.restype = ctypes.c_double
 mylib.mysum.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_double)]
 
 # call the function
-mylib.mysum(n, array.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+array_sum = mylib.mysum(n, array.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
 ```
 
 By default, arguments will be passed by value. To pass an array of doubles (`double*`), declare the argument as `ctypes.POINTER(ctypes.c_double)`. You can declare `int*` similarly by using `ctypes.POINTER(ctypes.c_int)`.
