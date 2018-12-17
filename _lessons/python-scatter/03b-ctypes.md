@@ -118,7 +118,7 @@ The following summarises the translation between Python and C for some common da
 | `ctypes.c_int(...)`                       | `int`             | No need to cast                               |
 | `ctypes.c_double(...)`                    | `double`          |                                               |
 | `(...).ctypes.POINTER(ctypes.c_double)`   | `double*`         | pass a numpy array of type float64            |
-| `ctypes.byref(...)`                       | `&`               | pass by reference (suitable for returning results)                             |      
+| `ctypes.byref(...)`                       | `&`               | pass by reference (suitable for arguments returning results)                             |      
 
 
 For a complete list of C to ctypes type mapping see the Python [documentation](https://docs.python.org/3/library/ctypes.html).
