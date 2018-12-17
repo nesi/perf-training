@@ -54,7 +54,7 @@ double mysum(int n, double* array) {
     return res;
 }
 ```
-in file *mysum.cpp*. The `extern "C"` line is required if you compile the above in C++.
+in file *mysum.cpp*. The `extern "C"` line ensures that function "mysum" can be called from "C".
 
 The easiest way to compile *mysum.cpp* is to write a *setup.py* file, which lists the source file to compile:
 ```python
