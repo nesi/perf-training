@@ -80,9 +80,8 @@ The extension `.so` indicates that the above is a shared library (also called dy
 To call  `mysum` from Python we'll use the `ctypes` module. The steps are described below:
 
  1. use function `CDLL` to open the shared library. `CDLL` expects the path to the shared library and returns a shared library object.
- 2. tell the Python script what the arguments passed to the function are. You need to provide a list where each element is a `ctypes` object, e.g. `ctypes.c_int` to pass a C `int` argument. See table below.
- 3. tell Python the return type of the function 
- 4. call the function, casting the Python objects into ctypes objects. For instance, to pass `double` 1.2, call the function with argument `ctypes.c_double(1.2)`.
+ 2. tell the argument and result types of the function. The argument types are listed in members `argtypes` (a list) and `restype`, respectively. Use for instance `ctypes.c_int` for a C `int`. See table below to find out how to translate other C types to their corresponding `ctypes` objects.
+ 3. call the function, casting the Python objects into ctypes objects. For instance, to pass `double` 1.2, call the function with argument `ctypes.c_double(1.2)`.
 
 ### Translation of some Python types into objects that can be passed to a C/C++ function
 
@@ -112,23 +111,19 @@ import glob
 # find the shared library, the path depends on the platform and Python version
 libfile = glob.glob('build/*/*.so')[0]
 
-# open the shared library
+# 1. open the shared library
 mylib = ctypes.CDLL(libfile)
 
-# tell Python the return type of function mysum
+# 2. tell Python the argument and result types of function mysum
 mylib.mysum.restype = ctypes.c_double
-
-# tell Python the argument types of mysum
 mylib.mysum.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_double)]
 
-# create an array 
 array = numpy.linspace(0., 1., 100000)
 
-# call the function
+# 3. call function mysum
 arrPtr = array.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 array_sum = mylib.mysum(len(array), arrPtr)
 
-# print sum
 print('sum of array: {}'.format(array_sum))
 ```
 
@@ -149,7 +144,7 @@ The C type `NULL` will map to None.
 
 ## Exercises
 
-We've created a version of `scatter.py` that builds and calls a C++ external function `src/wave.cpp`. Load the Boost module
+We've created a version of `scatter.py` that builds and calls a C++ external function `src/wave.cpp`. On Mahuika, load the Boost module
 ```
 module load Boost/1.61.0-gimkl-2017a
 ```
