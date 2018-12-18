@@ -141,9 +141,7 @@ print('sum of array: {}'.format(array_sum))
 
 ### Additional explanation
 
-By default, arguments are passed by value. To pass an array of doubles (`double*`), declare the argument as `ctypes.POINTER(ctypes.c_double)`. You can declare `int*` similarly by using `ctypes.POINTER(ctypes.c_int)`.
-
-In the above example, the C++ routine expects a pointer to a double as argument. Numpy arrays have a `ctypes.data_as()` method which can be used to adapt numpy arrays into `double*` pointers. For a `float64` numpy array named `arr`, the pointer is `arr.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))`.
+By default, arguments are passed by value. To pass an array of doubles (`double*`), specify `numpy.ctypeslib.ndpointer(dtype=numpy.float)` in the `argtypes` list. You can declare `int*` similarly by using `numpy.ctypeslib.ndpointer(dtypes=numpy.int)`. Then the numpy arrays can be passed directly to the function with no other casting required.
 
 Strings will need to be converted to byte strings in Python 3 (`str(mystring).encode('ascii')`).
 
