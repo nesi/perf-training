@@ -96,9 +96,22 @@ The following summarises the translation between Python and C for some common da
 | `(...).ctypes.POINTER(ctypes.c_double)`   | `double*`         | pass a numpy array of type float64            |
 | `ctypes.byref(...)`                       | `&`               | pass by reference (suitable for arguments returning results)                             |      
 
-
 For a complete list of C to ctypes type mapping see the Python [documentation](https://docs.python.org/3/library/ctypes.html).
 
+### Passing NumPy arrays to `ctypes` functions
+
+An alternative to using the Python casting in the above table every time you want to pass an array to a C/C++ function (i.e. `(...).ctypes.POINTER(ctypes.c_double)`) is to use `numpy.ctypeslib.ndpointer` to specify that an array should be passed using the `argtypes` list:
+
+```python
+# define the interface (this dummy function takes 1 argument, a float64 array)
+mylib.myfunction.argtypes = [np.ctypeslib.ndpointer(dtype=np.float64)]
+
+# call the function (no casting required)
+myarray = np.zeros(100, np.float64)
+mylib.myfunction(myarray)
+```
+
+With this approach it is possible to specify extra restrictions on the NumPy arrays at the interface level, for example the number of dimensions the array should have or its shape. If an array passed in as an argument does not meet the specified requirements and exception will be raised. A full list of possible options can be found in the `numpy.ctypeslib.ndpointer` [documentation](https://docs.scipy.org/doc/numpy-1.15.0/reference/routines.ctypeslib.html#numpy.ctypeslib.ndpointer).
 
 ### Working example
 
@@ -116,13 +129,12 @@ mylib = ctypes.CDLL(libfile)
 
 # 2. tell Python the argument and result types of function mysum
 mylib.mysum.restype = ctypes.c_double
-mylib.mysum.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_double)]
+mylib.mysum.argtypes = [ctypes.c_int, numpy.ctypeslib.ndpointer(dtype=numpy.float64)]
 
 array = numpy.linspace(0., 1., 100000)
 
 # 3. call function mysum
-arrPtr = array.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-array_sum = mylib.mysum(len(array), arrPtr)
+array_sum = mylib.mysum(len(array), array)
 
 print('sum of array: {}'.format(array_sum))
 ```
