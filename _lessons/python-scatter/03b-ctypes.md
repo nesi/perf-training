@@ -100,7 +100,7 @@ For a complete list of C to ctypes type mapping see the Python [documentation](h
 
 ### Passing NumPy arrays to `ctypes` functions
 
-An alternative to using the Python casting in the above table every time you want to pass an array to a C/C++ function (i.e. `(...).ctypes.POINTER(ctypes.c_double)`) is to use `numpy.ctypeslib.ndpointer` to specify that an array should be passed using the `argtypes` list:
+An alternative to using the Python casting from the above table every time you want to pass an array to a C/C++ function (i.e. `(...).ctypes.POINTER(ctypes.c_double)`), is to use `numpy.ctypeslib.ndpointer` in the `argtypes` list to specify that an array should be passed to the function:
 
 ```python
 # define the interface (this dummy function takes 1 argument, a float64 array)
