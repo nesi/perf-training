@@ -93,11 +93,11 @@ In the following, we parallelise a loop computing the total contour length:
  */
 double getContourLength(const int nc, const double xc[], const double yc[]) {
     double tot = 0.0;
-#pragma omp parallel for default(none) shared(nc, xc, yc) reduction(+:tot)
+#pragma omp parallel for default(none) shared(xc, yc) reduction(+:tot)
     for (int i = 0; i < nc - 1; ++i) {
         // dx and dy are declared inside the loop and thus private 
-        double dx = xc[i + 1] - x[i];
-        double dy = yc[i + 1] - y[i];
+        double dx = xc[i + 1] - xc[i];
+        double dy = yc[i + 1] - yc[i];
         tot += std::sqrt(dx*dx + dy*dy);
     }
     return tot;
