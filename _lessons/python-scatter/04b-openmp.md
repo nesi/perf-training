@@ -12,7 +12,7 @@ You will:
 * learn how to spawn OpenMP threads in your C/C++ code
 * how to compile C/C++ code with OpenMP enabled using `setuptools`
 
-We will use the code in directory `openmp`. Start with
+We will use the code in directory `openmp`. Start by
 ```
 cd openmp
 ```
@@ -21,28 +21,27 @@ cd openmp
 
 One way to speed up your application is using the available resources more efficiently. This approach was used while porting our Python code to C++ by removing the interpreter's overhead. Here we will improve performance by using more resources instead.
 
-Most modern computers have multi-core CPUs, and we can use two or more of these cores to compute instructions in parallel. All cores can access the same, shared memory. We will need to be careful about instructions stepping over each other and undoing or modifying each other's work, the so-called race conditions.
+Most modern computers have multi-core CPUs and we can use two or more of these cores to execute instructions in parallel. All cores can access the same, shared memory.
 
 ## What is OpenMP
 
 OpenMP (Open Multi-Processing) is an application programming interface (API) for shared memory multiprocessing programming in C, C++ and Fortran.  An OpenMP-parallelised application starts as a serial application that runs on a single compute core. When instructed by the programmer, the application spawns a number of threads, which can run concurrently on separate cores. Thus, work can be distributed to leverage more resources.
 
-Note that the OpenMP standard was recently extended to enable offloading computations to GPUs and other accelerators. However, not all compilers support this feature yet, and there is a similar, competing standard called OpenACC that addresses the same use case. We will limit this lesson to multicore computing without offloading.
+Note that the OpenMP standard was recently extended to enable offloading computations to GPUs and other accelerators. However, not all compilers support this feature yet and there is a similar, competing standard called OpenACC that addresses the same use case. We will limit this lesson to multicore computing without offloading.
 
 ### Pros
 
 * supported by a large range of shared memory multicore architectures (virtually all modern CPUs have several cores) and accelerators
-* uses pragmas (C/C++) or specially formatted comments (Fortran) that can be ignored by non-OpenMP compilers to help code portability and avoid forking code
-* can be easier to implement than MPI parallelisation in existing code - a few lines of code often suffice to obtain significant speedups
+* the same source code can be used to compile in OpenMP and non-OpenMP mode
+* can be easier to implement than MPI parallelisation in existing code - a few lines of code may yield significant speedups
 * can be more efficient than MPI as data in memory can be shared between multiple threads
 * can be used in combination with other parallelisation methods and APIs, e.g., MPI or CUDA
-* does not require an additional runtime environment (unlike, e.g., MPI)
 
 ### Cons
 
 * limited to the resources of a single compute node
-* not all compilers support OpenMP
-* it is easy to create "race conditions" where multiple threads overwrite each other's work, and such errors can be difficult to debug
+* spawning threads incurs a small overhead - OpenMP code using one thread runs slower than non-OpenMP code
+* it is easy to create "race conditions" where multiple threads overwrite each other's work and such errors can be difficult to debug
 * can thus be very cumbersome to implement safely in complex cases, as the entire parallel region will need to be inspected carefully for potential race conditions
 * some external libraries implement code that is not "thread-safe", which means that these library functions cannot be used by more than one thread in a parallel program - OpenMP offers ways to deal with such cases, but thread-safety always needs to be verified for each individual library function!
 
@@ -79,29 +78,42 @@ There are various ways to distribute workloads for parallel execution, the most 
 The application always starts in serial mode on a single thread (single arrow at the top). When requested, multiple threads are created/spawned (multiple arrays at the top). In this particular case, the number of threads is 3 (coloured boxes), and each thread performs three iterations (9 iterations altogether). Results are stored in separate elements of array `a` for each loop index `i`, so we do not create a race condition when the loop is executed in parallel. The program then resumes running on a single thread (single arrow at the bottom).
 
 ### Data handling
-Because OpenMP is based on the shared memory programming model, most variables are shared by default. Other variables like loop index are meant to be private. By private we mean that every thread gets its own copy of the variable - the variable can take a different value for each thread. The programmer determines which variables are private and which are shared.
+Because OpenMP is based on the shared memory programming model, most variables are shared by default. Other variables like loop index are meant to be private. By private we mean that the variable can take a different value for each thread. The programmer determines which variables are private and which are shared.
 
 ### Example
-In the following, we parallelise a loop computing a sum.
-```
-#pragma omp parallel for default(none) shared(nc,x,y) reduction(+:res)
-for (int i = 0; i < nc - 1; ++i) {
-   double arr[2];
-   arr[0] = x[i]; arr[1] = y[i];
-   res += computeProperty(arr);
+In the following, we parallelise a loop computing the total contour length:
+```cpp
+#include <cmath>
+
+/**
+ * Compute the length of a closed contour
+ * @param nc number of contour points (size of xc and yc)
+ * @param xc x points (last point is same as first point)
+ * @param yc y points (yc[nc-1] == yc[0])
+ */
+extern "C"
+double getContourLength(const int nc, const double xc[], const double yc[]) {
+    double tot = 0.0;
+#pragma omp parallel for default(none) shared(nc, xc, yc) reduction(+:tot)
+    for (int i = 0; i < nc - 1; ++i) {
+        // dx and dy are declared inside the loop and thus private 
+        double dx = xc[i + 1] - x[i];
+        double dy = yc[i + 1] - y[i];
+        tot += std::sqrt(dx*dx + dy*dy);
+    }
 }
 ```
 With the `parallel` statement we ask the compiler to spawn threads. The number of threads can be set using environment variable `OMP_NUM_THREADS`, which can be anything between 1 and the number of cores on a node, e.g., `export OMP_NUM_THREADS=36`.
 
 The `for` construct specifies that we want to parallelise the `for` loop that immediately follows the pragma. The different iterations of the loop will be then handled by different threads.
 
-It is good practice to always use the `default(none)` clause, which forces us to declare the `shared` or `private` status of each variable that was defined _prior_ to the parallel region. Variables that are defined _inside_ the parallel region, such as loop index variable `i` or helper variable `arr`, are automatically private; each thread will get its own copy of `i` and `arr`. The same is true for local variables that are declared inside functions such as `computeProperty`.
+It is good practice to always use the `default(none)` clause, which forces us to declare the `shared` or `private` status of each variable defined _above_ the parallel region. Variables that are defined _inside_ the parallel region, such as loop index variable `i` or helper variables `dx` and `dy`, are automatically private. Each thread gets its own copy of `i`, `dx` and `dy`.
 
-It is generally good practice to define local variables such as `arr` inside the loop where possible. This will make your program easier to read and maintain, and you don't have to worry about creating race conditions by erroneously sharing a variable between threads. If you still need to declare, e.g., `myvariable` outside the loop, add the clause `private(myvariable)` to the OpenMP pragma.
+It is generally good practice to define local variables such as `dx` inside the loop where possible. This will make your program easier to read and maintain, and you don't have to worry about creating race conditions by erroneously sharing a variable between threads. If you still need to declare, e.g., `myvariable` outside the loop, add the clause `private(myvariable)` to the OpenMP pragma.
 
-Loop trip count `nc` and data arrays `x` and `y` can be shared as they are not changed inside the loop. Each thread will access the same data in memory, which is very efficient.
+Loop trip count `nc` and data arrays `xc` and `yc` can be shared as they are not changed inside the loop. Each thread will access the same data in memory, which is very efficient.
 
-Variable `res` is special - it has to store the sum across all loop iterations at the end of the loop, even though individual iterations are executed by different threads. So `res` needs to be private to each thread at first and store partial sums. These partial sums then need to be collected by the original thread at the end of the loop to compute a grand total, which will be stored in `res` on that thread. The `reduction(+:res)` clause makes sure that the compiler will insert all required code to accomplish this.
+Variable `tot` is special - it has to store the sum across all loop iterations at the end of the loop, even though individual iterations are executed by different threads. So `tot` needs to be private to each thread at first and store partial sums. These partial sums then need to be collected by the original thread at the end of the loop to compute a grand total, which will be stored in `tot` on that thread. The `reduction(+:tot)` clause makes sure that the compiler will insert all required code to accomplish this.
 
 ## Exercises
 
