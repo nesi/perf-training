@@ -144,14 +144,11 @@ The C type `NULL` will map to None.
 
 ## Exercises
 
-We've created a version of `scatter.py` that builds and calls a C++ external function `src/wave.cpp`. On Mahuika, load the Boost module
-```
-module load Boost/1.61.0-gimkl-2017a
-```
-and compile the code using
+We've created a version of `scatter.py` that builds and calls a C++ external function `src/wave.cpp`. Compile the code using
 ```
 python setup.py build
 ```
+(Make sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
 
  1. profile the code and compare the timings with the results under `original` and `vect`
  2. rewrite Python function `isInsideContour` defined in `scatter.py` in C++ and update file `setup.py` to compile your extension. 

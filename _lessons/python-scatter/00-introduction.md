@@ -13,24 +13,38 @@ Learn how to write Python programs that run efficiently on high performance comp
  * understand that there are many ways to write a program (but some ways are better than others)
  * know how to apply different strategies to get your code to run faster
 
+## Getting ready
 
-## Getting started
+The training requires:
 
-The training will be based on the *scatter* code. Clone and switch to the repository:
+ * Python 3 (tested with version 3.6.3)
+ * numpy (1.13.3)
+ * scipy (1.0.0)
+ * setuptools (28.8.0)
+ * Boost library (1.61)
 
+Set environment variable 
 ```
-git clone https://github.com/pletzer/scatter.git scatter
-cd scatter
+export BOOST_DIR=<top-directory-where-boost-is-installed>
 ```
 
-This code uses Python. On Mahuika load the Python module:
+
+On NeSI's Mahuika Cray CS400 cluster, 
 
 ```
 module load Python/3.6.3-gimkl-2017a
 module load Boost/1.61.0-gimkl-2017a
 ```
+and there is no need to set `BOOST_DIR`.
 
-## What does the scatter code compute?
+## Scattering wave example problem
+
+We will run the *scatter* code. Clone and switch to the repository:
+
+```
+git clone https://github.com/pletzer/scatter.git scatter
+cd scatter
+```
 
 The code computes the scattering of a plane wave against a two-dimensional obstacle
 
@@ -46,7 +60,7 @@ The sum of the contributions from each segments gives the total scattered wave.
 
 Notice the small wave amplitude on the shadow side of the obstacle. 
 
-## How to run the scatter code
+### How to run the scatter code
 
 You can run the code interactively
 ```
