@@ -43,7 +43,7 @@ We will run the *scatter* code. Clone and switch to the repository:
 
 ```
 git clone https://github.com/pletzer/scatter.git scatter
-cd scatter
+cd scatter/original
 ```
 
 The code computes the scattering of a plane wave against a two-dimensional obstacle
@@ -85,7 +85,13 @@ will run the code using 256x256 cells and 512 obstacle segments and we expect th
 
 ### How to check if the results have changed
 
-When modifying the code, it is important to check that the results haven't changed. Use option `-checksum` to record the sum of the field values and make sure this value does not affected after code editing. Note: the check sum changes with resolution and other parameters. 
+When modifying the code, it is important to check that the results haven't changed. Use
+```
+python scatter.py -c 
+```
+to record the sum of the field values squared (4686.33935546875). Make sure this value does not change after code editing. 
+
+Note: the check sum changes with resolution and other parameters. 
 
 ## Measuring execution time
 
