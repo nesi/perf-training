@@ -18,10 +18,12 @@ Learn how to write Python programs that run efficiently on high performance comp
 The training requires:
 
  * Python 3 (tested with version 3.6.3)
- * numpy (1.13.3)
- * scipy (1.0.0)
- * setuptools (28.8.0)
- * Boost library (1.61)
+ * numpy (tested with 1.13.3)
+ * scipy (tested with 1.0.0)
+ * setuptools (tested with 28.8.0)
+ * Boost library (tested with 1.61)
+ * gprof2dot (tested with 2017.9.19)
+ * Graphviz (tested with 2.30.1)
 
 Set environment variable 
 ```
