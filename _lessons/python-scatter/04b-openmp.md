@@ -117,7 +117,7 @@ Variable `tot` is special - it has to store the sum across all loop iterations a
 
 ## Exercises
 
- 1. Add OpenMP pragma at line indicated by `// ADD OPENMP PRAGMA HERE` in `src/wave.cpp`
+ 1. Add OpenMP pragma at line indicated by `// ADD OPENMP PRAGMA HERE` in `src/wave.cpp`. Assume that function `computeScatteredWaveElement` is thread-safe.
 
  2. Measure the speedup vs the number of threads (`OMP_NUM_THREADS` values) using problem size `-nx 256 -ny 256 -nc 1024`
 
