@@ -33,6 +33,8 @@ The training requires:
  * Boost library (tested with 1.61)
  * gprof2dot (tested with 2017.9.19)
  * Graphviz (tested with 2.30.1)
+ * mpi4py (tested with 2.0.0)
+ * a C++ compiler with OpenMP support
 
 to be installed and environment variable 
 ```
