@@ -13,6 +13,15 @@ Learn how to write Python programs that run efficiently on high performance comp
  * understand that there are many ways to write a program (but some ways are better than others)
  * know how to apply different strategies to get your code to run faster
 
+## Prerequisites
+
+To take this training you will need:
+
+ * to be able to log into a Unix computer (and submit jobs if connected to a NeSI computer)
+ * be comfortable with typing Unix and git commands
+ * know how to use an editor
+ * have a some knowledge of Python and C/C++
+
 ## Getting ready
 
 The training requires:
@@ -25,19 +34,19 @@ The training requires:
  * gprof2dot (tested with 2017.9.19)
  * Graphviz (tested with 2.30.1)
 
-Set environment variable 
+to be installed and environment variable 
 ```
 export BOOST_DIR=<top-directory-where-boost-is-installed>
 ```
+to be set.
 
-
-On NeSI's Mahuika Cray CS400 cluster, 
+On NeSI's Mahuika Cray CS400 cluster, all these packages are installed and all you need to do is:
 
 ```
 module load Python/3.6.3-gimkl-2017a
 module load Boost/1.61.0-gimkl-2017a
 ```
-and there is no need to set `BOOST_DIR`.
+(`BOOST_DIR` will be set for you).
 
 ## Scattering wave example problem
 
@@ -70,9 +79,9 @@ python scatter.py
 ```
 or by submitting a job to the scheduler. On Mahuika
 ```
-srun --account="myAccount" python scatter.py
+srun python scatter.py
 ```
-where "myAccount" is your account on Mahuika (e.g. nesi12345). This will launch a single task. 
+where you might have to pass `--account="myAccount"` as well as other options to the `srun` command. [See](https://nesi.github.io/hpc_training/lessons/maui-and-mahuika/slurm) for more information.
 
 ### Adjusting the domain size and contour resolution
 
@@ -80,16 +89,16 @@ As you improve the performance of the code, you'll find it useful to increase th
 
 The default values are `-nx 128`, `-ny 128` and `-nc 128`. The execution time scales linearly with the values of options `-nx`, `-ny` and `-nc`. For example:
 ```
-python scatter.py -nx 256 -ny 256 -nc 512
+srun python scatter.py -nx 256 -ny 256 -nc 512
 ```
-will run the code using 256x256 cells and 512 obstacle segments and we expect the code to run `2*2*4 = 16` times longer compare to the default resolution.
+will run the code using 256x256 cells and 512 obstacle segments and we expect the code to run `2*2*4 = 16` times longer compared to the default resolution.
 
 
 ### How to check if the results have changed
 
 When modifying the code, it is important to check that the results haven't changed. Use
 ```
-python scatter.py -c 
+srun python scatter.py -c 
 ```
 to record the sum of the field values squared (4686.33935546875). Make sure this value does not change after code editing. 
 
@@ -99,7 +108,7 @@ Note: the check sum changes with resolution and other parameters.
 
 You can use the `time` command
 ```
-time python scatter.py
+srun time python scatter.py
 ```
 which may return something like
 ```
