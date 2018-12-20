@@ -60,9 +60,9 @@ How it works: each input value of array `input_values` is put in a queue and han
 
 To submit a multithreaded job on Mahuika, type
 ```
-srun --account="myAccount" --ntasks=1 --cpus-per-task=8 python scatter.py
+srun --ntasks=1 --cpus-per-task=8 python scatter.py
 ```
-where "myAccount" is your account on Mahuika (e.g. nesi12345). This will launch a single task with 8 threads.  
+(with additional `srun` options such as `--account=` required). This will launch a single task with 8 threads.  
 
 To run interactively using 8 threads, type
 ```
