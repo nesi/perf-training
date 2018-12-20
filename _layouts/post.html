@@ -21,6 +21,24 @@ layout: default
     {{ content }}
   </div>
 
+  <hr />
+  {% assign lessons = site.lessons | where:"chapter", page.chapter %}
+  {% for lesson in lessons %}
+    {% if lesson.url == page.url %}
+      {% assign prev_lesson = lesson.previous %}
+      {% assign next_lesson = lesson.next %}
+    {% endif %}
+  {% endfor %}
+
+  <div class="PageNavigation">
+    {% if prev_lesson %}
+      <a class="prev" href="{{ prev_lesson.url | relative_url }}">&laquo; {{ prev_lesson.title }}</a>
+    {% endif %}
+    {% if next_lesson %}
+      <a class="next" href="{{ next_lesson.url | relative_url }}">{{ next_lesson.title }} &raquo;</a>
+    {% endif %}
+  </div>
+
   {% if site.disqus.shortname %}
     {% include disqus_comments.html %}
   {% endif %}

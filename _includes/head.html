@@ -31,6 +31,26 @@
         }
     </style>
 
+    <!-- previous/next links -->
+    <style>
+      .PageNavigation {
+        font-size:14px;
+        display: block;
+        width: auto;
+        overflow: hidden;
+      }
+      .PageNavigation a {
+        display: block;
+        width: 50%;
+        float: left;
+        margin: lem 0;
+      }
+      .PageNavigation .next {
+        text-align: right;
+        float: right;
+      }
+    </style>
+
   {% if jekyll.environment == 'production' and site.google_analytics %}
   {% include google-analytics.html %}
   {% endif %}
