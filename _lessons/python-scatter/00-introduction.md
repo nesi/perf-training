@@ -20,7 +20,7 @@ To take this training you will need:
  * to be able to log into a Unix computer (and submit jobs if connected to a NeSI computer)
  * be comfortable with typing Unix and git commands
  * know how to use an editor
- * have a some knowledge of Python and C/C++
+ * have some knowledge of Python and C/C++
 
 ## Getting ready
 
