@@ -83,7 +83,7 @@ or by submitting a job to the scheduler. On Mahuika
 ```
 srun python scatter.py
 ```
-where you might have to pass `--account="myAccount"` as well as other options to the `srun` command. [See](https://nesi.github.io/hpc_training/lessons/maui-and-mahuika/slurm) for more information.
+where you might have to pass `--account="myAccount"` as well as other options to the `srun` command. [See](https://support.nesi.org.nz/hc/en-gb/articles/360000359576-Slurm-Usage-A-Primer) for more information.
 
 ### Adjusting the domain size and contour resolution
 
