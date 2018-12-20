@@ -56,9 +56,9 @@ Transferring data from processes 0-5 to 6 takes additional time. Hence 6.7x woul
 
 Type
 ```
-srun --account="myAccount" --ntasks=4 python scatter.py
+srun --ntasks=4 python scatter.py
 ```
-where "myAccount" is your account on Mahuika (e.g. nesi12345). This will request 4 processes.  
+(with additional `srun` options such as `--account=` required). This will request 4 processes.  
 
 ### Interactive parallel execution 
 

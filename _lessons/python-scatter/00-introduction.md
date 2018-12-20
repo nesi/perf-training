@@ -13,24 +13,51 @@ Learn how to write Python programs that run efficiently on high performance comp
  * understand that there are many ways to write a program (but some ways are better than others)
  * know how to apply different strategies to get your code to run faster
 
+## Prerequisites
 
-## Getting started
+To take this training you will need:
 
-The training will be based on the *scatter* code. Clone and switch to the repository:
+ * to be able to log into a Unix computer (and submit jobs if connected to a NeSI computer)
+ * be comfortable with typing Unix and git commands
+ * know how to use an editor
+ * have some knowledge of Python and C/C++
 
+## Getting ready
+
+The training requires:
+
+ * Python 3 (tested with version 3.6.3)
+ * numpy (tested with 1.13.3)
+ * scipy (tested with 1.0.0)
+ * setuptools (tested with 28.8.0)
+ * Boost library (tested with 1.61)
+ * gprof2dot (tested with 2017.9.19)
+ * Graphviz (tested with 2.30.1)
+ * mpi4py (tested with 2.0.0)
+ * a C++ compiler with OpenMP support
+
+to be installed and environment variable 
 ```
-git clone https://github.com/pletzer/scatter.git scatter
-cd scatter
+export BOOST_DIR=<top-directory-where-boost-is-installed>
 ```
+to be set.
 
-This code uses Python. On Mahuika load the Python module:
+On NeSI's Mahuika Cray CS400 cluster, all these packages are installed and all you need to do is:
 
 ```
 module load Python/3.6.3-gimkl-2017a
 module load Boost/1.61.0-gimkl-2017a
 ```
+(`BOOST_DIR` will be set for you).
 
-## What does the scatter code compute?
+## Scattering wave example problem
+
+We will run the *scatter* code. Clone and switch to the repository:
+
+```
+git clone https://github.com/pletzer/scatter.git scatter
+cd scatter/original
+```
 
 The code computes the scattering of a plane wave against a two-dimensional obstacle
 
@@ -46,7 +73,7 @@ The sum of the contributions from each segments gives the total scattered wave.
 
 Notice the small wave amplitude on the shadow side of the obstacle. 
 
-## How to run the scatter code
+### How to run the scatter code
 
 You can run the code interactively
 ```
@@ -54,9 +81,9 @@ python scatter.py
 ```
 or by submitting a job to the scheduler. On Mahuika
 ```
-srun --account="myAccount" python scatter.py
+srun python scatter.py
 ```
-where "myAccount" is your account on Mahuika (e.g. nesi12345). This will launch a single task. 
+where you might have to pass `--account="myAccount"` as well as other options to the `srun` command. [See](https://support.nesi.org.nz/hc/en-gb/articles/360000359576-Slurm-Usage-A-Primer) for more information.
 
 ### Adjusting the domain size and contour resolution
 
@@ -64,25 +91,29 @@ As you improve the performance of the code, you'll find it useful to increase th
 
 The default values are `-nx 128`, `-ny 128` and `-nc 128`. The execution time scales linearly with the values of options `-nx`, `-ny` and `-nc`. For example:
 ```
-python scatter.py -nx 256 -ny 256 -nc 512
+srun python scatter.py -nx 256 -ny 256 -nc 512
 ```
-will run the code using 256x256 cells and 512 obstacle segments and we expect the code to run `2*2*4 = 16` times longer compare to the default resolution.
+will run the code using 256x256 cells and 512 obstacle segments and we expect the code to run `2*2*4 = 16` times longer compared to the default resolution.
 
 
 ### How to check if the results have changed
 
-When modifying the code, it is important to check that the results haven't changed. Use option `-checksum` to record the sum of the field values and make sure this value does not affected after code editing. Note: the check sum changes with resolution and other parameters. 
+When modifying the code, it is important to check that the results haven't changed. Use
+```
+srun python scatter.py -c 
+```
+to record the sum of the field values squared (4686.33935546875). Make sure this value does not change after code editing. 
+
+Note: the check sum changes with resolution and other parameters. 
 
 ## Measuring execution time
 
 You can use the `time` command
 ```
-time python scatter.py
+srun time python scatter.py
 ```
 which may return something like
 ```
-real	1m21.575s
-user	1m21.215s
-sys	0m0.243s
+123.36user 0.14system 2:04.67elapsed 99%CPU (0avgtext+0avgdata 49212maxresident)
 ```
-The relevant time is `real`, the wall clock time.
+The relevant time is `elapsed`, the wall clock time.
