@@ -114,8 +114,6 @@ srun time python scatter.py
 ```
 which may return something like
 ```
-real	1m21.575s
-user	1m21.215s
-sys	0m0.243s
+123.36user 0.14system 2:04.67elapsed 99%CPU (0avgtext+0avgdata 49212maxresident)
 ```
-The relevant time is `real`, the wall clock time.
+The relevant time is `elapsed`, the wall clock time.
