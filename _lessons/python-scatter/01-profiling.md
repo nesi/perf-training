@@ -16,13 +16,11 @@ Learn how to profile Python code:
 ## Introduction to profiling
 
 Profiling tools help you understand how much time is spent in different
-parts of your code when it runs. This can be function, loop or source code line based.
-This information is important for optimising code, as it
+parts of your code when it runs. This can be function, loop, or source code line based. This information is important for optimising code, as it
 enables you to focus your efforts on improving the parts of the code that
 will result in the biggest gains in performance.
 
-When you profile your code it can sometimes run much slower than when you run
-it normally. Therefore it is generally advisable to choose a small but
+The profiler could add significant overhead. Thus your code could run slower than normal. Therefore it is generally advisable to choose a small but
 representative case to profile, i.e. something that is representative of what
 you eventually want to run but completes in a short time frame.
 
@@ -36,6 +34,10 @@ cd original
 ```
 
 ## Profiling Python code with *cProfile*
+
+The *cProfile* is one implementation of the Python profiling interface. Basically it measures the time spend within a function and the amount of calls.
+
+**Note:** The timing information should not be taken as absolute values, since the profiling itself can add significant overhead, in some cases.
 
 Run the following command to profile the code:
 
@@ -107,7 +109,7 @@ What to look for:
   - Usually you don't want to change code from external libraries, but you can
     look at your functions that call that function, by going back along the
     arrow. You might be able to optimise the way your code calls the external
-    function, or remove the call entirely.
+    function, use a more optimized library, or remove the call entirely.
 
 
 
@@ -116,7 +118,7 @@ What to look for:
 The *cProfile* tool only times function calls. This is a good first step to
 find hotspots in your code (and often this is enough by itself). However, in
 some cases knowing that a particular function takes a lot of time is not
-particularly helpful. For example, it could be a very long function.
+particularly helpful. For example, it could be a very long function with multiple loops and computations.
 
 With *line_profiler* you have to explicitly tell it which functions you would
 like to be profiled, by modifying the source code slightly. Then
@@ -214,14 +216,12 @@ at the page linked above.
 
 ## ARM MAP
 
-On NeSI systems we also provide the ARM (previous Allinea) MAP profiler.
-It is meant to be user-friendly and works also with parallel applications.
-To use it you need to load
-`module load forge`
-and start `map`. We need to specify the executable (in this case `python`),
-the arguments (here `scatter.py`) and a working directory and if necessary the parallelization parameters. After running the executable, MAP shows the summary with different metrics, including memory consumption, floating-point instructions, and (most important here) a line based profile.
+On NeSI systems we also provide the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) (previous Allinea MAP) profiler in the `forge` module (as well as the parallel debugger DDT).
+It is meant to be simple to use and designed for parallel applications.
+The GUI can be started after loading `module load forge` and launching `map`. In the profile menu we need to specify the executable (in this case "python"), the arguments (here "scatter.py") and a working directory and if necessary the parallelization parameters. After running the executable, MAP shows the summary with different metrics.
 [![example-map-scatter](images/MAP_scatter.png)](images/MAP_scatter.png)
-
+In the default view we see on top following behaviors over run time: "thread activity", usage of floating point operations, and used memory.
+But even more interesting for us here, is the "total core time" presented in the lower box, where we can also go down the call stack. Thus, our focus is quickly pointed to the most time consuming source code lines, which we should concentrate in our optimization approach. The source code viewer in the middle helps us navigating and combining the data.
 
 ## Summary
 
