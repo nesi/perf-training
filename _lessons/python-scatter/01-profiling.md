@@ -16,7 +16,8 @@ Learn how to profile Python code:
 ## Introduction to profiling
 
 Profiling tools help you understand how much time is spent in different
-parts of your code when it runs. This is important for optimising code, as it
+parts of your code when it runs. This can be function, loop or source code line based.
+This information is important for optimising code, as it
 enables you to focus your efforts on improving the parts of the code that
 will result in the biggest gains in performance.
 
@@ -53,7 +54,7 @@ A nice way to visualise the  *output.pstats* file is with *gprof2dot*.
 
 ### Visualising the profiling output with *gprof2dot*
 
-Note, `gprof2dot` is installed on Mahuika already. If you need to install it
+**Note:** `gprof2dot` is installed on Mahuika already. If you need to install it
 elsewhere you can try `pip install gprof2dot` or search online for documentation.
 
 Run `gprof2dot` to generate a PNG image file:
@@ -85,7 +86,7 @@ What does the image show:
   - the number of times this function was called
 * Arrows indicate which functions are called by other functions
   - information about the number of times called and percentage of total run
-    time 
+    time
 * We used the option `--colour-nodes-by-selftime`, so boxes are coloured by
   self time (the number in brackets)
   - red coloured boxes are the functions that have the most time spent in them
@@ -172,9 +173,9 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
     28                                           @profile
     29                                           def isInsideContour(p, xc, yc, tol=0.01):
     30                                               """
-    31                                               Check is a point is inside closed contour by summing the 
+    31                                               Check is a point is inside closed contour by summing the
     32                                               the angles between point p, (xc[i], yc[i]) and (xc[i+1], yc[i+1]).
-    33                                               Point p id declared to be inside if the total angle amounts to 
+    33                                               Point p id declared to be inside if the total angle amounts to
     34                                               2*pi.
     35                                           
     36                                               @param p point (2d array)
@@ -210,6 +211,17 @@ tell *memory_profiler* which functions you wish to profile.
 
 We will not cover memory profiler in detail here but more information can be found
 at the page linked above.
+
+## ARM MAP
+
+On NeSI systems we also provide the ARM (previous Allinea) MAP profiler.
+It is meant to be user-friendly and works also with parallel applications.
+To use it you need to load
+`module load forge`
+and start `map`. We need to specify the executable (in this case `python`),
+the arguments (here `scatter.py`) and a working directory and if necessary the parallelization parameters. After running the executable, MAP shows the summary with different metrics, including memory consumption, floating-point instructions, and (most important here) a line based profile.
+[![example-map-scatter](images/MAP_scatter.png)](images/MAP_scatter.png)
+
 
 ## Summary
 
