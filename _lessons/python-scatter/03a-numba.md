@@ -9,16 +9,11 @@ chapter: python-scatter
 
 You will:
 
-* learn how to accelerate code with numba 
-
-We'll use the code in directory `numba`. Start by
-```
-cd numba
-```
+* learn how to accelerate code with numba
 
 ## Why use numba
 
-Python often runs an order of magnitude or slower than compiled C/C++ code and sometimes numpy vectorisation is not enough to get the performance boost you need. In this case you will need to implement some parts of your code as C/C++ functions and invoke these functions from your Python script. 
+Python often runs an order of magnitude or slower than compiled C/C++ code and sometimes numpy vectorisation is not enough to get the performance boost you need. In this case you will need to implement some parts of your code as C/C++ functions and invoke these functions from your Python script.
 
 Numba will translate Python functions into C and compile the code automatically, under the hood.
 
@@ -63,6 +58,10 @@ Numba generates specialised, "just-in-time" from Python code. In the above examp
 
 
 ## Exercises
+We'll use the code in directory `numba`. Start by
+```
+cd numba
+```
 
 We've created a version of `scatter.py` to which numba decorators can be freely added to its functions. The original version was calling the Hankel function `hankel1` from `scipy.special` and this prevented numba to generate the code. In the modified the version we call the Bessel functions from the C++ Boost library. Compile the code under `src/`
 ```
@@ -74,5 +73,3 @@ python setup.py build
  1. profile the code to get baseline timings
  2. incrementally add `@jit` decorators to the most time consuming functions
  3. compare the performance with the original code
-
-

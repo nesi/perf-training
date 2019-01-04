@@ -12,11 +12,6 @@ You will:
 * learn how to spawn OpenMP threads in your C/C++ code
 * how to compile C/C++ code with OpenMP enabled using `setuptools`
 
-We will use the code in directory `openmp`. Start by
-```
-cd openmp
-```
-
 ## Why implement OpenMP parallelisation
 
 One way to speed up your application is using the available resources more efficiently. This approach was used while porting our Python code to C++ by removing the interpreter's overhead. Here we will improve performance by using more resources instead.
@@ -116,8 +111,11 @@ Loop trip count `nc` and data arrays `xc` and `yc` can be shared as they are not
 Variable `tot` is special - it has to store the sum across all loop iterations at the end of the loop, even though individual iterations are executed by different threads. So `tot` needs to be private to each thread at first and store partial sums. These partial sums then need to be collected by the original thread at the end of the loop to compute a grand total, which will be stored in `tot` on that thread. The `reduction(+:tot)` clause makes sure that the compiler will insert all required code to accomplish this.
 
 ## Exercises
+We will use the code in directory `openmp`. Start by
+```
+cd openmp
+```
 
  1. Add OpenMP pragma at line indicated by `// ADD OPENMP PRAGMA HERE` in `src/wave.cpp`. Assume that function `computeScatteredWaveElement` is thread-safe.
 
  2. Measure the speedup vs the number of threads (`OMP_NUM_THREADS` values) using problem size `-nx 256 -ny 256 -nc 1024`
-

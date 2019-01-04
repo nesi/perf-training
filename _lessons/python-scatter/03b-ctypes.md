@@ -12,34 +12,29 @@ You will learn:
 * how to call C/C++ compiled code from Python using the `ctypes` module
 * how to compile a C++ extension using `setuptools`
 
-We'll use the code in directory `cext`. Start by
-```
-cd cext
-```
-
 ## Why extend Python with C/C++
 
  1. You want to call a function that is implemented in C, C++ or Fortran. This can give access to a vast collection of libraries so you won't have to rewrite the code in Python.
  2. You have identified a performance bottleneck - reimplementing some parts of your Python code in C, C++ or Fortran will give you a performance boost
- 3. Make your code type safe. In contrast to C, C++ and Fortran, Python is not a typed language - you can pass any object to any Python function.  This can cause runtime failures in Python which cannot occur in C, C++ or Fortran, as the error would be caught by the compiler. 
+ 3. Make your code type safe. In contrast to C, C++ and Fortran, Python is not a typed language - you can pass any object to any Python function.  This can cause runtime failures in Python which cannot occur in C, C++ or Fortran, as the error would be caught by the compiler.
 
 ### Pros
 
  * A good way to glue Python with an external library
  * Can be used to incrementally migrate code to C/C++
  * Very flexible
- * Simpler and easier to maintain than custom C extensions 
+ * Simpler and easier to maintain than custom C extensions
 
 ### Cons
 
  * Has a learning curve, one must understand how Python and C work
  * Mistakes often lead to segmentation faults, which can be hard to debug
 
-## Learn the basics 
+## Learn the basics
 
 As an example, we'll assume that you have to compute the sum of all the elements of an array. Let's assume you have written a C++ extension for that purpose
 ```cpp
-/** 
+/**
  * Compute the sum an array
  * @param n number of elements
  * @param array input array
@@ -145,7 +140,7 @@ By default, arguments are passed by value. To pass an array of doubles (`double*
 
 Strings will need to be converted to byte strings in Python 3 (`str(mystring).encode('ascii')`).
 
-Passing by reference, for instance `int&` can be achieved using `ctypes.byref(myvar_t)` with `myvar_t` of type `ctypes.c_int`. 
+Passing by reference, for instance `int&` can be achieved using `ctypes.byref(myvar_t)` with `myvar_t` of type `ctypes.c_int`.
 
 The C type `NULL` will map to None.
 
@@ -153,6 +148,10 @@ The C type `NULL` will map to None.
 
 
 ## Exercises
+We'll use the code in directory `cext`. Start by
+```
+cd cext
+```
 
 We've created a version of `scatter.py` that builds and calls a C++ external function `src/wave.cpp`. Compile the code using
 ```

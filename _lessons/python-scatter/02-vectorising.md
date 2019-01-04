@@ -14,16 +14,11 @@ You will:
 * learn to recognise code that can benefit from vectorisation
 * learn how to vectorise a loop
 
-We'll use the code in directory `vect`. Start by
-```
-cd vect
-```
-
 ## What is vectorisation
 
 Vectorisation is a programming style where operations on a single piece of data, typically in a loop, are replaced by operations on entire arrays. Vectorisation can improve the performance of a code, and can make the code more concise and easier to maintain.
 
-In scripting languages, loops can be slow to execute because of the overhead of the interpreter, which may need to parse each expression, perform various input data checks and more. These overheads add up when expressions are repeated many times in a loop. Vectorisation avoids the issue by replacing the loop with a single array operation, which can significantly boost performance. 
+In scripting languages, loops can be slow to execute because of the overhead of the interpreter, which may need to parse each expression, perform various input data checks and more. These overheads add up when expressions are repeated many times in a loop. Vectorisation avoids the issue by replacing the loop with a single array operation, which can significantly boost performance.
 
 Vectorisation has a second meaning in the context of modern CPUs, which can apply the same basic operation to 8 or more pieces of data for every clock cycle, depending on the hardware. This is also often called `SIMD` (single instruction multiple data), and it is a low-level parallelisation method (distinct from other methods, such as OpenMP parallelisation).
 
@@ -87,8 +82,12 @@ s = numpy.linspace(0, n-1, n).sum()
 As in the previous case, the vectorised code is more concise.
 
 ## Vectorising the scatter code
+We'll use the code in directory `vect`. Start by
+```
+cd vect
+```
 
-We have written a partially vectorised version of `scatter`. In `wave.py`, 
+We have written a partially vectorised version of `scatter`. In `wave.py`,
 ```python
   res = 0j
   n = len(xc)

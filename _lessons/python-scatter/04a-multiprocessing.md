@@ -9,11 +9,6 @@ chapter: python-scatter
 
 Learn how to call a function in parallel using shared memory multiprocessing.
 
-We'll use the code in directory `multiproc`. Start by
-```
-cd multiproc
-```
-
 ## Why multiprocessing
 
 Multiprocessing is suitable when you have:
@@ -57,6 +52,10 @@ res = pool.map(f, input_values)
 How it works: each input value of array `input_values` is put in a queue and handed over to a worker. Here, there are 8 workers who accomplish the task in parallel. When a worker has finished a task, a new task is assigned until the queue is empty. At which point all the elements of array `res` have been filled.
 
 ## Running the scatter code using multiple threads
+We'll use the code in directory `multiproc`. Start by
+```
+cd multiproc
+```
 
 To submit a multithreaded job on Mahuika, type
 ```

@@ -28,13 +28,12 @@ you eventually want to run but completes in a short time frame.
 Here we are going to profile the scatter code to understand where we should
 focus our efforts when we try to improve its performance.
 
+## Profiling Python code with *cProfile*
 We'll use the code in directory `original`. Start by
 
 ```
 cd original
 ```
-
-## Profiling Python code with *cProfile*
 
 Run the following command to profile the code:
 

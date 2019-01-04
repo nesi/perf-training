@@ -12,14 +12,9 @@ You will:
 
 * learn how to parallelise code using the message passing interface (MPI)
 
-We'll use the code in directory `mpi`. Start by
-```
-cd mpi
-```
-
 ## What is MPI
 
-MPI is a standard application programming interface for executing programs in parallel. MPI was originally written for C, C++ and Fortran code but implementations have since been written for a variety of other languages, including Python. 
+MPI is a standard application programming interface for executing programs in parallel. MPI was originally written for C, C++ and Fortran code but implementations have since been written for a variety of other languages, including Python.
 
 MPI programs start a number of processes at the beginning of the program. A process is an instance of an executable that runs concurrently with other processes.
 
@@ -50,7 +45,10 @@ Transferring data from processes 0-5 to 6 takes additional time. Hence 6.7x woul
 
 
 ## Running the scatter code using multiple MPI processes
-
+We'll use the code in directory `mpi`. Start by
+```
+cd mpi
+```
 
 ### On Mahuika
 
