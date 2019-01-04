@@ -67,7 +67,10 @@ mpiexec -n 4 python scatter.py
 
 ## How to use MPI to accelerate `scatter.py`
 
- * At the top: `from mpi4py import MPI`. This will initialise MPI. The number of processes is `nprocs`.
+ * `from mpi4py import MPI` at the top. This will initialise MPI.
+ * `comm = MPI_COMM_WORLD` sets the communicator.
+ * `nprocs = comm.Get_size()` stores the total number of processes.
+ * `pe = comm.Get_rank()` stores the actual rank of an process.
  * Assign a collection of scattered field elements to each MPI process. The process dependent start/end indices into the flat array are `indxBeg` and `indxEnd`. Compute the scattered field for indices `indxBeg` to `indxEnd - 1`.
  * Gather the fields from each process onto root process `nprocs - 1`, see [mpi4py](https://info.gwdg.de/~ceulig/docs-dev/doku.php?id=en:services:application_services:high_performance_computing:mpi4py) documentation.
 
