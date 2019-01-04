@@ -20,9 +20,7 @@ parts of your code when it runs. This can be function, loop, or source code line
 enables you to focus your efforts on improving the parts of the code that
 will result in the biggest gains in performance.
 
-The profiler could add significant overhead. Thus your code could run slower than normal. Therefore it is generally advisable to choose a small but
-representative case to profile, i.e. something that is representative of what
-you eventually want to run but completes in a short time frame.
+Due to possible overhead the code could run slower than normal. Therefore it is generally advisable to choose a small but representative case to profile, i.e. something that is representative of what you eventually want to run but completes in a short time frame.
 
 Here we are going to profile the scatter code to understand where we should
 focus our efforts when we try to improve its performance.
@@ -35,9 +33,9 @@ cd original
 
 ## Profiling Python code with *cProfile*
 
-The *cProfile* is one implementation of the Python profiling interface. Basically it measures the time spend within a function and the amount of calls.
+The *cProfile* is one implementation of the Python profiling interface. It measures the time spent within a function and the amount of calls.
 
-**Note:** The timing information should not be taken as absolute values, since the profiling itself can add significant overhead, in some cases.
+**Note:** The timing information should not be taken as absolute values, since the profiling itself could possibly extend the run time, in some cases.
 
 Run the following command to profile the code:
 
@@ -109,7 +107,7 @@ What to look for:
   - Usually you don't want to change code from external libraries, but you can
     look at your functions that call that function, by going back along the
     arrow. You might be able to optimise the way your code calls the external
-    function, use a more optimized library, or remove the call entirely.
+    function, use a more optimised library, or remove the call entirely.
 
 
 
