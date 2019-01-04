@@ -63,9 +63,9 @@ array = numpy.zeros((4,5), numpy.float64)
 comm = MPI.COMM_WORLD
 nprocs = comm.Get_size()
 pe = comm.Get_rank()
-root = nprocs-1
+root = nprocs - 1
 
-pe_indices_all = numpy.array_split(numpy.arange(array.size),nprocs)
+pe_indices_all = numpy.array_split(numpy.arange(array.size), nprocs)
 pe_indices = pe_indices_all[pe]
 
 for index in pe_indices:
