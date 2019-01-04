@@ -96,15 +96,15 @@ if pe == root:
   print(results)
 ```
 
-We first need to get a "communicator" - this is our communication interface that allows us to exchange data with other MPI processes. `COMM_WORLD` is the default communicator that includes all processes that we launched, and we will use that in this simple example.
+We first need to get a "communicator" - this is our communication interface that allows us to exchange data with other MPI processes. `COMM_WORLD` is the default communicator that includes all the processes we launch, and we will use that in this simple example.
 
-We can now ask our communicator how many MPI processes are running using the `Get_size()` method. The `Get_rank()` method identifies the rank (a process number between 0 and `nprocs`). Keep in mind that `pe` is the only differentiating factor between this and other MPI processes. Our program then needs to make decisions based on `pe`, for instance on which data to operate on.
+We can now ask our communicator how many MPI processes are running using the `Get_size()` method. The `Get_rank()` method returns the rank (a process number between 0 and `nprocs`) and stores the value in `pe`. Keep in mind that `pe` is the only differentiating factor between this and other MPI processes. Our program then needs to make decisions based on `pe`, to decide for instance on which subset of the data to operate on.
 
 The process with rank `nprocs - 1` is earmarked here as "root". The root process often does administrative work, such as gathering results from other processes, as shown in the diagram above. We are free to choose any MPI rank as root.
 
-Now each process works on its own `array`, which is smaller than the actual array as it contains only the data for a given process. The amount of work performed by each process is often proportional to the size of this array. For good load balancing, we like the local process array to have the same size across all processes so we allocate size `n` to each local array, except for the last process which gets the remaining number of elements (`nLocal` can be be different for each process). 
+Now each process works on its own, local `array`, which is smaller than the actual array as it contains only the data assigned to a given process. For good load balancing, we like the local array to have the same size across all processes so we allocate size `n` to each local array, except for the last process which gets the remaining number of elements. 
 
-Every instance of our program then performs its work using its individual index range `indxBeg` to `indxEnd`.
+Each process then performs work on global index range `indxBeg` to `indxEnd` of the data. In this simple example, the data are set to `pe` but in more complex situations we should expect the data to depend on `indxBeg` and `indxEnd`.
 
 To gather all results on `root`, we now call MPI's `gather` method on every process, hand over the different contributions, and tell MPI which rank we have chosen as root.
 
