@@ -58,35 +58,53 @@ We will now implement the example using the `mpi4py` package in Python.
 from mpi4py import MPI
 import numpy
 
-array = numpy.zeros((4,5), numpy.float64)
-
+# default communicator - grab all processes
 comm = MPI.COMM_WORLD
+
+# number of processes
 nprocs = comm.Get_size()
+
+# identiy of this process
 pe = comm.Get_rank()
+
+# special process responsible for administrative work
 root = nprocs - 1
 
-pe_indices_all = numpy.array_split(numpy.arange(array.size), nprocs)
-pe_indices = pe_indices_all[pe]
+# global 2d array sizes
+n0 = 4
+n1 = 5
 
-for index in pe_indices:
-  array.flat[index] = pe
+# total number of elements
+ntot = n0 * n1
 
-results_list = comm.gather(array.flat[pe_indices], root=root)
+# get the start/end indices for each proc
+n = int(numpy.ceil(ntot / float(nprocs)))
+indxBeg = n * pe
+indxEnd = min(n*(pe + 1), ntot)
+
+# local number of elements
+nLocal =  indxEnd - indxBeg
+
+# allocate and set local array to the process rank
+array = pe * numpy.ones((nLocal,), numpy.float64)
+
+# gather all local arrays on process root
+results_list = comm.gather(array, root=root)
 
 if pe == root:
-  results = numpy.concatenate(results_list).reshape(array.shape)
+  results = numpy.concatenate(results_list).reshape((n0, n1))
   print(results)
 ```
 
 We first need to get a "communicator" - this is our communication interface that allows us to exchange data with other MPI processes. `COMM_WORLD` is the default communicator that includes all processes that we launched, and we will use that in this simple example.
 
-We can now ask our communicator how many MPI processes are running alongside with ours by using the `Get_size()` method. The `Get_rank()` method tells us which rank (a process number between 0 and `nprocs`) we are. Keep in mind that MPI launches many instances of the same process, so our `rank` is the only differentiating factor between us and the other MPI processes that we launched. Our program then needs to take decisions based on this rank, e.g., which work share it will take over.
+We can now ask our communicator how many MPI processes are running using the `Get_size()` method. The `Get_rank()` method identifies the rank (a process number between 0 and `nprocs`). Keep in mind that `pe` is the only differentiating factor between this and other MPI processes. Our program then needs to make decisions based on `pe`, for instance on which data to operate on.
 
-The process with rank `nprocs-1` is earmarked as "root" - the root process often does administrative work, such as gathering results from other processes, as shown in the diagram above. We are free to choose any MPI rank as root.
+The process with rank `nprocs - 1` is earmarked here as "root". The root process often does administrative work, such as gathering results from other processes, as shown in the diagram above. We are free to choose any MPI rank as root.
 
-Now the individual work packages are defined by using NumPy's `array_split` method on an array of indices, one index for each work item. `array_split` will try to evenly divide the array into `nprocs` chunks. Once again, this line is executed in the same way by every process, so we need to pick up our individual piece of work afterwards, using the MPI rank stored in variable `pe`.
+Now each process works on its own `array`, which is smaller than the actual array as it contains only the data for a given process. The amount of work performed by each process is often proportional to the size of this array. For good load balancing, we like the local process array to have the same size across all processes so we allocate size `n` to each local array, except for the last process which gets the remaining number of elements (`nLocal` can be be different for each process). 
 
-Every instance of our program then performs its work using its individual index range stored in `pe_indices`.
+Every instance of our program then performs its work using its individual index range `indxBeg` to `indxEnd`.
 
 To gather all results on `root`, we now call MPI's `gather` method on every process, hand over the different contributions, and tell MPI which rank we have chosen as root.
 
