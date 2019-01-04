@@ -12,12 +12,18 @@ You will:
 
 * learn how to parallelise code using the message passing interface (MPI)
 
+We'll use the code in directory `mpi`. Start by
+```
+cd mpi
+```
+
 ## What is MPI
 
-MPI is a standard application programming interface for programs executed in parallel. MPI was originally written for C, C++ and Fortran code but implementations have since been written for a variety of other languages, including Python.
+MPI is a standard application programming interface for executing programs in parallel. MPI was originally written for C, C++ and Fortran code but implementations have since been written for a variety of other languages, including Python. 
 
-MPI programs are started as a bunch of instances (often called "processes" or "tasks") of an executable, which run concurrently.
-As the program runs, the computation usually vary between the processes and the program may need to exchange data with other processes. An example of data exchanges is point-to-point communication where a process sends data to another process. In other cases data may be "gathered" from processes and sent to a root process. Inversely, data can be scattered from the root process to other processes.
+MPI programs start a number of processes at the beginning of the program. A process is an instance of an executable that runs concurrently with other processes.
+
+As the process runs, the program may need to exchange data with other processes. An example of data exchanges is point-to-point communication where a process sends data to another process. In other cases data may be "gathered" from processes and sent to a root process. Inversely, data can be scattered from the root process to other processes.
 
 ### Pros
 
@@ -27,13 +33,13 @@ As the program runs, the computation usually vary between the processes and the 
 
 ### Cons
 
- * MPI applications run in parallel from the beginning to the end. Thus, the specified computing resources are occupied the whole run time, no dynamic allocation/deallocation of CPU cores.
+ * there are no serial sections in MPI code and hence MPI programs tend to be written to run in parallel from the beginning to the end
 
 ## An example of MPI work load distribution
 
-Say we need to compute the elements of a 4x5 array, shown below on the right, and the computation of each matrix element is very costly. We have 7 processes available for this task, shown on the left (time is drawn downwards).
+Say we need to compute the elements of a 4x5 array, shown below on the right, and the computation of each matrix element is very costly. We have 7 processes available for this task, shown on the left. 
 
-In order to reduce the execution time of the program, we may decide to distribute the work between processes. Each (colour coded) process will compute a few elements in the matrix. For instance, process 0 (red) will compute the first three elements, process 1 (yellow) the next three elements, etc. until process 6 (grey) which will be computing the remaining two elements. Once the elements of the matrix are computed, a gather operation collects the elements into a single array on process 6 - this is shown as converging arrows.
+In order to reduce the execution time of the program, we may decide to distribute the work between processes. Each (colour coded) process will compute a few elements in the matrix. For instance, process 0 (red) will compute the first three elements, process 1 (yellow) the next three elements, etc. until process 6 (grey) which will be computing the remaining two elements. Once the elements of the matrix are computed, a gather operation collects the elements into a single array on process 6 - this is shown as converging arrows. 
 
 Neglecting the time it takes to gather the elements, we can expect the execution time to be reduced from 20 (number of matrix elements computed serial) to 3 time units (maximum number of elements handled by a process). We get a speedup of 6.7x in this case. The ideal speedup is 7x but this cannot happen because the 20 elements cannot be evenly distributed to 7 processes. This, so called *Load imbalance*, lead to longer execution times on some processes (here 0-5) and waiting time (dashed line on process 6). Naturally, we should always strive to assign the same amount of work to each process.
 
@@ -45,10 +51,6 @@ Transferring data from processes 0-5 to 6 takes additional time. Hence 6.7x woul
 
 ## Running the scatter code using multiple MPI processes
 
-We'll use the code in directory `mpi`. Start by
-```
-cd mpi
-```
 
 ### On Mahuika
 
@@ -58,7 +60,7 @@ srun --ntasks=4 python scatter.py
 ```
 (with additional `srun` options such as `--account=` required). This will request 4 processes.  
 
-### Interactive parallel execution
+### Interactive parallel execution 
 
 To run interactively using 4 processes, type
 ```
