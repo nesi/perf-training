@@ -214,12 +214,14 @@ at the page linked above.
 
 ## ARM MAP
 
-On NeSI systems we also provide the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) (previous Allinea MAP) profiler in the `forge` module (as well as the parallel debugger DDT).
-It is meant to be simple to use and designed for parallel applications.
-The GUI can be started after loading `module load forge` and launching `map`. In the profile menu we need to specify the executable (in this case "python"), the arguments (here "scatter.py") and a working directory and if necessary the parallelization parameters. After running the executable, MAP shows the summary with different metrics.
+On NeSI systems another profiler is provide, the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) (previous Allinea MAP) profiler, which is part of the `forge` module (as well as the parallel debugger DDT).
+
+In contrast to cProfile, which provides function based profiling information of Python programs, MAP is a commercial product, which can profile  parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Pyhton codes. MAP can be launched with a GUI, which allows the user to navigate thru the code and enables to focus on specific source lines, and also without a GUI for faster execution (see [documentation](https://developer.arm.com/docs/101136/latest/map)).
+
+The GUI can be started after loading `module load forge` and launching `map`. In the profile menu we need to specify the executable (in this case "python"), the arguments (here "scatter.py") and a working directory and if necessary the parallelisation parameters. After running the executable, MAP shows the summary with different metrics.
 [![example-map-scatter](images/MAP_scatter.png)](images/MAP_scatter.png)
 In the default view we see on top following behaviors over run time: "thread activity", usage of floating point operations, and used memory.
-But even more interesting for us here, is the "total core time" presented in the lower box, where we can also go down the call stack. Thus, our focus is quickly pointed to the most time consuming source code lines, which we should concentrate in our optimization approach. The source code viewer in the middle helps us navigating and combining the data.
+But even more interesting for us here, is the "total core time" presented in the lower box, where we can also go down the call stack. Thus, our focus is quickly pointed to the most time consuming source code lines, which we should concentrate in our optimisation approach. The source code viewer in the middle helps us navigating and combining the data.
 
 ## Summary
 
