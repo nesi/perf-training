@@ -214,11 +214,11 @@ at the page linked above.
 
 ## ARM MAP
 
-Another useful profiler is provide on the NeSI system, the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) (previous Allinea MAP) profiler, which is part of the `forge` module (as well as the parallel debugger DDT).
+Another useful profiler is provided on the NeSI system, the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) (previous Allinea MAP) profiler, which is part of the `forge` module (as well as the parallel debugger DDT).
 
-In contrast to cProfile, MAP is a commercial product, which can profile  parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Pyhton codes.
+In contrast to cProfile, MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Python codes.
 It can be used without code modification.
-MAP can be launched with a GUI and without. The GUI allows the user to navigate thru the code and enables to focus on specific source lines. The "Express Launch", without GIU enables easy usage of existing queue scripts and workflows. For more details see [ARM MAP manual](https://developer.arm.com/docs/101136/latest/map)). On the NeSI system you can start it by loading `module load forge` and launching `map`.
+MAP can be launched with a GUI and without. The GUI allows the user to navigate through the code and enables them to focus on specific source lines. The "Express Launch", without a GUI, enables easy usage of existing submission scripts and workflows. For more details see the [ARM MAP manual](https://developer.arm.com/docs/101136/latest/map)). On the NeSI system you can start it by loading `module load forge` and launching `map`.
 
 ## Summary
 
