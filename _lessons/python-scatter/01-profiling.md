@@ -33,7 +33,7 @@ cd original
 
 ## Profiling Python code with *cProfile*
 
-The *cProfile* is one implementation of the Python profiling interface. It measures the time spent within a function and the amount of calls.
+The *cProfile* profiler is one implementation of the Python profiling interface. It measures the time spent within a function and the amount of calls.
 
 **Note:** The timing information should not be taken as absolute values, since the profiling itself could possibly extend the run time, in some cases.
 
