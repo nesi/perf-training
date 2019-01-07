@@ -42,7 +42,7 @@ def f(x):
 	return x
 
 # call the function sequentially for each input value
-input_values = [x for x in range(8)]
+input_values = [x for x in range(12)]
 res = [f(x) for x in input_values]
 ```
 
@@ -60,7 +60,7 @@ def f(x):
 pool = multiprocessing.Pool(processes=8)
 
 # the function is called in parallel, using the number of processes we set when creating the Pool
-input_values = [x for x in range(8)]
+input_values = [x for x in range(12)]
 res = pool.map(f, input_values)
 ```
 
