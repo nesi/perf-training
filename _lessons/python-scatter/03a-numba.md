@@ -64,14 +64,12 @@ Numba generates specialised, "just-in-time" from Python code. In the above examp
 
 ## Exercises
 
-We've created a version of `scatter.py` to which numba decorators can be freely added to its functions. The original version was calling the Hankel function `hankel1` from `scipy.special` and this prevented numba to generate the code. In the modified the version we call the Bessel functions from the C++ Boost library. Before running the scatter.py script you will need to load the Boost module
-```
-module load Boost/1.61.0-gimkl-2017a
-```
-and compile the code under `src/` using
+We've created a version of `scatter.py` to which numba decorators can be freely added to its functions. The original version was calling the Hankel function `hankel1` from `scipy.special` and this prevented numba to generate the code. In the modified the version we call the Bessel functions from the C++ Boost library. Compile the code under `src/`
 ```
 python setup.py build
 ```
+(Make sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
+
 
  1. profile the code to get baseline timings
  2. incrementally add `@jit` decorators to the most time consuming functions

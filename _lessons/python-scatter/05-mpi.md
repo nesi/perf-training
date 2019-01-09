@@ -117,9 +117,9 @@ The last thing to do is to look at the results. It is very important to realise 
 
 Type
 ```
-srun --account="myAccount" --ntasks=4 python scatter.py
+srun --ntasks=4 python scatter.py
 ```
-where "myAccount" is your account on Mahuika (e.g. nesi12345). This will request 4 processes.  
+(with additional `srun` options such as `--account=` required). This will request 4 processes.  
 
 ### Interactive parallel execution 
 

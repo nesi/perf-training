@@ -96,9 +96,22 @@ The following summarises the translation between Python and C for some common da
 | `(...).ctypes.POINTER(ctypes.c_double)`   | `double*`         | pass a numpy array of type float64            |
 | `ctypes.byref(...)`                       | `&`               | pass by reference (suitable for arguments returning results)                             |      
 
-
 For a complete list of C to ctypes type mapping see the Python [documentation](https://docs.python.org/3/library/ctypes.html).
 
+### Passing NumPy arrays to `ctypes` functions
+
+An alternative to using the Python casting from the above table every time you want to pass an array to a C/C++ function (i.e. `(...).ctypes.POINTER(ctypes.c_double)`), is to use `numpy.ctypeslib.ndpointer` in the `argtypes` list to specify that an array should be passed to the function:
+
+```python
+# define the interface (this dummy function takes 1 argument, a float64 array)
+mylib.myfunction.argtypes = [np.ctypeslib.ndpointer(dtype=np.float64)]
+
+# call the function (no casting required)
+myarray = np.zeros(100, np.float64)
+mylib.myfunction(myarray)
+```
+
+With this approach it is possible to specify extra restrictions on the NumPy arrays at the interface level, for example the number of dimensions the array should have or its shape. If an array passed in as an argument does not meet the specified requirements and exception will be raised. A full list of possible options can be found in the `numpy.ctypeslib.ndpointer` [documentation](https://docs.scipy.org/doc/numpy-1.15.0/reference/routines.ctypeslib.html#numpy.ctypeslib.ndpointer).
 
 ### Working example
 
@@ -116,22 +129,19 @@ mylib = ctypes.CDLL(libfile)
 
 # 2. tell Python the argument and result types of function mysum
 mylib.mysum.restype = ctypes.c_double
-mylib.mysum.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_double)]
+mylib.mysum.argtypes = [ctypes.c_int, numpy.ctypeslib.ndpointer(dtype=numpy.float64)]
 
 array = numpy.linspace(0., 1., 100000)
 
 # 3. call function mysum
-arrPtr = array.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-array_sum = mylib.mysum(len(array), arrPtr)
+array_sum = mylib.mysum(len(array), array)
 
 print('sum of array: {}'.format(array_sum))
 ```
 
 ### Additional explanation
 
-By default, arguments are passed by value. To pass an array of doubles (`double*`), declare the argument as `ctypes.POINTER(ctypes.c_double)`. You can declare `int*` similarly by using `ctypes.POINTER(ctypes.c_int)`.
-
-In the above example, the C++ routine expects a pointer to a double as argument. Numpy arrays have a `ctypes.data_as()` method which can be used to adapt numpy arrays into `double*` pointers. For a `float64` numpy array named `arr`, the pointer is `arr.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))`.
+By default, arguments are passed by value. To pass an array of doubles (`double*`), specify `numpy.ctypeslib.ndpointer(dtype=numpy.float)` in the `argtypes` list. You can declare `int*` similarly by using `numpy.ctypeslib.ndpointer(dtypes=numpy.int)`. Then the numpy arrays can be passed directly to the function with no other casting required.
 
 Strings will need to be converted to byte strings in Python 3 (`str(mystring).encode('ascii')`).
 
@@ -144,14 +154,11 @@ The C type `NULL` will map to None.
 
 ## Exercises
 
-We've created a version of `scatter.py` that builds and calls a C++ external function `src/wave.cpp`. On Mahuika, load the Boost module
-```
-module load Boost/1.61.0-gimkl-2017a
-```
-and compile the code using
+We've created a version of `scatter.py` that builds and calls a C++ external function `src/wave.cpp`. Compile the code using
 ```
 python setup.py build
 ```
+(Make sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
 
  1. profile the code and compare the timings with the results under `original` and `vect`
  2. rewrite Python function `isInsideContour` defined in `scatter.py` in C++ and update file `setup.py` to compile your extension. 
