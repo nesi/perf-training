@@ -73,9 +73,9 @@ How it works: each input value of array `input_values` is put in a queue and han
 
 To submit a job with 8 threads on Mahuika, type
 ```
-srun --ntasks=1 --cpus-per-task=8 python scatter.py
+srun --hint=nomultithread --ntasks=1 --cpus-per-task=8 python scatter.py
 ```
-(with additional `srun` options such as `--account=` required).
+(with additional `srun` options such as `--account=` required). Option `--hint=nomultithread` ensures that each physical core gets only one thread, recommended in most cases for best performance. Without this option two threads may be placed on each core.
 
 To run interactively using 8 threads, type
 ```
