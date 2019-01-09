@@ -36,43 +36,46 @@ As an example, we'll assume that you have to apply a very expensive function to 
 
 ```python
 import time
+
 def f(x):
 	# expensive function
 	time.sleep(10)
 	return x
 
-# call the function sequentially for each input value
-input_values = [x for x in range(12)]
+# call the function sequentially for input values 0, 1, 2, 3 and 4
+input_values = [x for x in range(5)]
 res = [f(x) for x in input_values]
 ```
 
-In its original form, function `f` is called sequentially for each value of `x`. The modified version using 8 processes reads:
+In its original form, function `f` is called sequentially for each value of `x`. The modified version using 3 processes reads:
 
 ```python
 import multiprocessing
 import time
+
 def f(x):
 	# expensive function
 	time.sleep(10)
 	return x
 
-# create a "pool" of 8 processes to do the calculations
-pool = multiprocessing.Pool(processes=8)
+# create a "pool" of 3 processes to do the calculations
+pool = multiprocessing.Pool(processes=3)
 
-# the function is called in parallel, using the number of processes we set when creating the Pool
-input_values = [x for x in range(12)]
+# the function is called in parallel, using the number of processes 
+# we set when creating the Pool
+input_values = [x for x in range(5)]
 res = pool.map(f, input_values)
 ```
 
-How it works: each input value of array `input_values` is put in a queue and handed over to a worker. Here, there are 8 workers who accomplish the task in parallel. When a worker has finished a task, a new task is assigned until the queue is empty. At which point all the elements of array `res` have been filled.
+How it works: each input value of array `input_values` is put in a queue and handed over to a worker. Here, there are 3 workers who accomplish the task in parallel. When a worker has finished a task, a new task is assigned until the queue is empty. At which point all the elements of array `res` have been filled.
 
 ## Running the scatter code using multiple threads
 
-To submit a multithreaded job on Mahuika, type
+To submit a job with 8 threads on Mahuika, type
 ```
 srun --ntasks=1 --cpus-per-task=8 python scatter.py
 ```
-(with additional `srun` options such as `--account=` required). This will launch a single task with 8 threads.  
+(with additional `srun` options such as `--account=` required).
 
 To run interactively using 8 threads, type
 ```
