@@ -12,16 +12,11 @@ You will:
 
 * learn how to parallelise code using the message passing interface (MPI)
 
-We'll use the code in directory `mpi`. Start by
-```
-cd mpi
-```
-
 ## What is MPI
 
 MPI is a standard application programming interface for creating and executing parallel programs. MPI was originally written for C, C++ and Fortran code but implementations have since become available for a variety of other languages, including Python.
 
-MPI programs start a number of processes at the beginning of the program. A process is an instance of an executable that runs concurrently with other processes.
+MPI programs are started as a bunch of instances (often called "processes" or "tasks") of an executable, which run concurrently.
 
 As the process runs, the program may need to exchange data ("messages" - hence the name) with other processes. An example of data exchanges is point-to-point communication where one process sends data to another process. In other cases data may be "gathered" from multiple processes at once and sent to a root process. Inversely, data can be "scattered" from the root process to multiple other processes in one step.
 
@@ -36,6 +31,7 @@ As the process runs, the program may need to exchange data ("messages" - hence t
  * there are no serial sections in MPI code and hence MPI programs need to be written to run in parallel from the beginning to the end
  * some algorithms are difficult to implement efficiently with MPI due its distributed memory approach and communication overheads
  * it is easy to create "dead locks" where one or more processes get stuck waiting for a message
+ * the requested computing resources are occupied the whole run time, i.e. there is no dynamic allocation/deallocation of CPU cores
 
 ## An example of MPI work load distribution
 
@@ -130,6 +126,10 @@ The last thing to do is to look at the results. It is important to realise that 
 
 ## Running the scatter code using multiple MPI processes
 
+We'll use the code in directory `mpi`. Start by
+```
+cd mpi
+```
 
 ### On Mahuika
 
@@ -139,7 +139,7 @@ srun --ntasks=8 python scatter.py
 ```
 (with additional `srun` options such as `--account=` required).  
 
-### Interactive parallel execution 
+### Interactive parallel execution
 
 To run interactively using 8 processes, type
 ```
@@ -148,7 +148,10 @@ mpiexec -n 8 python scatter.py
 
 ## How to use MPI to accelerate `scatter.py`
 
- * At the top: `from mpi4py import MPI`. This will initialise MPI. The number of processes is `nprocs`.
+ * `from mpi4py import MPI` at the top. This will initialise MPI.
+ * `comm = MPI.COMM_WORLD` gets the communicator.
+ * `nprocs = comm.Get_size()` gets the total number of processes.
+ * `pe = comm.Get_rank()` gets the actual rank of a process.
  * Assign a collection of scattered field elements to each MPI process. The process dependent start/end indices into the flat array are `indxBeg` and `indxEnd`. Compute the scattered field for indices `indxBeg` to `indxEnd - 1`.
  * Gather the fields from each process onto root process `nprocs - 1`, see [mpi4py](https://info.gwdg.de/~ceulig/docs-dev/doku.php?id=en:services:application_services:high_performance_computing:mpi4py) documentation.
 
