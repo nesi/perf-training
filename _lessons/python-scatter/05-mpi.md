@@ -31,7 +31,7 @@ As the process runs, the program may need to exchange data ("messages" - hence t
  * there are no serial sections in MPI code and hence MPI programs need to be written to run in parallel from the beginning to the end
  * some algorithms are difficult to implement efficiently with MPI due its distributed memory approach and communication overheads
  * it is easy to create "dead locks" where one or more processes get stuck waiting for a message
- * specified computing resources are occupied the whole run time, no dynamic allocation/deallocation of CPU cores
+ * the requested computing resources are occupied the whole run time, i.e. there is no dynamic allocation/deallocation of CPU cores
 
 ## An example of MPI work load distribution
 
