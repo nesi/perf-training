@@ -18,7 +18,7 @@ Learn how to profile parallel codes using ARM MAP:
 Parallel profiling tools provide information about how much time is spent in different parts of your code by different threads/processes.
 There are 2 major ways to collect profiling data: *sampling* and *tracing*. Sampling is a statistical method. During run time the so called *stack trace* is analysed regularly. In contast to that tracing measures actual run time of instrumented parts with a well defined start and end. The data from all threads/processes are gathered and analysed. Thus we can not only see which part of the code is most time consuming, but also how this performs on different processes.
 
-Due to possible overhead (especially for tracing experiments) the program could run significantly slower than normal. Therefore it is generally advisable to first run a sampling experiments and choose a small representative test case to profile.
+Due to possible overhead (especially for tracing experiments) the program could run significantly slower than normal. Therefore it is generally advisable to first run a sampling experiment and choose a small representative test case to profile.
 
 ## Profiling test case
 
