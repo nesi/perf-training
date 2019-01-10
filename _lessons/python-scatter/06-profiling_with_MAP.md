@@ -68,8 +68,11 @@ As a result some general information about the program run is printed to stdout 
 ## Using the graphical Interface
 
 The GUI can be started after loading `module load forge` and launching `map`.
+
 [![ARM MAP main](images/ARM_MAP_main.png)](images/ARM_MAP_main.png)
+
 In the profile menu we need to specify the executable (in this case `python`), the arguments (here `scatter.py -c`) and a working directory. Additional to that, we need to define the parallelisation parameters, e.g. one MPI process and 8 OMP threads.
+
 [![ARM MAP main](images/ARM_MAP_run.png)](images/ARM_MAP_run.png)
 
 Furthermore, the "submit to queue" parameter needs to be checked, for example the `--hint=nomultithread` can be specified there.
@@ -79,7 +82,9 @@ After submitting, MAP will wait until the job is allocated, connect to the proce
 ## MAP Profile
 
 The profile window is divided into three main sections.
+
 [![example-map-scatter](images/ARM_MAP_scatter_mpi.png)](images/ARM_MAP_scatter_mpi.png)
+
 On top various metrics can be displayed, which can be switched in the "Metrics" menu.
 In the middle part, a source code navigator connects line by line with profiling data.
 Most interesting for us here, is the profiling table on the bottom. Presenting the most time consuming parts of the program with function names, the actual source code, and its location.
@@ -94,6 +99,7 @@ The Metrics part can be changed to:
 * MPI
 
 As an example, "CPU instructions" present the usage of different instruction sets during the program run time.
+
 [![example-map-scatter_CPU](images/ARM_MAP_scatter_mpi_CPU.png)](images/ARM_MAP_scatter_mpi_CPU.png)
 
 
