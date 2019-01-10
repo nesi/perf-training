@@ -72,7 +72,7 @@ The GUI can be started after loading `module load forge` and launching `map`.
 In the profile menu we need to specify the executable (in this case `python`), the arguments (here `scatter.py -c`) and a working directory. Additional to that, we need to define the parallelisation parameters, e.g. one MPI process and 8 OMP threads.
 [![ARM MAP main](images/ARM_MAP_run.png)](images/ARM_MAP_run.png)
 
-Furthermore, the "submit to queue" parameter need to be checked, for example the `--hint=nomultithreading` can be specified there.
+Furthermore, the "submit to queue" parameter needs to be checked, for example the `--hint=nomultithread` can be specified there.
 
 After submitting, MAP will wait until the job is allocated, connect to the processes, run the program and gather all the data. Then the profile information will be presented.
 
