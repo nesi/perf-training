@@ -65,7 +65,7 @@ map --profile srun python scatter.py -c
 
 As a result some general information about the program run is printed to stdout from MAP as well as a file with the profiling information. This has the file ending `.map`. The results can be view by launching map with that file (see section [MAP Profile](#map-profile) ).
 
-## using the graphical Interface
+## Using the graphical Interface
 
 The GUI can be started after loading `module load forge` and launching `map`.
 [![ARM MAP main](images/ARM_MAP_main.png)](images/ARM_MAP_main.png)
