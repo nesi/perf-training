@@ -53,7 +53,7 @@ The MPI version of scatter performs the default test case within a short time (l
 ```
 python scatter.py -c -nx 256 -ny 256 -nc 256
 ```
-## using the "Express Launch"
+## Using the "Express Launch"
 
 To use ARM MAP we need to load `module load forge` in our batch script and add `map --profile` in front of the parallel run statements. Thus, `srun` and its options, as well as our executable and its arguments are passed to MAP.
 Thus in the script we will have something like:
