@@ -32,7 +32,7 @@ The profiling case should be:
 
 ## ARM MAP profiler
 
-On NeSI systems the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) (previous Allinea MAP) profiler is provide as part of the `forge` module (beside the parallel debugger DDT).
+On NeSI systems the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) profiler is provided as part of the `forge` module (along with the parallel debugger, DDT).
 
 MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Pyhton codes. It can be used without code modification.
 MAP can be launched with a GUI and without. The GUI allows the user to navigate thru the code and enables to focus on specific source lines. The "Express Launch", without GIU enables easy usage of existing queue scripts and workflows.
