@@ -49,7 +49,7 @@ We'll use the code in directory `mpi`. Start by
 cd mpi
 ```
 
-The MPI version of scatter performs the default test case within short time (less than 20 seconds). We could argue that this could be to short. Thus, we increase the problem size:
+The MPI version of scatter performs the default test case within a short time (less than 20 seconds). We could argue that this is too short. Thus, we increase the problem size:
 ```
 python scatter.py -c -nx 256 -ny 256 -nc 256
 ```
