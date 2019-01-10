@@ -16,14 +16,11 @@ Learn how to profile Python code:
 ## Introduction to profiling
 
 Profiling tools help you understand how much time is spent in different
-parts of your code when it runs. This is important for optimising code, as it
+parts of your code when it runs. This can be function, loop, or source code line based. This information is important for optimising code, as it
 enables you to focus your efforts on improving the parts of the code that
 will result in the biggest gains in performance.
 
-When you profile your code it can sometimes run much slower than when you run
-it normally. Therefore it is generally advisable to choose a small but
-representative case to profile, i.e. something that is representative of what
-you eventually want to run but completes in a short time frame.
+Due to possible overhead the code could run slower than normal. Therefore it is generally advisable to choose a small but representative case to profile, i.e. something that is representative of what you eventually want to run but completes in a short time frame.
 
 Here we are going to profile the scatter code to understand where we should
 focus our efforts when we try to improve its performance.
@@ -35,6 +32,10 @@ cd original
 ```
 
 ## Profiling Python code with *cProfile*
+
+The *cProfile* profiler is one implementation of the Python profiling interface. It measures the time spent within a function and the amount of calls.
+
+**Note:** The timing information should not be taken as absolute values, since the profiling itself could possibly extend the run time, in some cases.
 
 Run the following command to profile the code:
 
@@ -53,7 +54,7 @@ A nice way to visualise the  *output.pstats* file is with *gprof2dot*.
 
 ### Visualising the profiling output with *gprof2dot*
 
-Note, `gprof2dot` is installed on Mahuika already. If you need to install it
+**Note:** `gprof2dot` is installed on Mahuika already. If you need to install it
 elsewhere you can try `pip install gprof2dot` or search online for documentation.
 
 Run `gprof2dot` to generate a PNG image file:
@@ -85,7 +86,7 @@ What does the image show:
   - the number of times this function was called
 * Arrows indicate which functions are called by other functions
   - information about the number of times called and percentage of total run
-    time 
+    time
 * We used the option `--colour-nodes-by-selftime`, so boxes are coloured by
   self time (the number in brackets)
   - red coloured boxes are the functions that have the most time spent in them
@@ -106,7 +107,7 @@ What to look for:
   - Usually you don't want to change code from external libraries, but you can
     look at your functions that call that function, by going back along the
     arrow. You might be able to optimise the way your code calls the external
-    function, or remove the call entirely.
+    function, use a more optimised library, or remove the call entirely.
 
 
 
@@ -115,7 +116,7 @@ What to look for:
 The *cProfile* tool only times function calls. This is a good first step to
 find hotspots in your code (and often this is enough by itself). However, in
 some cases knowing that a particular function takes a lot of time is not
-particularly helpful. For example, it could be a very long function.
+particularly helpful. For example, it could be a very long function with multiple loops and computations.
 
 With *line_profiler* you have to explicitly tell it which functions you would
 like to be profiled, by modifying the source code slightly. Then
@@ -172,9 +173,9 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
     28                                           @profile
     29                                           def isInsideContour(p, xc, yc, tol=0.01):
     30                                               """
-    31                                               Check is a point is inside closed contour by summing the 
+    31                                               Check is a point is inside closed contour by summing the
     32                                               the angles between point p, (xc[i], yc[i]) and (xc[i+1], yc[i+1]).
-    33                                               Point p id declared to be inside if the total angle amounts to 
+    33                                               Point p id declared to be inside if the total angle amounts to
     34                                               2*pi.
     35                                           
     36                                               @param p point (2d array)
@@ -210,6 +211,14 @@ tell *memory_profiler* which functions you wish to profile.
 
 We will not cover memory profiler in detail here but more information can be found
 at the page linked above.
+
+## ARM MAP
+
+Another useful profiler is provided on the NeSI system, the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) (previous Allinea MAP) profiler, which is part of the `forge` module (as well as the parallel debugger DDT).
+
+In contrast to cProfile, MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Python codes.
+It can be used without code modification.
+MAP can be launched with a GUI and without. The GUI allows the user to navigate through the code and enables them to focus on specific source lines. The "Express Launch", without a GUI, enables easy usage of existing submission scripts and workflows. For more details see the [ARM MAP manual](https://developer.arm.com/docs/101136/latest/map)). On the NeSI system you can start it by loading `module load forge` and launching `map`.
 
 ## Summary
 
