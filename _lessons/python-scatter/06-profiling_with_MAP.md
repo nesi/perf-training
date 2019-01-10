@@ -24,7 +24,7 @@ Due to possible overhead (especially for tracing experiments) the program could 
 
 The profiling case should be:
 * representative, need to cover all features used during production
-* short in run time for fast turnaround, but long enough with sufficiently many data points (usually few minutes)
+* short in run time for a fast turnaround, but long enough to be representative of the actual calculations you are going to run
 * scaling effects can be investigated by comparing profiles small and big jobs
 
 **Note:** keep in mind, that with shortened computation time, the initialisation and finalisation becomes more dominant.
