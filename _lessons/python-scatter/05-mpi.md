@@ -17,7 +17,6 @@ You will:
 MPI is a standard application programming interface for creating and executing parallel programs. MPI was originally written for C, C++ and Fortran code but implementations have since become available for a variety of other languages, including Python.
 
 MPI programs are started as a bunch of instances (often called "processes" or "tasks") of an executable, which run concurrently.
-As the program runs, the computation usually vary between the processes and the program may need to exchange data with other processes. An example of data exchanges is point-to-point communication where a process sends data to another process. In other cases data may be "gathered" from processes and sent to a root process. Inversely, data can be scattered from the root process to other processes.
 
 As the process runs, the program may need to exchange data ("messages" - hence the name) with other processes. An example of data exchanges is point-to-point communication where one process sends data to another process. In other cases data may be "gathered" from multiple processes at once and sent to a root process. Inversely, data can be "scattered" from the root process to multiple other processes in one step.
 
@@ -32,7 +31,7 @@ As the process runs, the program may need to exchange data ("messages" - hence t
  * there are no serial sections in MPI code and hence MPI programs need to be written to run in parallel from the beginning to the end
  * some algorithms are difficult to implement efficiently with MPI due its distributed memory approach and communication overheads
  * it is easy to create "dead locks" where one or more processes get stuck waiting for a message
- * MPI applications run in parallel from the beginning to the end. Thus, the specified computing resources are occupied the whole run time, no dynamic allocation/deallocation of CPU cores.
+ * specified computing resources are occupied the whole run time, no dynamic allocation/deallocation of CPU cores
 
 ## An example of MPI work load distribution
 
