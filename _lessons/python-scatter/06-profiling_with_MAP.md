@@ -37,7 +37,7 @@ On NeSI systems the [ARM MAP](https://www.arm.com/products/development-tools/ser
 MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Python codes. It can be used without code modification.
 MAP can be launched with a GUI and without. The GUI allows the user to navigate through the code and enables them to focus on specific source lines. The "Express Launch", without GUI enables easy usage of existing queue scripts and workflows.
 
-For more details see [ARM MAP documentation](https://developer.arm.com/docs/101136/latest/map).
+For more details see the [ARM MAP documentation](https://developer.arm.com/docs/101136/latest/map).
 
 In the following both, GUI and express launch are used with the scatter example.
 
