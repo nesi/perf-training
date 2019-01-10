@@ -20,7 +20,7 @@ There are 2 major ways to collect profiling data: *sampling* and *tracing*. Samp
 
 Due to possible overhead (especially for tracing experiments) the program could run significantly slower than normal. Therefore it is generally advisable to first run a sampling experiments and choose a small representative test case to profile.
 
-## profiling test case
+## Profiling test case
 
 The profiling case should be:
 * representative, need to cover all features used during production
