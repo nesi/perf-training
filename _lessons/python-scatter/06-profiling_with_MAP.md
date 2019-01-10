@@ -39,7 +39,7 @@ MAP can be launched with a GUI and without. The GUI allows the user to navigate 
 
 For more details see the [ARM MAP documentation](https://developer.arm.com/docs/101136/latest/map).
 
-In the following both, GUI and express launch are used with the scatter example.
+In the following, both GUI and express launch versions are used with the scatter example.
 
 ## Scatter MPI test case
 
