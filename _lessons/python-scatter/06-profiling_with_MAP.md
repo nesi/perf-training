@@ -60,7 +60,7 @@ Thus in the script we will have something like:
 
 ```
 module load forge
-map --profile srun python scatter.py -c
+map --profile srun python scatter.py -c -nx 256 -ny 256 -nc 256
 ```
 
 As a result some general information about the program run is printed to stdout from MAP as well as a file with the profiling information. This has the file ending `.map`. The results can be view by launching map with that file (see section [MAP Profile](#map-profile) ).
