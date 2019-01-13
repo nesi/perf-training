@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Profiling_MAP
+title: Profiling with ARM 
 permalink: /python-scatter/profiling_MAP
 chapter: python-scatter
 ---

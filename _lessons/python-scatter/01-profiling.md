@@ -7,23 +7,23 @@ chapter: python-scatter
 
 ## Objectives
 
-Learn how to profile Python code:
+You will:
 
-* use different tools to gather profiling information
-* visualise the profiling data
-* interpret the profiling results
+* understand what profiling is and why it is important to profile code
+* learn how to gather profiling data
+* learn how to visualise profiling data
+* learn how to interpret profiling data
 
 ## Introduction to profiling
 
 Profiling tools help you understand how much time is spent in different
-parts of your code when it runs. This can be function, loop, or source code line based. This information is important for optimising code, as it
+parts of your code when it runs. These can be functions, loops, or source code lines. Profiling information is important for optimising code, as it
 enables you to focus your efforts on improving the parts of the code that
 will result in the biggest gains in performance.
 
-Due to possible overhead the code could run slower than normal. Therefore it is generally advisable to choose a small but representative case to profile, i.e. something that is representative of what you eventually want to run but completes in a short time frame.
+Due to possible overhead from the profiling tools, the code could run slower than normal. Therefore it is advisable to choose a small but representative test case to profile. I.e. something that is representative of what you eventually want to run but completes in a short time.
 
-Here we are going to profile the scatter code to understand where we should
-focus our efforts when we try to improve its performance.
+Here we'll profile the scatter code to identify the sections of the code where most the execution time is spent.
 
 We'll use the code in directory `original`. Start by
 
@@ -33,22 +33,20 @@ cd original
 
 ## Profiling Python code with *cProfile*
 
-The *cProfile* profiler is one implementation of the Python profiling interface. It measures the time spent within a function and the amount of calls.
+The *cProfile* profiler is one implementation of the Python profiling interface. It measures the time spent within a function and the number of times 
+the function is called.
 
-**Note:** The timing information should not be taken as absolute values, since the profiling itself could possibly extend the run time, in some cases.
+**Note:** The timing information should not be taken as absolute values, since the profiling itself could extend the run time.
 
-Run the following command to profile the code:
-
+Replace `python scatter.py` with 
 ```
 python -m cProfile -o output.pstats scatter.py
 ```
+in your Slurm script or when running interactively. Additional arguments can be passed to the *scatter.py* at the end if needed.
 
 Notice the `-m cProfile -o output.pstats` in the above command. This enables
 profiling and stores the profiling results in a file called *output.pstats*.
 If you leave out these options the code will just run normally.
-
-**Note:** the code will take longer to run when profiling is enabled, due to
-the overhead involved in collecting the profiling information.
 
 A nice way to visualise the  *output.pstats* file is with *gprof2dot*.
 
@@ -214,13 +212,10 @@ at the page linked above.
 
 ## ARM MAP
 
-Another useful profiler is provided on the NeSI system, the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) (previous Allinea MAP) profiler, which is part of the `forge` module (as well as the parallel debugger DDT).
+Another useful profiler provided on the NeSI system is [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) (previous Allinea MAP) profiler, which is part of the `forge` module (as well as the parallel debugger DDT). In contrast to cProfile, MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Python codes. More about ARM can be found [here](https://nesi.github.io/perf-training/python-scatter/profiling_MAP).
 
-In contrast to cProfile, MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Python codes.
-It can be used without code modification.
-MAP can be launched with a GUI and without. The GUI allows the user to navigate through the code and enables them to focus on specific source lines. The "Express Launch", without a GUI, enables easy usage of existing submission scripts and workflows. For more details see the [ARM MAP manual](https://developer.arm.com/docs/101136/latest/map)). On the NeSI system you can start it by loading `module load forge` and launching `map`.
+## Exercises
 
-## Summary
-
-You should now be able to profile code to help understand where time is being
-spent in a Python code.
+ * How much self time in percent is spent in `computeScatteredWave`?
+ * How much total time in percent is spent in `computeScatteredWave`?
+ * Does it make sense to focus optimisation efforts on `computeScatteredWave`?
