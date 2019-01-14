@@ -16,7 +16,7 @@ You will:
 
 Parallel profiling tools provide information about how much time is spent in different parts of your code by different threads/processes.
 There are two major ways to collect profiling data: 
- * *sampling*: data are statistically harvested during run time to determine which parts of the code are most time consuming. This is useful for identiying the hotspots in a code (see [profiling](https://nesi.github.io/perf-training/python-scatter/profiling)).
+ * *sampling*: data are statistically harvested during run time to determine which parts of the code are most time consuming. This is useful for identifying the hotspots in a code (see [profiling](01-profiling.md)).
  * *tracing*: records the activity of instrumented parts of the code in time. This is useful to determine what each thread and process is doing at a particaular point in time. Tracing can reveal load balancing issues or the communication patterns of an MPI program. 
 
 MAP can be used both for sampling and tracing.
