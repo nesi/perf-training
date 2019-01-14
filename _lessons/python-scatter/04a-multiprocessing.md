@@ -16,47 +16,48 @@ cd multiproc
 
 ## Why multiprocessing
 
-Multiprocessing is suitable when you have:
+Multiprocessing is suitable when:
 
- * computational resources with many CPU cores. On Mahuika, you can access up to 36 cores (72 hyperthreads).
- * a large number of tasks to be executed in any order
+ * your computational resources have many CPU cores. On Mahuika, you can access up to 36 cores (72 hyperthreads).
+ * you have a large number of tasks that need to be executed in any order
 
 ### Pros
 
- * a way to leverage multiple CPU cores for increased performance
- * can handle different work load
+ * decreases your execution time by leveraging multiple CPU cores
+ * suitable when the workload of each process varies
 
 ### Cons
 
+ * uses more resources
  * processes must typically run on the same node
 
 ## Learn the basics 
 
-As an example, we'll assume that you have to apply a very expensive function to a large number of input values:
+As an example, we'll assume that you have to apply a very expensive function `f` to a number of input values:
 
 ```python
 import time
 
 def f(x):
-	# expensive function
-	time.sleep(10)
-	return x
+    # expensive function
+    time.sleep(10)
+    return x
 
 # call the function sequentially for input values 0, 1, 2, 3 and 4
 input_values = [x for x in range(5)]
 res = [f(x) for x in input_values]
 ```
 
-In its original form, function `f` is called sequentially for each value of `x`. The modified version using 3 processes reads:
+In its original form, function `f` is called sequentially for each value of `x`. The modified version using 3 processes is:
 
 ```python
 import multiprocessing
 import time
 
 def f(x):
-	# expensive function
-	time.sleep(10)
-	return x
+    # expensive function
+    time.sleep(10)
+    return x
 
 # create a "pool" of 3 processes to do the calculations
 pool = multiprocessing.Pool(processes=3)
@@ -67,17 +68,21 @@ input_values = [x for x in range(5)]
 res = pool.map(f, input_values)
 ```
 
-How it works: each input value of array `input_values` is put in a queue and handed over to a worker. Here, there are 3 workers who accomplish the task in parallel. When a worker has finished a task, a new task is assigned until the queue is empty. At which point all the elements of array `res` have been filled.
+How it works: each input value of `input_values` is put in a queue and handed over to a worker. Here, there are 3 workers who accomplish the task in parallel. When a worker has finished a task, a new task is assigned until the queue is empty. At which point all the elements of array `res` have been filled.
+
+The serial version takes about 50 seconds - there are 5 tasks each taking 10 seconds. The multiprocessing version takes about 20 seconds as some processes need to complete two tasks and others only one. Naturally, it would be more efficient to match the number of tasks to the number of processes. In many cases, however, the number of tasks exceeds the number of processes available on the system, meaning that some processes will need to work on several tasks.
+
 
 ## Running the scatter code using multiple threads
 
-To submit a job with 8 threads on Mahuika, type
+We've created a version of `scatter.py` which reads the environment variable `OMP_NUM_THREADS` to set the number of processes. To submit a job with 8 processes on Mahuika, type
 ```
-srun --hint=nomultithread --ntasks=1 --cpus-per-task=8 python scatter.py
+srun --hint=nomultithread --ntasks=1 --cpus-per-task=8 \
+time python scatter.py -checksum
 ```
-(with additional `srun` options such as `--account=` required). Option `--hint=nomultithread` ensures that each physical core gets only one thread, recommended in most cases for best performance. Without this option two threads may be placed on each core.
+(with additional `srun` options such as `--account=` required). Option `--hint=nomultithread` ensures that each physical core gets only one process, recommended in most cases for best performance. Without this option two processes may be placed on each core.
 
-To run interactively using 8 threads, type
+To run interactively using 8 processes, type
 ```
 export OMP_NUM_THREADS=8
 python scatter.py
@@ -85,21 +90,12 @@ python scatter.py
 
 ## Exercises
 
-We've created a version of `scatter.py` which reads the environment variable `OMP_NUM_THREADS` to set the number of threads.  In this version, the computation of the field values takes place in function 
-```python
-def  computeField(k):
-	#...
-```
-with argument `k` being the flat index into the 2D field arrays representing the incident and scatted fields (i.e. `k = j*nx1 + i`). In our formulation, the field at any location depends only on the values on the domain and obstacle boundaries, not on neighbouring locations. This allows us to compute the scatted and incident fields
+ This version of *scatter.py* has been slightly adapted so that, with a few code changes, you can turn the serial version into one where function `computeField` can execute in parallel. Function `computeField` takes input argument `k`, the flat index into the 2D field arrays representing the incident and scatted fields (i.e. `k = j*nx1 + i`), and returns the incident and scattered field values for each grid node. The incident and scattered field values
 ```python
 # change the following for parallel execution
 res = [computeField(k) for k in range(ny1 * nx1)]
- 
-# compute the field
-inci = numpy.array([r[0] for r in res], numpy.complex64).reshape((ny1, nx1))
-scat = numpy.array([r[1] for r in res], numpy.complex64).reshape((ny1, nx1))
 ```
-in parallel.
+can be computed in any order.
 
-1. adapt the code in scatter.py to evaluate `computeField` in parallel
-2. show the speedup with increasing number of processes
+1. adapt the code in scatter.py to call `computeField` in parallel (the number of processes is `nproc`)
+2. what is the speedup (timing of `--cpus-per-task=1` over `--cpus-per-task=8`)?
