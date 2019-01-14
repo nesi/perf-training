@@ -25,6 +25,7 @@ MAP can be used both for sampling and tracing.
 
 Choose your profiling case carefully, making sure:
 * it runs in a short time. Due to a possible large overhead from MAP (especially for tracing experiments), the program could run significantly slower than normal.
+* but the run time should not be too short as this could affect the accuracy of the sampling statistics
 * ensure the test case is representative of a production run
 
 **Note:** keep in mind, that with shortened computation time, the initialisation and finalisation steps may become dominant.
