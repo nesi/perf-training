@@ -44,10 +44,6 @@ python -m cProfile -o output.pstats scatter.py
 ```
 in your Slurm script or when running interactively. Options `-m cProfile -o output.pstats` call the cProfile library and save the profiling data in file *output.pstat*. Additional arguments can be passed to the *scatter.py* at the end if needed.
 
-Notice the `-m cProfile -o output.pstats` in the above command. This enables
-profiling and stores the profiling results in a file called *output.pstats*.
-If you leave out these options the code will just run normally.
-
 A nice way to visualise the  *output.pstats* file is with *gprof2dot*.
 
 ### Visualising the profiling output with *gprof2dot*
