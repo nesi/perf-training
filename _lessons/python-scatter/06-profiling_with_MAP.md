@@ -108,4 +108,4 @@ As an example, "CPU instructions" present the usage of different instruction set
 ## Exercises
 
  * profile the scatter code under the openmp directory using 4 OpenMP threads. Increase the problem size by passing options `-nx 256 -ny 256 -nc 256` to *scatter.py* to make the test run longer.
- * what is the amount of time spent in computeScatteredWave for the above test case?
+ * what is the amount of time spent in `computeScatteredWave` for the above test case?
