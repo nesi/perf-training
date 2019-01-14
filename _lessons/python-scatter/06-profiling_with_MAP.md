@@ -56,7 +56,7 @@ cd mpi
 To use MAP we need to load the *forge* module in our batch script and add `map --profile` in front of the parallel run statements. For example:
 ```
 module load forge
-map --profile srun --tasks=8 python scatter.py
+map --profile srun python scatter.py
 ```
 Upon execution, a file with subscript `.map` will be generated. The results can be viewed, for instance, with
 ```
