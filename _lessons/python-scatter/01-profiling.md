@@ -167,9 +167,9 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
     28                                           @profile
     29                                           def isInsideContour(p, xc, yc, tol=0.01):
     30                                               """
-    31                                               Check is a point is inside closed contour by summing the
+    31                                               Check if a point is inside closed contour by summing the
     32                                               the angles between point p, (xc[i], yc[i]) and (xc[i+1], yc[i+1]).
-    33                                               Point p id declared to be inside if the total angle amounts to
+    33                                               Point p is declared to be inside if the total angle amounts to
     34                                               2*pi.
     35                                           
     36                                               @param p point (2d array)
