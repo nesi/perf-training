@@ -46,7 +46,7 @@ In the following, both the graphical user interface and express launch versions 
 We'll use the *scatter.py* code in directory `mpi` of the *solutions* branch. Start by
 
 ```
-git --fetch all
+git fetch --all
 git checkout solutions
 cd mpi
 ```
