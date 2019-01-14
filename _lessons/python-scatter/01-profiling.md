@@ -212,7 +212,7 @@ at the page linked above.
 
 ## ARM MAP
 
-Another useful profiler provided on the NeSI system is [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) (previous Allinea MAP) profiler, which is part of the `forge` module (as well as the parallel debugger DDT). In contrast to cProfile, MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Python codes. More about ARM can be found [here](https://nesi.github.io/perf-training/python-scatter/profiling_MAP).
+Another useful profiler provided on the NeSI system is [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) profiler, which is part of the `forge` module (along with a parallel debugger, DDT). In contrast to cProfile, MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Python codes. More about MAP can be found [here](06-profiling_with_MAP.md).
 
 ## Exercises
 
