@@ -23,7 +23,7 @@ MAP can be used both for sampling and tracing.
 
 ## Choosing your test case
 
-Choose your test case carefully, making sure:
+Choose your profiling case carefully, making sure:
 * it runs in a short time. Due to a possible large overhead from MAP (especially for tracing experiments), the program could run significantly slower than normal.
 * ensure the test case is representative of a production run
 
