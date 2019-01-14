@@ -35,7 +35,7 @@ Choose your profiling case carefully, making sure:
 On NeSI systems the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) profiler is provided as part of the *forge* module (along with the parallel debugger DDT).
 
 MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran, as well as Python code. It can be used without code modification.
-MAP can be launched with a graphical user interface and without. The graphical user interface allows the user to navigate through the code and focus on specific source lines. The "Express Launch", without graphical user interface, makes it ieasy to submit job scripts and workflows.
+MAP can be launched with a graphical user interface and without. The graphical user interface allows the user to navigate through the code and focus on specific source lines. The "Express Launch", without the graphical user interface, makes it easy to submit job scripts and workflows.
 
 For more details see the [ARM MAP documentation](https://developer.arm.com/docs/101136/latest/map).
 
