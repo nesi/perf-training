@@ -71,6 +71,7 @@ The version with decorator `@jit(nopython=True)` runs 20x faster.
 
  * be sure to pass a numpy array to `mysum`, passing a list will cause the numba version to run slower than the original version
  * there is a one off cost when calling the function the first time due to the translation from Python to C and the compilation of the C code
+ * numba translated loops can call functions but these need to have the `@jit` decorator as well
 
 ## How it works
 
