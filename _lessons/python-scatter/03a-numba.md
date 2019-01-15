@@ -9,16 +9,19 @@ chapter: python-scatter
 
 You will:
 
-* learn how to accelerate code with numba 
+* learn how to accelerate code with numba
 
-We'll use the code in directory `numba`. Start by
+We'll use the code in the `numba` directory of the `scatter` repository. Move there with the command
 ```
 cd numba
 ```
 
 ## Why use numba
 
-Python often runs at least an order of magnitude slower than compiled C/C++ code and sometimes numpy vectorisation is not enough to get the performance boost you need. In this case you will need to implement some parts of your code as C/C++ functions and invoke these functions from your Python script. 
+Python often runs at least an order of magnitude slower than compiled C/C++
+code and sometimes numpy vectorisation is not enough to get the performance boost you need.
+In this case you will need to implement some parts of your code as C/C++ functions
+and invoke these functions from your Python script.
 
 Numba will translate Python functions into C and compile the code automatically under the hood.
 
@@ -34,7 +37,7 @@ Numba will translate Python functions into C and compile the code automatically 
  * Not all functions can be successfully processed by numba - if your function calls another function implemented in another Python module then the chances are that the function cannot be accelerated.
 
 
-## Learn the basics 
+## Learn the basics
 
 As an example, we'll assume that you have to compute the sum of all the elements of a very large array:
 ```python
@@ -59,8 +62,8 @@ The version with decorator `@jit(nopython=True)` runs 20x faster for an array of
 
 ## How it works
 
-Numba generates specialised, "just-in-time" machine code from Python code. 
-In the above example, the Python code defining the function `mysum` is 
+Numba generates specialised, "just-in-time" machine code from Python code.
+In the above example, the Python code defining the function `mysum` is
 translated into C code then compiled and executed when you run the script, all completely transparently.
 The argument `nopython=True` to the jit decorator indicates that the generated
 code will not access the Python interpreter. This produces the best performance
@@ -69,11 +72,11 @@ but requires that all argument types can be inferred, which may not always be th
 
 ## Exercises
 
-We've created a version of `scatter.py` in numba/src/ in which the numba decorator
+We've created a version of `scatter.py` in the `src/` directory, in which the numba decorator
 `@jit` can be freely added to its functions. The original version calls
 the Hankel function `hankel1` from `scipy.special` and this would prevent numba from generating the code.
-In the modified the version we call the Bessel functions from the C++ Boost library.
-Compile the code under `numba/src/` with
+In the modified version we call the associated Bessel functions from the C++ Boost library.
+Compile the code under `src/` with
 ```
 python setup.py build
 ```
