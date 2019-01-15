@@ -25,7 +25,7 @@ Due to possible overhead the code could run slower than normal. Therefore it is 
 Here we are going to profile the scatter code to understand where we should
 focus our efforts when we try to improve its performance.
 
-We'll use the code in directory `original`. Start by
+We'll use the code in directory `original`. Start with the command
 
 ```
 cd original
@@ -45,12 +45,10 @@ Run the following command to profile the code:
 python -m cProfile -o output.pstats scatter.py
 ```
 
-Notice the two options `-m cProfile -o output.pstats` in the above command. 
-* -m cProfile
-cProfile is a python module - we call it as a script by calling python with the `-m cProfile` option.
-* -o output.pstats
-We specify that the profiling results are written to a file called `output.pstats` with 
-the `-o` option.
+Notice the two options in the above command. 
+* -m cProfile :
+the -m option specifies the python module to run as a script - this allows us to run cProfile from the command-line
+* -o output.pstats : the -o option specifies that the  profiling results be written to the named file
 
 If you leave out these options the code will just run normally.
 
@@ -73,16 +71,17 @@ gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | dot -Tpng -o outp
 The `dot` program comes from *Graphviz*, which is already installed on
 Mahuika.
 
-Now view *output.png* by copying it to your local machine or by running
-`display output.png` on Mahuika (if you enabled X11 forwarding).
+Now view *output.png* either on Mahuika (if you have enabled X11-forwarding in your 
+`ssh` command) or on your local machine after copying it there,
+with the command `display output.png`.
 
-It should look something like this:
+The image should look something like this:
 
 [![profiling-results](images/scatter-profile.png)](images/scatter-profile.png)
 
 ### Interpreting the *gprof2dot* output
 
-What does the image show:
+What the image shows:
 
 * Each box represents a function from the input file, and contains information on:
   - the percentage of total run time spent in this function, including time
@@ -133,14 +132,14 @@ functions are to be profiled. *line_profiler* will time the execution of individ
 within these designated functions.
 
 **Note:** *line_profiler* is installed in the Python module we loaded earlier.
-You can check it is installed by running `kernprof --help`, which should print
+You can check that it is installed by running `kernprof --help`, which should print
 help information for the `kernprof` (*line_profiler*) program that we are going
 to use. (If not then `pip install line_profiler`.)
 
 To demonstrate the use of *line_profiler* we will use it to profile the
 `isInsideContour` function in the file *scatter.py*.
 
-**Note:** we chose this function because it is short, which means we can
+**Note:** we choose this function because it is short, which means we can
 include the output here and explain it.
 
 1. Edit the file *scatter.py*. Find the line that starts with:
