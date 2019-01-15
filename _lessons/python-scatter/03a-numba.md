@@ -18,20 +18,20 @@ cd numba
 
 ## Why use numba
 
-Python often runs an order of magnitude or slower than compiled C/C++ code and sometimes numpy vectorisation is not enough to get the performance boost you need. In this case you will need to implement some parts of your code as C/C++ functions and invoke these functions from your Python script. 
+Python often runs at least an order of magnitude slower than compiled C/C++ code and sometimes numpy vectorisation is not enough to get the performance boost you need. In this case you will need to implement some parts of your code as C/C++ functions and invoke these functions from your Python script. 
 
-Numba will translate Python functions into C and compile the code automatically, under the hood.
+Numba will translate Python functions into C and compile the code automatically under the hood.
 
 ### Pros
 
- * There is no need to know how to program C
- * Very little code change is in general required
+ * There is no need to know how to program in C
+ * Very little code change is required in general
  * Works well with numpy arrays
  * Numba supports multiple hardware (CPUs and GPUs), vectorisation, and can make your code run in parallel
 
 ### Cons
 
- * Not all functions can be successfully processed by numba - if your function calls another function implemented in another Python module then the chances are that the function cannot be accelerated. 
+ * Not all functions can be successfully processed by numba - if your function calls another function implemented in another Python module then the chances are that the function cannot be accelerated.
 
 
 ## Learn the basics 
@@ -59,12 +59,21 @@ The version with decorator `@jit(nopython=True)` runs 20x faster for an array of
 
 ## How it works
 
-Numba generates specialised, "just-in-time" from Python code. In the above example, the Python code defining function `mysum` is translated into C code, compiled and executed when you run the script, all completely transparently. Argument `nopython=True` indicates that the generated code will not access the Python interpreter. This produces the best performance but requires that all argument types can be inferred, which may not always be the case.
+Numba generates specialised, "just-in-time" machine code from Python code. 
+In the above example, the Python code defining the function `mysum` is 
+translated into C code then compiled and executed when you run the script, all completely transparently.
+The argument `nopython=True` to the jit decorator indicates that the generated
+code will not access the Python interpreter. This produces the best performance
+but requires that all argument types can be inferred, which may not always be the case.
 
 
 ## Exercises
 
-We've created a version of `scatter.py` to which numba decorators can be freely added to its functions. The original version was calling the Hankel function `hankel1` from `scipy.special` and this prevented numba to generate the code. In the modified the version we call the Bessel functions from the C++ Boost library. Compile the code under `src/`
+We've created a version of `scatter.py` in numba/src/ in which the numba decorator
+`@jit` can be freely added to its functions. The original version calls
+the Hankel function `hankel1` from `scipy.special` and this would prevent numba from generating the code.
+In the modified the version we call the Bessel functions from the C++ Boost library.
+Compile the code under `numba/src/` with
 ```
 python setup.py build
 ```
