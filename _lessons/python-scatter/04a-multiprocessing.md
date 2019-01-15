@@ -18,7 +18,7 @@ cd multiproc
 
 Multiprocessing is suitable when:
 
- * your computational resources have many CPU cores. On Mahuika, you can access up to 36 cores (72 hyperthreads).
+ * your computational resources have many CPU cores. On Mahuika, you can access up to 36 cores (72 hyperthreads) within a single node.
  * you have a large number of tasks that need to be executed in any order
 
 ### Pros
