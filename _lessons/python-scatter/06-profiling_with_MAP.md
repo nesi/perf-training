@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Profiling_MAP
+title: Profiling with ARM 
 permalink: /python-scatter/profiling_MAP
 chapter: python-scatter
 ---
@@ -34,7 +34,7 @@ The profiling case should be:
 
 On NeSI systems the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) profiler is provided as part of the `forge` module (along with the parallel debugger, DDT).
 
-MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Python codes. It can be used without code modification.
+MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran, as well as Python codes. It can be used without code modification.
 MAP can be launched with a GUI and without. The GUI allows the user to navigate through the code and enables them to focus on specific source lines. The "Express Launch", without GUI enables easy usage of existing queue scripts and workflows.
 
 For more details see the [ARM MAP documentation](https://developer.arm.com/docs/101136/latest/map).
