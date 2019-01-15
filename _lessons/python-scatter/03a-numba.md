@@ -69,13 +69,15 @@ The version with decorator `@jit(nopython=True)` runs 20x faster.
 
 *Notes*: 
 
- * be sure to pass a numpy array to `mysum`, passing a list will cause the numba version to run slower than the original version
- * there is a one off cost when calling the function the first time due to the translation from Python to C and the compilation of the C code
- * numba translated loops can call functions but these need to have the `@jit` decorator as well
+ * be sure to pass a numpy array to `mysum`, passing a Python list will cause the numba version to run slower than the original version
+ * it is possible to apply `@jit` decorators to loops that contain function calls. However, these functions need to be either implemented in C or have the `@jit` decorator
 
 ## How it works
 
 Numba generates specialised, "just-in-time" code from Python source code. In the above example, the Python function `mysum` is translated into C code, compiled and executed when you run the script. Argument `nopython=True` indicates that the generated code will not access the Python interpreter. This produces the best performance but requires that all argument types can be inferred, which may not always be the case.
+
+*Note*: there is a one off cost when calling the function the first time. Translating the code from Python to C and compiling the C code will consume time.
+
 
 
 ## Exercises
@@ -87,8 +89,8 @@ python setup.py build
 (Make sure you have the `BOOST_DIR` environment set as described [here.](introduction))
 
 
- 1. profile the code to get baseline timings using the approach described [here](profiling)
- 2. incrementally add `@jit` decorators to the most time consuming functions
+ 1. profile *scatter.py* to get a baseline timing using the approach described [here](profiling)
+ 2. incrementally add `@jit` decorators to the most time consuming functions. Start with the lowest level functions and move up the call stack.
  3. compare the performance with the original code
 
 
