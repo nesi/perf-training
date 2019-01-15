@@ -25,7 +25,7 @@ Due to possible overhead the code could run slower than normal. Therefore it is 
 Here we are going to profile the scatter code to understand where we should
 focus our efforts when we try to improve its performance.
 
-We'll use the code in directory `original`. Start by
+We'll use the code in directory `original`. Start with the command
 
 ```
 cd original
@@ -33,9 +33,11 @@ cd original
 
 ## Profiling Python code with *cProfile*
 
-The *cProfile* profiler is one implementation of the Python profiling interface. It measures the time spent within a function and the amount of calls.
+The *cProfile* profiler is one implementation of the Python profiling interface.
+It measures the time spent within functions and the number of calls made to them.
 
-**Note:** The timing information should not be taken as absolute values, since the profiling itself could possibly extend the run time, in some cases.
+**Note:** The timing information should not be taken as absolute values, since
+the profiling itself could possibly extend the run time in some cases.
 
 Run the following command to profile the code:
 
@@ -43,8 +45,11 @@ Run the following command to profile the code:
 python -m cProfile -o output.pstats scatter.py
 ```
 
-Notice the `-m cProfile -o output.pstats` in the above command. This enables
-profiling and stores the profiling results in a file called *output.pstats*.
+Notice the two options in the above command. 
+* -m cProfile :
+the -m option specifies the python module to run as a script - this allows us to run cProfile from the command-line
+* -o output.pstats : the -o option specifies that the  profiling results be written to the named file
+
 If you leave out these options the code will just run normally.
 
 **Note:** the code will take longer to run when profiling is enabled, due to
@@ -66,31 +71,32 @@ gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | dot -Tpng -o outp
 The `dot` program comes from *Graphviz*, which is already installed on
 Mahuika.
 
-Now view *output.png* by copying it to your local machine or running
-`display output.png` (if you enabled X11 forwarding).
+Now view *output.png* either on Mahuika (if you have enabled X11-forwarding in your 
+`ssh` command) or on your local machine after copying it there,
+with the command `display output.png`.
 
-It should look something like this:
+The image should look something like this:
 
 [![profiling-results](images/scatter-profile.png)](images/scatter-profile.png)
 
 ### Interpreting the *gprof2dot* output
 
-What does the image show:
+What the image shows:
 
-* Each box represents a function
+* Each box represents a function from the input file, and contains information on:
   - the percentage of total run time spent in this function, including time
     spent in other functions that are called by this function
   - (in brackets) the percentage of total run time spent in this function
     only, i.e. excluding time spent in other functions that are called by this
-    function. We call this *self time*.
+    function. We call this *self time*
   - the number of times this function was called
 * Arrows indicate which functions are called by other functions
   - information about the number of times called and percentage of total run
     time
 * We used the option `--colour-nodes-by-selftime`, so boxes are coloured by
   self time (the number in brackets)
-  - red coloured boxes are the functions that have the most time spent in them
-  - blue boxes have the least time
+  - red coloured boxes correspond to functions where the most time is spent 
+  - blue boxes correspond to functions where the least time is spent
 * Some functions that take a very low percentage of total run time may not
   show up
 
@@ -105,8 +111,8 @@ What to look for:
   *numpy*), for example the green box calling `dot` that takes 10.82% total
   time.
   - Usually you don't want to change code from external libraries, but you can
-    look at your functions that call that function, by going back along the
-    arrow. You might be able to optimise the way your code calls the external
+    see which of your functions call an external library function by going back along the
+    arrow from that function. You might be able to optimise the way your code calls the external
     function, use a more optimised library, or remove the call entirely.
 
 
@@ -118,23 +124,23 @@ find hotspots in your code (and often this is enough by itself). However, in
 some cases knowing that a particular function takes a lot of time is not
 particularly helpful. For example, it could be a very long function with multiple loops and computations.
 
-With *line_profiler* you have to explicitly tell it which functions you would
-like to be profiled, by modifying the source code slightly. Then
-*line_profiler* will time the execution of individual lines within those
-functions.
+*line_profiler* is a python profiler for doing line-by-line profiling.
+Typically, you would use *line_profiler* to gather more information about functions
+that *cProfile* has identified as hotspots.
+To use it, you modify the source code of your python file slightly to specify which
+functions are to be profiled. *line_profiler* will time the execution of individual lines
+within these designated functions.
 
 **Note:** *line_profiler* is installed in the Python module we loaded earlier.
-You can check it is installed by running `kernprof --help`, which should print
+You can check that it is installed by running `kernprof --help`, which should print
 help information for the `kernprof` (*line_profiler*) program that we are going
 to use. (If not then `pip install line_profiler`.)
 
 To demonstrate the use of *line_profiler* we will use it to profile the
-`isInsideContour` function.
+`isInsideContour` function in the file *scatter.py*.
 
-**Note:** we chose this function because it is short, which means we can
-include the output here and explain it. Typically, you would use
-*line_profiler* to gather more information about functions that *cProfile* has
-identified as hotspots.
+**Note:** we choose this function because it is short, which means we can
+include the output here and explain it.
 
 1. Edit the file *scatter.py*. Find the line that starts with:
    ```
@@ -218,7 +224,17 @@ Another useful profiler is provided on the NeSI system, the [ARM MAP](https://ww
 
 In contrast to cProfile, MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Python codes.
 It can be used without code modification.
-MAP can be launched with a GUI and without. The GUI allows the user to navigate through the code and enables them to focus on specific source lines. The "Express Launch", without a GUI, enables easy usage of existing submission scripts and workflows. For more details see the [ARM MAP manual](https://developer.arm.com/docs/101136/latest/map)). On the NeSI system you can start it by loading `module load forge` and launching `map`.
+MAP can be launched either with a GUI or without. 
+The GUI allows the user to navigate through the code enabling focus on specific source 
+lines.  The "Express Launch", without a GUI, enables easy usage of existing submission 
+scripts and workflows. 
+For more details see the [ARM MAP manual](https://developer.arm.com/docs/101136/latest/map)). On the NeSI system you can start it by loading `module load forge` and launching `map`.
+
+```
+map --help
+```
+
+will show you available options and how to call *map*.
 
 ## Summary
 
