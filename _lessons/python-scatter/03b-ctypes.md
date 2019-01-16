@@ -35,8 +35,8 @@ You will learn:
 
 Let's go to our example of computing the sum of all the elements of an array. In order not to interfere with the scatter code, let's create a directory `mysum` and go to that directory:
 ```
-mkdir mysum
-cd mysum
+mkdir mysum_example
+cd mysum_example
 ```
 Open your editor and copy-paste the following code
 ```cpp
@@ -47,8 +47,9 @@ Open your editor and copy-paste the following code
  * @return sum
  */
 extern "C" // required when using C++ compiler
-double mysum(int n, double* array) {
-    double res = 0;
+long long mysum(int n, int* array) {
+    // return type is 64 bit integer
+    long long res = 0;
     for (int i = 0; i < n; ++i) {
         res += array[i];
     }
@@ -101,8 +102,10 @@ The following summarises the translation between Python and C for some common da
 | `None`                                    | `NULL`            |                                               |
 | `str(...).encode('ascii')`                | `char*`           |                                               |
 | `ctypes.c_int(...)`                       | `int`             | No need to cast                               |
+| `ctypes.c_longlong(...)`                  | `long long`       |                                               |
 | `ctypes.c_double(...)`                    | `double`          |                                               |
 | `(...).ctypes.POINTER(ctypes.c_double)`   | `double*`         | pass a numpy array of type float64            |
+| `(...).ctypes.POINTER(ctypes.c_int)`      | `int*`            | pass a numpy array of type int32              |
 | `ctypes.byref(...)`                       | `&`               | pass by reference (suitable for arguments returning results)                             |      
 
 For a complete list of C to ctypes type mapping see the Python [documentation](https://docs.python.org/3/library/ctypes.html).
@@ -122,11 +125,11 @@ libfile = glob.glob('build/*/*.so')[0]
 mylib = ctypes.CDLL(libfile)
 
 # 2. tell Python the argument and result types of function mysum
-mylib.mysum.restype = ctypes.c_double
+mylib.mysum.restype = ctypes.c_longlong
 mylib.mysum.argtypes = [ctypes.c_int, 
-                        numpy.ctypeslib.ndpointer(dtype=numpy.float64)]
+                        numpy.ctypeslib.ndpointer(dtype=numpy.int32)]
 
-array = numpy.linspace(0., 1., 100000)
+array = numpy.arange(0, 100000000, 1, numpy.int32)
 
 # 3. call function mysum
 array_sum = mylib.mysum(len(array), array)
@@ -136,16 +139,15 @@ print('sum of array: {}'.format(array_sum))
 
 ### Additional explanation
 
- * By default, arguments are passed by value. To pass an array of doubles (`double*`), specify `numpy.ctypeslib.ndpointer(dtype=numpy.float)` in the `argtypes` list. You can declare `int*` similarly by using `numpy.ctypeslib.ndpointer(dtypes=numpy.int)`. Then the numpy arrays can be passed directly to the function with no other casting required.
+ * By default, arguments are passed by value. To pass an array of ints (`int*`), specify `numpy.ctypeslib.ndpointer(dtype=numpy.int32)` in the `argtypes` list. You can declare `double*` similarly by using `numpy.ctypeslib.ndpointer(dtypes=numpy.int32)`
 
- * Strings will need to be converted to byte strings in Python 3 (`str(mystring).encode('ascii')`).
+ * Strings will need to be converted to byte strings in Python 3 (`str(mystring).encode('ascii')`)
 
- * Passing by reference, for instance `int&` can be achieved using `ctypes.byref(myvar_t)` with `myvar_t` of type `ctypes.c_int`. 
+ * Passing by reference, for instance `int&` can be achieved using `ctypes.byref(myvar_t)` with `myvar_t` of type `ctypes.c_int`
 
- * The C type `NULL` will map to None.
+ * Numpy arrays of type numpy.int have precision numpy.int64 so make sure to create an array of type numpy.int32, which has the same precision as C int. 
 
  * When passing arrays, it is possible to specify extra restrictions on the numpy arrays at the interface level, for example the number of dimensions the array should have or its shape. If an array passed in as an argument does not meet the specified requirements and exception will be raised. A full list of possible options can be found in the `numpy.ctypeslib.ndpointer` [documentation](https://docs.scipy.org/doc/numpy-1.15.0/reference/routines.ctypeslib.html#numpy.ctypeslib.ndpointer).
-
 
 
 ## Exercises
@@ -155,7 +157,7 @@ We'll use the code in directory `cext`. Start with
 cd cext
 ```
 We've created a version of `scatter.py` that builds and calls a C++ external function `src/wave.cpp`. Compile the code using
-`python setup.py build`, making sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
+`python setup.py build`. Make sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
 
  1. profile the code and compare the timings with the results under `original`
  2. rewrite Python function `isInsideContour` defined in `scatter.py` in C++ and update file `setup.py` to compile your extension. 
