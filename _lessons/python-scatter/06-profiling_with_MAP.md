@@ -12,24 +12,6 @@ You will:
 * learn how to use MAP to profile an MPI code
 * learn how to interpret MAP profiling data
 
-## Introduction to profiling parallel codes
-
-Parallel profiling tools provide information about how much time is spent in different parts of your code by different threads/processes.
-There are two major ways to collect profiling data: 
- * *sampling*: data are statistically harvested during run time to determine which parts of the code are most time consuming. This is useful for identifying the hotspots in a code (see [profiling](01-profiling.md)).
- * *tracing*: records the activity of instrumented parts of the code in time. This is useful to determine what each thread and process is doing at a particaular point in time. Tracing can reveal load balancing issues or the communication patterns of an MPI program. 
-
-MAP can be used both for sampling and tracing.
-
-## Choosing your test case
-
-Choose your profiling case carefully, making sure:
-* it runs in a short time. Due to a possible large overhead from MAP (especially for tracing experiments), the program could run significantly slower than normal.
-* but the run time should not be too short as this could affect the accuracy of the sampling statistics
-* ensure the test case is representative of a production run
-
-**Note:** keep in mind, that with shortened computation time, the initialisation and finalisation steps may become dominant.
-
 
 ## MAP profiler
 
@@ -38,9 +20,20 @@ On NeSI systems the [Arm MAP](https://www.arm.com/products/development-tools/ser
 MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran, as well as Python code. It can be used without code modification.
 MAP can be launched with a graphical user interface (GUI) and without. The GUI allows the user to navigate through the code and focus on specific source lines. The "Express Launch", without the GUI, makes it easy to submit job scripts and workflows.
 
+MAP can be used to identify hotspots and load balance problems in parallel codes. In contrast to the *cProfiler* described in [here](profiling), MAP can be used to instrument Python, C, C++ and Fortran codes. MAP supports codes with OpenMP threads and/or MPI communication. It comes with a graphical user inteface which makes it easy to drill down into particular code sections or focus on specific time intervals during the run. 
+
 For more details see the [Arm MAP documentation](https://developer.arm.com/docs/101136/latest/map).
 
 In the following, both the GUI and express launch versions are used with the scatter example.
+
+## Choose your test case
+
+As with other profiling tools, choose your profiling case carefully by making sure:
+* the runs is short. Due to a possible large overhead from MAP (especially for tracing experiments), the program could run significantly slower than normal.
+* but the run time should not be too short as this could affect the accuracy of the sampling statistics
+
+**Note:** keep in mind, that with shortened computation time, the initialisation and finalisation steps may become dominant.
+
 
 ## Code example
 
