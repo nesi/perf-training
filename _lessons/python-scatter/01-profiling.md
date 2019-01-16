@@ -217,9 +217,9 @@ tell *memory_profiler* which functions you wish to profile.
 We will not cover memory profiler in detail here but more information can be found
 at the page linked above.
 
-## ARM MAP
+## Arm MAP
 
-Another useful profiler provided on the NeSI system is [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) (previous Allinea MAP) profiler, which is part of the `forge` module (as well as the parallel debugger DDT). In contrast to cProfile, MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran, as well as Python codes. More about ARM can be found [here](profiling_MAP).
+Another useful profiler provided on the NeSI system is [Arm MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) profiler (previously known as Allinea MAP), which is part of the `forge` module (as well as the parallel debugger DDT). In contrast to cProfile, MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran, as well as Python codes. More about ARM can be found [here](profiling_MAP).
 
 ## Exercises
 
