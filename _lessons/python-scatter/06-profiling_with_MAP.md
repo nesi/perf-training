@@ -33,12 +33,12 @@ Choose your profiling case carefully, making sure:
 
 ## MAP profiler
 
-On NeSI systems the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) profiler is provided as part of the *forge* module (along with the parallel debugger DDT).
+On NeSI systems the [Arm MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) profiler is provided as part of the *forge* module (along with the parallel debugger DDT).
 
 MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran, as well as Python code. It can be used without code modification.
 MAP can be launched with a graphical user interface (GUI) and without. The GUI allows the user to navigate through the code and focus on specific source lines. The "Express Launch", without the GUI, makes it easy to submit job scripts and workflows.
 
-For more details see the [ARM MAP documentation](https://developer.arm.com/docs/101136/latest/map).
+For more details see the [Arm MAP documentation](https://developer.arm.com/docs/101136/latest/map).
 
 In the following, both the GUI and express launch versions are used with the scatter example.
 
@@ -72,11 +72,11 @@ The GUI can be started after loading `module load forge` and launching
 map
 ```
 
-[![ARM MAP main](images/ARM_MAP_main.png)](images/ARM_MAP_main.png)
+[![Arm MAP main](images/ARM_MAP_main.png)](images/ARM_MAP_main.png)
 
 Click on "PROFILE". In the profile menu we need to specify the executable (in this case `python`), the arguments (here `scatter.py` and any additional options if present) and a working directory. In addition, we need to specify the number of MPI processes.
 
-[![ARM MAP main](images/ARM_MAP_run.png)](images/ARM_MAP_run.png)
+[![Arm MAP main](images/ARM_MAP_run.png)](images/ARM_MAP_run.png)
 
 Furthermore, the "submit to queue" parameter needs to be checked, for example the `--hint=nomultithread` can be specified there.
 
