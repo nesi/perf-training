@@ -97,15 +97,15 @@ To call  `mysum` from Python we'll use the `ctypes` module. The steps are:
 
 The following summarises the translation between Python and C for some common data types: 
 
-| Python casting                            | C type            | Comments                                      |
+| Python                                    | C type            | Comments                                      |
 |-------------------------------------------|-------------------|-----------------------------------------------|
 | `None`                                    | `NULL`            |                                               |
-| `str(...).encode('ascii')`                | `char*`           |                                               |
-| `ctypes.c_int(...)`                       | `int`             | No need to cast                               |
-| `ctypes.c_longlong(...)`                  | `long long`       |                                               |
-| `ctypes.c_double(...)`                    | `double`          |                                               |
-| `(...).ctypes.POINTER(ctypes.c_double)`   | `double*`         | pass a numpy array of type float64            |
-| `(...).ctypes.POINTER(ctypes.c_int)`      | `int*`            | pass a numpy array of type int32              |
+| `ctypes.char_p`                           | `char*`           |                                               |
+| `ctypes.c_int`                            | `int`             | No need to cast                               |
+| `ctypes.c_longlong`                       | `long long`       |                                               |
+| `ctypes.c_double`                         | `double`          |                                               |
+| `numpy.ctypeslib.ndpointer(dtype=numpy.float64)]`    | `double*`         | pass a numpy array of type numpy.float64            |
+| `numpy.ctypeslib.ndpointer(dtype=numpy.int32)]`      | `int*`            | pass a numpy array of type numpy.int32              |
 | `ctypes.byref(...)`                       | `&`               | pass by reference (suitable for arguments returning results)                             |      
 
 For a complete list of C to ctypes type mapping see the Python [documentation](https://docs.python.org/3/library/ctypes.html).
@@ -160,6 +160,6 @@ We've created a version of `scatter.py` that builds and calls a C++ external fun
 `python setup.py build`. Make sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
 
  1. profile the code and compare the timings with the results under `original`
- 2. rewrite Python function `isInsideContour` defined in `scatter.py` in C++ and update file `setup.py` to compile your extension. 
+ 2. rewrite Python function `isInsideContour` defined in `scatter.py` in C++ and update file `setup.py` to compile your extension. Make optional argument `tol` compulsory in the C++ version. 
 
 
