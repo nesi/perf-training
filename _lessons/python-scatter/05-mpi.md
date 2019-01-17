@@ -85,19 +85,14 @@ pe = comm.Get_rank()
 # special process responsible for administrative work
 root = nprocs - 1
 
-# total number of elements
+# total number of (work) elements
 n_global = 5
 
-# get the start/end indices for each proc
-n = int(numpy.ceil(n_global / float(nprocs)))
-indxBeg = n * pe
-indxEnd = min(n*(pe + 1), n_global)
-
-# local number of elements
-n_local =  indxEnd - indxBeg
+# get the list of indices local to this process
+local_inds = numpy.array_split(numpy.arange(0, n_global), nprocs)[pe]
 
 # allocate and set local input values 
-local_input_values = [x for x in range(indxBeg, indxEnd)]
+local_input_values = local_inds
 
 local_res = [f(x) for x in local_input_values]
 
@@ -116,9 +111,7 @@ We can now ask our communicator how many MPI processes are running using the `Ge
 
 The process with rank `nprocs - 1` is earmarked here as "root". The root process often does administrative work, such as gathering results from other processes, as shown in the diagram above. We are free to choose any MPI rank as root.
 
-Now each process works on its own local array `local_input_values`, which is smaller than the actual array as it contains only the data assigned to a given process. For good load balancing, we like the local array to have the same size across all processes so we allocate size `n` to each local array, except for the last process which gets the remaining number of elements. 
-
-Each process then performs work on global index range `indxBeg` to `indxEnd` of the data. In this simple example, the local data range from `indxBeg` to `indxEnd` and the results of the local calculations are stored in `local_res`.
+Now each process works on its own local array `local_input_values`, which is smaller than the actual array as it contains only the data assigned to a given process. In the above, array `local_input_values` is the set of indices `numpy.arange(0, n_global)` which is local to the process. For good load balancing, we like `local_input_values` to have the same size across all processes and so we use `numpy.array_split` to decompose the array in "optimal" way. The results of the local calculations are stored in `local_res`.
 
 To gather all results on `root`, we now call MPI's `gather` method on every process, hand over the different contributions, and tell MPI which rank we have chosen as root.
 
@@ -146,7 +139,7 @@ To run interactively using 8 processes, type
 mpiexec -n 8 python scatter.py
 ```
 
-## How to use MPI to accelerate `scatter.py`
+## How to use MPI to accelerate scatter.py
 
  * `from mpi4py import MPI` at the top. This will initialise MPI.
  * `comm = MPI.COMM_WORLD` gets the communicator.
