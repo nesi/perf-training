@@ -20,7 +20,7 @@ On NeSI systems the [Arm MAP](https://www.arm.com/products/development-tools/ser
 MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran, as well as Python code. It can be used without code modification.
 MAP can be launched with a graphical user interface (GUI) and without. The GUI allows the user to navigate through the code and focus on specific source lines. The "Express Launch", without the GUI, makes it easy to submit job scripts and workflows.
 
-MAP can be used to identify hotspots and load balance problems in parallel codes. In contrast to the *cProfiler* described in [here](profiling), MAP can be used to instrument Python, C, C++ and Fortran codes. MAP supports codes with OpenMP threads and/or MPI communication. It comes with a graphical user inteface which makes it easy to drill down into particular code sections or focus on specific time intervals during the run. 
+MAP can be used to identify hotspots and load balance problems in parallel codes. In contrast to the *cProfiler* described in [here](profiling), MAP can be used to instrument Python, C, C++ and Fortran codes. MAP supports codes with OpenMP threads and/or MPI communication. It comes with a graphical user inteface which makes it easy to drill down into particular code sections or focus on specific time intervals during the run.
 
 For more details see the [Arm MAP documentation](https://developer.arm.com/docs/101136/latest/map).
 
@@ -77,7 +77,7 @@ After submitting, MAP will wait until the job is allocated, connect to the proce
 
 ## MAP Profile
 
-The profile window is divided into three main sections.
+The profile window is divided into three main sections (click on picture to enlarge).
 
 [![example-map-scatter](images/ARM_MAP_scatter_mpi.png)](images/ARM_MAP_scatter_mpi.png)
 
