@@ -16,7 +16,7 @@ You will learn:
 ## Why extend Python with C/C++
 
  1. You want to call a function that is implemented in C, C++ or Fortran. This can give you access to a vast collection of libraries so you won't have to reinvent the wheel
- 2. You have identified a performance bottleneck - reimplementing some parts of your Python code in C, C++ or Fortran will give you a performance boost
+ 2. You have identified a performance bottleneck - reimplementing some parts of your Python code in C, C++ or Fortran could give you a performance boost
  3. It makes your code type safe. In contrast to C, C++ and Fortran, Python is not a typed language - you can pass any object to any Python function.  This can cause runtime failures in Python which cannot occur in C, C++ or Fortran, as the error would be caught by the compiler
 
 ### Pros
