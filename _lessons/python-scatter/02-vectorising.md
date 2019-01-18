@@ -97,13 +97,13 @@ We have written a partially vectorised version of `scatter`. In `wave.py`,
   res = 0j
   n = len(xc)
   for i0 in range(n - 1):
-    ...
+    #...
     res += computeScatteredWaveElement(kvec, p0, p1, point)
   return res
 ```
 was replaced with:
 ```python
-    ...
+    #...
     return numpy.sum( dsdt * (-g * gradIncident(kvec, nDotK, pmid) + \
                               shadow * dgdn * incident(kvec, pmid)) )  
 ```
