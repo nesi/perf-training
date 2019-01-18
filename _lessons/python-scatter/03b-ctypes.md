@@ -139,7 +139,7 @@ print('sum of array: {}'.format(array_sum))
 
 ### Additional explanation
 
- * By default, arguments are passed by value. To pass an array of ints (`int*`), specify `numpy.ctypeslib.ndpointer(dtype=numpy.int32)` in the `argtypes` list. You can declare `double*` similarly by using `numpy.ctypeslib.ndpointer(dtypes=numpy.int32)`
+ * By default, arguments are passed by value. To pass an array of ints (`int*`), specify `numpy.ctypeslib.ndpointer(dtype=numpy.int32)` in the `argtypes` list. You can declare `double*` similarly by using `numpy.ctypeslib.ndpointer(dtypes=numpy.float64)`
 
  * Strings will need to be converted to byte strings in Python 3 (`str(mystring).encode('ascii')`)
 
