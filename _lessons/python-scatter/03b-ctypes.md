@@ -119,7 +119,7 @@ import numpy
 import glob
 
 # find the shared library, the path depends on the platform and Python version
-libfile = glob.glob('build/*/*.so')[0]
+libfile = glob.glob('build/*/mysum*.so')[0]
 
 # 1. open the shared library
 mylib = ctypes.CDLL(libfile)
@@ -160,6 +160,9 @@ We've created a version of `scatter.py` that builds and calls a C++ external fun
 `python setup.py build`. Make sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
 
  1. profile the code and compare the timings with the results under `original`
- 2. rewrite Python function `isInsideContour` defined in `scatter.py` in C++ and update file `setup.py` to compile your extension. Make optional argument `tol` compulsory in the C++ version. 
+ 2. rewrite Python function `isInsideContour` defined in `scatter.py` in C++. To do so:
+   * create a new file called `is_inside_contour.cpp` under the `src` directory and write the C callable function in it. Make optional argument `tol` compulsory in function
+   * add this file to the wave extension in setup.py
+   * compile the extension. 
 
 
