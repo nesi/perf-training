@@ -90,7 +90,7 @@ python setup.py build
 
 
  1. profile *scatter.py* to get a baseline timing using the approach described [here](profiling)
- 2. incrementally add `@jit` decorators to the most time consuming functions. Start with the lowest level functions and move up the call stack.
+ 2. incrementally add `@jit` decorators to the most time consuming functions. Start with the lowest level functions and move up the call stack
  3. compare the performance with the original code
 
 
