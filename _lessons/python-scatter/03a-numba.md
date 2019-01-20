@@ -12,7 +12,7 @@ You will learn:
 * what numba is 
 * how to accelerate code with numba 
 
-We'll use the code in directory `numba`. Start by
+We'll use the code in directory `numba`. Start with
 ```
 cd numba
 ```
