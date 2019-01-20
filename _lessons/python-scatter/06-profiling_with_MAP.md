@@ -1,79 +1,75 @@
 ---
 layout: post
-title: Profiling_MAP
+title: Profiling with MAP
 permalink: /python-scatter/profiling_MAP
 chapter: python-scatter
 ---
 
 ## Objectives
 
-Learn how to profile parallel codes using ARM MAP:
+You will:
 
-* learn how to use MAP
-* visualise the profiling data
-* interpret the profiling results
-
-## Introduction to profiling parallel codes
-
-Parallel profiling tools provide information about how much time is spent in different parts of your code by different threads/processes.
-There are 2 major ways to collect profiling data: *sampling* and *tracing*. Sampling is a statistical method. During run time the so called *stack trace* is analysed regularly. In contast to that tracing measures actual run time of instrumented parts with a well defined start and end. The data from all threads/processes are gathered and analysed. Thus we can not only see which part of the code is most time consuming, but also how this performs on different processes.
-
-Due to possible overhead (especially for tracing experiments) the program could run significantly slower than normal. Therefore it is generally advisable to first run a sampling experiment and choose a small representative test case to profile.
-
-## Profiling test case
-
-The profiling case should be:
-* representative, need to cover all features used during production
-* short in run time for a fast turnaround, but long enough to be representative of the actual calculations you are going to run
-* scaling effects can be investigated by comparing profiles small and big jobs
-
-**Note:** keep in mind, that with shortened computation time, the initialisation and finalisation becomes more dominant.
+* learn how to use MAP to profile an MPI code
+* learn how to interpret MAP profiling data
 
 
-## ARM MAP profiler
+## MAP profiler
 
-On NeSI systems the [ARM MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) profiler is provided as part of the `forge` module (along with the parallel debugger, DDT).
+On NeSI systems the [Arm MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) profiler is provided as part of the *forge* module (along with the parallel debugger DDT).
 
-MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran and F90, as well as Python codes. It can be used without code modification.
-MAP can be launched with a GUI and without. The GUI allows the user to navigate through the code and enables them to focus on specific source lines. The "Express Launch", without GUI enables easy usage of existing queue scripts and workflows.
+MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran, as well as Python code. It can be used without code modification.
+MAP can be launched with a graphical user interface (GUI) and without. The GUI allows the user to navigate through the code and focus on specific source lines. The "Express Launch", without the GUI, makes it easy to submit job scripts and workflows.
 
-For more details see the [ARM MAP documentation](https://developer.arm.com/docs/101136/latest/map).
+MAP can be used to identify hotspots and load balance problems in parallel codes. In contrast to the *cProfiler* described in [here](profiling), MAP can be used to instrument Python, C, C++ and Fortran codes. MAP supports codes with OpenMP threads and/or MPI communication. It comes with a graphical user inteface which makes it easy to drill down into particular code sections or focus on specific time intervals during the run.
 
-In the following, both GUI and express launch versions are used with the scatter example.
+For more details see the [Arm MAP documentation](https://developer.arm.com/docs/101136/latest/map).
 
-## Scatter MPI test case
+In the following, both the GUI and express launch versions are used with the scatter example.
 
-We'll use the code in directory `mpi`. Start by
+## Choose your test case
+
+As with other profiling tools, choose your profiling case carefully by making sure:
+* the runs is short. Due to a possible large overhead from MAP (especially for tracing experiments), the program could run significantly slower than normal.
+* but the run time should not be too short as this could affect the accuracy of the sampling statistics
+
+**Note:** keep in mind, that with shortened computation time, the initialisation and finalisation steps may become dominant.
+
+
+## Code example
+
+We'll use the *scatter.py* code in directory `mpi` of the *solutions* branch. Start by
 
 ```
+git fetch --all
+git checkout solutions
 cd mpi
 ```
 
-The MPI version of scatter performs the default test case within a short time (less than 20 seconds). We could argue that this is too short. Thus, we increase the problem size:
-```
-python scatter.py -c -nx 256 -ny 256 -nc 256
-```
 ## Using the "Express Launch"
 
-To use ARM MAP we need to load `module load forge` in our batch script and add `map --profile` in front of the parallel run statements. Thus, `srun` and its options, as well as our executable and its arguments are passed to MAP.
-Thus in the script we will have something like:
-
+To use MAP we need to load the *forge* module in our batch script and add `map --profile` in front of the parallel run statements. For example:
 ```
 module load forge
-map --profile srun python scatter.py -c -nx 256 -ny 256 -nc 256
+map --profile srun python scatter.py
+```
+Upon execution, a file with subscript `.map` will be generated. The results can be viewed, for instance, with
+```
+map python3_scatter_py_8p_1n_2019-01-14_00-31.map
+```
+(the `.map` file name will vary with each run.) See section [MAP Profile](#map-profile) for how to interpret the results.
+
+## Using the graphical interface
+
+The GUI can be started after loading `module load forge` and launching
+```
+map
 ```
 
-As a result some general information about the program run is printed to stdout from MAP as well as a file with the profiling information. This has the file ending `.map`. The results can be view by launching map with that file (see section [MAP Profile](#map-profile) ).
+[![Arm MAP main](images/ARM_MAP_main.png)](images/ARM_MAP_main.png)
 
-## Using the graphical Interface
+Click on "PROFILE". In the profile menu we need to specify the executable (in this case `python`), the arguments (here `scatter.py` and any additional options if present) and a working directory. In addition, we need to specify the number of MPI processes.
 
-The GUI can be started after loading `module load forge` and launching `map`.
-
-[![ARM MAP main](images/ARM_MAP_main.png)](images/ARM_MAP_main.png)
-
-In the profile menu we need to specify the executable (in this case `python`), the arguments (here `scatter.py -c`) and a working directory. Additional to that, we need to define the parallelisation parameters, e.g. one MPI process and 8 OMP threads.
-
-[![ARM MAP main](images/ARM_MAP_run.png)](images/ARM_MAP_run.png)
+[![Arm MAP main](images/ARM_MAP_run.png)](images/ARM_MAP_run.png)
 
 Furthermore, the "submit to queue" parameter needs to be checked, for example the `--hint=nomultithread` can be specified there.
 
@@ -81,14 +77,14 @@ After submitting, MAP will wait until the job is allocated, connect to the proce
 
 ## MAP Profile
 
-The profile window is divided into three main sections.
+The profile window is divided into three main sections (click on picture to enlarge).
 
 [![example-map-scatter](images/ARM_MAP_scatter_mpi.png)](images/ARM_MAP_scatter_mpi.png)
 
-On top various metrics can be displayed, which can be switched in the "Metrics" menu.
+On top, various metrics can be selected in the "Metrics" menu.
 In the middle part, a source code navigator connects line by line with profiling data.
-Most interesting for us here, is the profiling table on the bottom. Presenting the most time consuming parts of the program with function names, the actual source code, and its location.
-For more detail, the table can be extended with the most time consuming parts of the contained sub-function calls.
+Most interesting is the profiling table at the bottom, which sorts the most time consuming parts of the program, providing
+function names, source code and line numbers.
 
 The Metrics part can be changed to:
 * Activity timeline
@@ -102,7 +98,7 @@ As an example, "CPU instructions" present the usage of different instruction set
 
 [![example-map-scatter_CPU](images/ARM_MAP_scatter_mpi_CPU.png)](images/ARM_MAP_scatter_mpi_CPU.png)
 
+## Exercises
 
-## Summary
-
-You should now be able to profile parallel programs using MAP to help understand where time is being and where we should start to optimise.
+ * profile the scatter code under the openmp directory using 4 OpenMP threads. Increase the problem size by passing options `-nx 256 -ny 256 -nc 256` to *scatter.py* to make the test run longer.
+ * what is the amount of time spent in `computeScatteredWave` for the above test case?
