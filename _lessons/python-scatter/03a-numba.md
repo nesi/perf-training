@@ -14,16 +14,17 @@ You will learn:
 
 We'll use the code in the `numba` directory of the `scatter` repository.
 Move there with the command
-
 ```
 cd numba
 ```
 
+## What is numba
+
+Numba is Python module that translates a subset of Python and numpy code into fast machine code. Numba will allow you to develop code in Python while being able to reap the benefit of C code in terms of execution speed.
+
 ## Why use numba
 
-Python often runs at least an order of magnitude slower than compiled C/C++ code and sometimes numpy vectorisation is not enough to get the performance boost you need.  In this case you will need to implement some parts of your code as C/C++ functions and invoke these functions from your Python script.
-
-Numba will translate Python functions into C and compile the code automatically under the hood.
+Python often runs at least an order of magnitude slower than compiled C/C++ code and sometimes numpy vectorisation is not enough to get the performance boost you need.  In this case you will need to implement some parts of your code as C/C++ functions. With numba, you can tag slow functions, numba will translate these to C and compile the code automatically under the hood.
 
 ### Pros
 
@@ -34,8 +35,7 @@ Numba will translate Python functions into C and compile the code automatically 
 
 ### Cons
 
- * not all functions can be successfully processed by numba - if your function calls another function implemented in another Python module then the chances are that your function cannot be accelerated.
-
+ * not all functions can be successfully processed by numba - if your function calls another function implemented in another Python module then the chances are that your function cannot be accelerated
 
 ## Learn the basics
 
@@ -44,8 +44,8 @@ As an example, we'll assume that you have to compute the sum of all the elements
 import numpy
 
 def mysum(array):
-        res = 0
-        for i in range(len(array)):
+    res = 0
+    for i in range(len(array)):
         res += array[i]
     return res
 
@@ -59,10 +59,10 @@ from numba import jit
 
 @jit(nopython=True)
 def mysum(array):
-        res = 0
-        for i in range(len(array)):
-                res += array[i];
-        return res;
+    res = 0
+    for i in range(len(array)):
+        res += array[i];
+    return res;
 
 # print the sum of 0, 1, ... 99999999
 print(mysum(numpy.arange(0, 100000000)))
@@ -70,7 +70,6 @@ print(mysum(numpy.arange(0, 100000000)))
 The version with decorator `@jit(nopython=True)` runs 20x faster.
 
 *Notes*:
-
  * be sure to pass a numpy array to `mysum`, passing a Python list will cause the numba version to run slower than the original version
  * it is possible to apply `@jit` decorators to loops that contain function calls. However, these functions need to be either implemented in C or have the `@jit` decorator
 
@@ -102,7 +101,7 @@ python setup.py build
 
 
  1. profile *scatter.py* to get a baseline timing using the approach described [here](profiling)
- 2. incrementally add `@jit` decorators to the most time consuming functions. Start with the lowest level functions and move up the call stack.
+ 2. incrementally add `@jit` decorators to the most time consuming functions. Start with the lowest level functions and move up the call stack
  3. compare the performance with the original code
 
 
