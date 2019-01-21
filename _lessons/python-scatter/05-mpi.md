@@ -82,7 +82,7 @@ comm = MPI.COMM_WORLD
 # number of processes
 nprocs = comm.Get_size()
 
-# identiy of this process (process element, sometimes called rank)
+# identity of this process (process element, sometimes called rank)
 pe = comm.Get_rank()
 
 # special process responsible for administrative work
@@ -115,7 +115,7 @@ We can now ask our communicator how many MPI processes are running using the `Ge
 
 The process with rank `nprocs - 1` is earmarked here as "root". The root process often does administrative work, such as gathering results from other processes, as shown in the diagram above. We are free to choose any MPI rank as root.
 
-Now each process works on its own local array `local_input_values`, which is smaller than the actual array as it contains only the data assigned to a given process. In the above, array `local_input_values` is the set of indices from `numpy.arange(0, n_global)` which are local to that particular process. Each process will get a different  `local_input_values`. For good load balancing, we like `local_input_values` to have the same size across all processes and so we use `numpy.array_split` to decompose the array in "optimal" way.
+Now each process works on its own local array `local_input_values`, which is smaller than the actual array as it contains only the data assigned to a given process. In the above, array `local_input_values` is the set of indices from `numpy.arange(0, n_global)` which are local to that particular process. Each process will get a different  `local_input_values`. For good load balancing, we like `local_input_values` to have the same size across all processes and so we use `numpy.array_split` to decompose the array in an "optimal" way.
 
 The results of the local calculations are stored in `local_res`. To gather all results on `root`, we now call MPI's `gather` method on every process, hand over the different contributions, and tell MPI which rank we have chosen as root.
 
