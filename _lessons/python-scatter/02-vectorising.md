@@ -57,7 +57,7 @@ Consider computing the sine function of 10 million elements and storing the resu
 import numpy
 
 n = 10000000
-a = numpy.zeros((n,), numpy.float64)
+a = numpy.zeros([n], numpy.float64)
 for i in range(n):
   a[i] = numpy.sin(i)
 ```
