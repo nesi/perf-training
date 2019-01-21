@@ -18,11 +18,13 @@ Move there with the command
 cd numba
 ```
 
+## What is numba
+
+Numba is Python module that translates a subset of Python and numpy code into fast machine code. Numba will allow you to develop code in Python while being able to reap the benefit of C code in terms of execution speed.
+
 ## Why use numba
 
-Python often runs at least an order of magnitude slower than compiled C/C++ code and sometimes numpy vectorisation is not enough to get the performance boost you need.  In this case you will need to implement some parts of your code as C/C++ functions and invoke these functions from your Python script.
-
-Numba will translate Python functions into C and compile the code automatically under the hood.
+Python often runs at least an order of magnitude slower than compiled C/C++ code and sometimes numpy vectorisation is not enough to get the performance boost you need.  In this case you will need to implement some parts of your code as C/C++ functions. With numba, you can tag slow functions, numba will translate these to C and compile the code automatically under the hood.
 
 ### Pros
 
