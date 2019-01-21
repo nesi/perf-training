@@ -14,7 +14,7 @@ You will:
 * learn to recognise code that can benefit from vectorisation
 * learn how to vectorise a loop
 
-We'll use the code in directory `vect`. Start by
+We'll use the code in directory `vect`. Start with
 ```
 cd vect
 ```
@@ -46,15 +46,18 @@ Array operations are available through the `numpy` Python module. `numpy` arrays
  * all array elements must have the **same type** (integer, float, etc.)
  * array elements cannot be added or removed
 
-On the other hand, `numpy` arrays support elementwise operations. Python code using large `numpy` arrays can run as fast as C code in some cases. A typical exception is an algorithm that performs a large number of operations on the same data, where each data element should be kept inside the processor for as long as possible to avoid the waiting times associated with accessing memory. In such cases, writing a loop can be better than vectorisation with `numpy`, but you may need to use `numba` or write your code in a compiled language to do this efficiently for the reasons that we discussed at the beginning.
+On the other hand, `numpy` arrays support elementwise operations. Python code using large `numpy` arrays can run as fast as C code in some cases. 
+
+There are (rare) instances where the non-vectorised version of a code runs faster. A typical case is when an algorithm performs a large number of operations on a small set of data. The processor may then be able to keep the data stored internally in registers and avoid the cost of repeatedly fetching data from memory. In such cases, writing a loop can be better than vectorisation with *numpy*, but you may need to use *numba* or write your code in a compiled language to do this efficiently for the reasons that we discussed at the beginning.
 
 ### Example 1: function applied to each array element
 
 Consider computing the sine function of 10 million elements and storing the result in a list
 ```python
 import numpy
+
 n = 10000000
-a = numpy.zeros((n,), numpy.float64)
+a = numpy.zeros([n], numpy.float64)
 for i in range(n):
   a[i] = numpy.sin(i)
 ```
@@ -62,10 +65,11 @@ for i in range(n):
 The equivalent, vectorised version
 ```python
 import numpy
+
 n = 10000000
 a = numpy.sin(numpy.linspace(0, n - 1, n))
 ```
-runs about 10 times faster.
+runs 20 or more times faster.
 
 Note that the vectorised version requires more memory since a temporary array will need to be created to hold `numpy.linspace(0, n - 1, n)`. In general, the vectorised version may contain many more temporary arrays, so a trade-off must be made between memory usage and performance.
 
@@ -93,13 +97,13 @@ We have written a partially vectorised version of `scatter`. In `wave.py`,
   res = 0j
   n = len(xc)
   for i0 in range(n - 1):
-    ...
+    #...
     res += computeScatteredWaveElement(kvec, p0, p1, point)
   return res
 ```
 was replaced with:
 ```python
-    ...
+    #...
     return numpy.sum( dsdt * (-g * gradIncident(kvec, nDotK, pmid) + \
                               shadow * dgdn * incident(kvec, pmid)) )  
 ```
@@ -110,8 +114,6 @@ where `dsdt`, `g`, etc. are all arrays of size `n - 1` (number of segments).
 
  1. profile the vectorised code and compare to the non-vectorised code
 
- 2. in scatter.py, vectorise the `isInsideContour` function by eliminating the loop and working directly on the `xc` and `yc` arrays
+ 2. in scatter.py, vectorise function `isInsideContour` by eliminating the loop computing the sum `tot` and report the new timing
  
- 3. report the performance improvement of the vectorised branch over the non-vectorised, master branch. 
-
 
