@@ -44,7 +44,7 @@ Array operations are available through the `numpy` Python module. `numpy` arrays
 
 On the other hand, `numpy` arrays support elementwise operations.
 
-Python code using large `numpy` arrays should almost always run much faster than plain Python code, and it can run as fast as C code in some cases. If your algorithm has high "algorithmic intensity", where many operations are done on the same piece of data, you may find that implementing loops with Numba or a low-level language like C provides yet better performance - these methods can often use fast processor caches more efficiently, avoiding the cost of repeatedly fetching data form memory. They also avoid temporary arrays that `numpy` code sometimes requires.
+Vectorised Python code using large `numpy` arrays should almost always run much faster than plain Python code with loops, and it can run as fast as C code in some cases. If your algorithm has high "algorithmic intensity", where many operations are done on the same piece of data, you may find that implementing loops with Numba or a low-level language like C provides yet better performance - these methods can often use fast processor caches more efficiently, avoiding the cost of repeatedly fetching data form memory. They also avoid temporary arrays that `numpy` code sometimes requires.
 
 ### Example 1: function applied to each array element
 
