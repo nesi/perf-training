@@ -81,16 +81,16 @@ The application always starts in serial mode on a single thread (single arrow at
 Because OpenMP is based on the shared memory programming model, most variables are shared by default. Other variables like loop index are meant to be private. By private we mean that the variable can take a different value for each thread. The programmer determines which variables are private and which are shared.
 
 ### Example
-As an example, we’ll assume that you have to compute the sum of the square of each element of an array.
+As an example, we’ll assume that you have to compute the sum of the square of each element of an array:
 ```cpp
 /**
- * Compute the sum an array
+ * Compute the sum of the quare of array elements
  * @param n number of elements
  * @param arr input array
- * @return sum
+ * @return res
  */
 extern "C"
-double mysum(int n, double* arr) {
+double mySumSq(int n, double* arr) {
     double res = 0;
     #pragma omp parallel for default(none) shared(arr) reduction(+:res)
     for (int i = 0; i < n; ++i) {
