@@ -21,13 +21,9 @@ cd vect
 
 ## What is vectorisation
 
-Vectorisation is a programming style where operations on a single piece of data, typically in a loop, are replaced by operations on entire arrays. Vectorisation can improve the performance of a code, and can make the code more concise and easier to maintain.
+Vectorisation in Python is a programming style where operations on a single piece of data, typically in a loop, are replaced by operations on entire arrays. Vectorisation can improve the performance of a code, and can make the code more concise and easier to maintain.
 
 In scripting languages, loops can be slow to execute because of the overhead of the interpreter, which may need to parse each expression, perform various input data checks and more. These overheads add up when expressions are repeated many times in a loop. Vectorisation avoids the issue by replacing the loop with a single array operation, which can significantly boost performance. 
-
-Vectorisation has a second meaning in the context of modern CPUs, which can apply the same basic operation to 8 or more pieces of data for every clock cycle, depending on the hardware. This is also often called `SIMD` (single instruction multiple data), and it is a low-level parallelisation method (distinct from other methods, such as OpenMP parallelisation).
-
-Compilers can make use of such SIMD instructions when they generate machine code for loops (or the vectorised expressions that we just discussed), which can provide very significant performance improvements. Large parts of the algorithms implemented in the `numpy` package that we will introduce in this lesson use SIMD instructions as well if supported by the hardware. GPUs also use a form of SIMD to reach their enormous compute performance.
 
 ## Identifying code sections for vectorisation
 
@@ -44,11 +40,11 @@ When considering nested loops, start by vectorising the innermost loop, unless t
 Array operations are available through the `numpy` Python module. `numpy` arrays in many respects behave like lists with the following caveats:
 
  * all array elements must have the **same type** (integer, float, etc.)
- * array elements cannot be added or removed
+ * array elements cannot be added or removed (without having to recreate the array)
 
-On the other hand, `numpy` arrays support elementwise operations. Python code using large `numpy` arrays can run as fast as C code in some cases. 
+On the other hand, `numpy` arrays support elementwise operations.
 
-There are (rare) instances where the non-vectorised version of a code runs faster. A typical case is when an algorithm performs a large number of operations on a small set of data. The processor may then be able to keep the data stored internally in registers and avoid the cost of repeatedly fetching data from memory. In such cases, writing a loop can be better than vectorisation with *numpy*, but you may need to use *numba* or write your code in a compiled language to do this efficiently for the reasons that we discussed at the beginning.
+Python code using large `numpy` arrays should almost always run much faster than plain Python code, and it can run as fast as C code in some cases. If your algorithm has high "algorithmic intensity", where many operations are done on the same piece of data, you may find that implementing loops with Numba or a low-level language like C provides yet better performance - these methods can often use fast processor caches more efficiently, avoiding the cost of repeatedly fetching data form memory. They also avoid temporary arrays that `numpy` code sometimes requires.
 
 ### Example 1: function applied to each array element
 
