@@ -61,7 +61,7 @@ Use the following compiler switches:
 
 ### Directives
 
-Parallelisation with OpenMP is implemented using directives, which are written as pragmas (C/C++) or specially formatted comments (Fortran). OpenMP also provides an additional Application Program Interface (API) that allows the programm to configure and query the runtime environment, e.g., to find out how many threads are running in parallel and which thread ID is running a given parallel section. For more information, have a look at the latest [OpenMP standard](https://www.openmp.org/wp-content/uploads/openmp-4.5.pdf).
+Parallelisation with OpenMP is implemented using directives, which are written as pragmas (C/C++) or specially formatted comments (Fortran). OpenMP also provides an additional Application Program Interface (API) that allows the program to configure and query the runtime environment, e.g., to find out how many threads are running in parallel and which thread ID is running a given parallel section. For more information, have a look at the latest [OpenMP standard](https://www.openmp.org/wp-content/uploads/openmp-4.5.pdf).
 
 Here we focus on OpenMP directives in the source code that are interpreted by the compiler. The same source code can be used to build a serial or threaded version of the application by simply turning the OpenMP compiler switch on or off, and a non-OpenMP compiler will ignore the directives as unknown pragmas (C/C++) or as comments (Fortran).
 
@@ -81,43 +81,41 @@ The application always starts in serial mode on a single thread (single arrow at
 Because OpenMP is based on the shared memory programming model, most variables are shared by default. Other variables like loop index are meant to be private. By private we mean that the variable can take a different value for each thread. The programmer determines which variables are private and which are shared.
 
 ### Example
-In the following, we parallelise a loop computing the total contour length:
+As an example, we’ll assume that you have to compute the sum of the square of each element of an array:
 ```cpp
-#include <cmath>
-
 /**
- * Compute the length of a closed contour
- * @param nc number of contour points (size of xc and yc)
- * @param xc x points (last point is same as first point)
- * @param yc y points (yc[nc-1] == yc[0])
+ * Compute the sum of the square of array elements
+ * @param n number of elements
+ * @param arr input array
+ * @return res
  */
-double getContourLength(const int nc, const double xc[], const double yc[]) {
-    double tot = 0.0;
-#pragma omp parallel for default(none) shared(xc, yc) reduction(+:tot)
-    for (int i = 0; i < nc - 1; ++i) {
-        // dx and dy are declared inside the loop and thus private 
-        double dx = xc[i + 1] - xc[i];
-        double dy = yc[i + 1] - yc[i];
-        tot += std::sqrt(dx*dx + dy*dy);
+extern "C"
+double mySumSq(int n, double* arr) {
+    double res = 0;
+    #pragma omp parallel for default(none) shared(arr) reduction(+:res)
+    for (int i = 0; i < n; ++i) {
+        // all variables defined inside the loop (here sq) and also index i are private
+        double sq = arr[i] * arr[i];
+        res += sq;
     }
-    return tot;
+    return res;
 }
 ```
+
 With the `parallel` statement we ask the compiler to spawn threads. The number of threads can be set using environment variable `OMP_NUM_THREADS`, which can be anything between 1 and the number of cores on a node, e.g., `export OMP_NUM_THREADS=36`.
 
 The `for` construct specifies that we want to parallelise the `for` loop that immediately follows the pragma. The different iterations of the loop will be then handled by different threads.
 
-It is good practice to always use the `default(none)` clause, which forces us to declare the `shared` or `private` status of each variable defined _above_ the parallel region. Variables that are defined _inside_ the parallel region, such as loop index variable `i` or helper variables `dx` and `dy`, are automatically private. Each thread gets its own copy of `i`, `dx` and `dy`.
+It is good practice to always use the `default(none)` clause, which forces us to declare the `shared` or `private` status of each variable defined _above_ the parallel region. Variables that are defined _inside_ the parallel region, such as loop index variable `i` or helper variables `sq`, are automatically private. Each thread gets its own copy of `i`, and `sq`.
 
-It is generally good practice to define local variables such as `dx` inside the loop where possible. This will make your program easier to read and maintain and you won't have to worry about creating race conditions by erroneously sharing a variable between threads. If you still need to declare, e.g., `myvariable` outside the loop, add the clause `private(myvariable)` to the OpenMP pragma.
+It is generally good practice to define local variables such as `sq` inside the loop where possible. This will make your program easier to read and maintain and you won't have to worry about creating race conditions by erroneously sharing a variable between threads. If you still need to declare, e.g., `myvariable` outside the loop, add the clause `private(myvariable)` to the OpenMP pragma.
 
-Loop trip count `nc` and data arrays `xc` and `yc` can be shared as they are not changed inside the loop. Each thread will access the same data in memory, which is very efficient.
+Loop trip count `n` and data arrays `arr` can be shared as they are not changed inside the loop. Each thread will access the same data in memory, which is very efficient.
 
-Variable `tot` is special - it has to store the sum across all loop iterations at the end of the loop, even though individual iterations are executed by different threads. So `tot` needs to be private to each thread at first and store partial sums. These partial sums then need to be collected by the original thread at the end of the loop to compute a grand total, which will be stored in `tot` on that thread. The `reduction(+:tot)` clause makes sure that the compiler will insert all required code to accomplish this.
+Variable `res` is special - it has to store the sum across all loop iterations at the end of the loop, even though individual iterations are executed by different threads. So `res` needs to be private to each thread at first and store partial sums. These partial sums then need to be collected by the original thread at the end of the loop to compute a grand total, which will be stored in `res` on that thread. The `reduction(+:res)` clause makes sure that the compiler will insert all required code to accomplish this.
 
 ## Exercises
 
  1. Add OpenMP pragma at line indicated by `// ADD OPENMP PRAGMA HERE` in `src/wave.cpp`. Assume that function `computeScatteredWaveElement` is thread-safe.
 
  2. Measure the speedup vs the number of threads (`OMP_NUM_THREADS` values) using problem size `-nx 256 -ny 256 -nc 1024`
-
