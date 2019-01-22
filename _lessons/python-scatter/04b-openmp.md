@@ -84,7 +84,7 @@ Because OpenMP is based on the shared memory programming model, most variables a
 As an example, we’ll assume that you have to compute the sum of the square of each element of an array:
 ```cpp
 /**
- * Compute the sum of the quare of array elements
+ * Compute the sum of the square of array elements
  * @param n number of elements
  * @param arr input array
  * @return res
