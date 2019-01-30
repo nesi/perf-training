@@ -65,13 +65,13 @@ Run `gprof2dot` to generate a PNG image file:
 
 ```
 gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | \
-dot -Tpng -o output.png
+    dot -Tpng -o output.png
 ```
 
 On Maui, generate an EPS image
 ```
 gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | \
-dot -Teps -o output.eps
+    dot -Teps -o output.eps
 ```
 as you would otherwise get message `Format: "png" not recognized.`
 
