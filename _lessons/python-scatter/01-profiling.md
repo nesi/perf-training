@@ -68,12 +68,19 @@ gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | \
 dot -Tpng -o output.png
 ```
 
-The `dot` program comes from *Graphviz*, which is already installed on
-Mahuika.
+On Maui, generate an EPS image
+```
+gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | \
+dot -Teps -o output.eps
+```
+as you would otherwise get message `Format: "png" not recognized.`
 
-Now view *output.png* either on Mahuika with the command `display output.png` 
-(if you have enabled X11-forwarding in your 
-`ssh` command) or on your local machine after copying it there.
+The `dot` program comes from *Graphviz*, which is already installed on
+Mahuika and Maui.
+
+Now view *output.png* with the command `display output.png` on Mahuika (or `display output.eps` on Maui)
+if you have enabled X11-forwarding in your 
+`ssh` command. Alternatively, you can copy the file your local machine and open it there.
 
 The image should look something like this:
 
