@@ -64,7 +64,8 @@ elsewhere you can try `pip install gprof2dot` or search online for documentation
 Run `gprof2dot` to generate a PNG image file:
 
 ```
-gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | dot -Tpng -o output.png
+gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | \
+dot -Tpng -o output.png
 ```
 
 The `dot` program comes from *Graphviz*, which is already installed on
