@@ -58,8 +58,7 @@ A nice way to visualise the  *output.pstats* file is with *gprof2dot*.
 
 ### Visualising the profiling output with *gprof2dot*
 
-**Note:** `gprof2dot` is installed on Mahuika already. If you need to install it
-elsewhere you can try `pip install gprof2dot` or search online for documentation.
+**Note:** You will need programs `gprof2dot` and `dot`, which are available on Mahuika and Maui. On other systems, use `conda install gprof2dot` to install *gprof2dot* and `conda install graphviz` to install *Graphviz* which provides the *dot* command.
 
 Run `gprof2dot` to generate a PNG image file:
 
@@ -74,9 +73,6 @@ gprof2dot --colour-nodes-by-selftime -f pstats output.pstats | \
     dot -Teps -o output.eps
 ```
 as you would otherwise get message `Format: "png" not recognized.`
-
-The `dot` program comes from *Graphviz*, which is already installed on
-Mahuika and Maui.
 
 Now view *output.png* with the command `display output.png` on Mahuika (or `display output.eps` on Maui)
 if you have enabled X11-forwarding in your 
