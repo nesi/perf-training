@@ -37,4 +37,4 @@ something that is representative of what you eventually want to run but complete
 
 The run time should not be too short, however, as this could make profiling results unreliable. In general, the execution should take at least 10 seconds.
 
-**Note:** keep in mind, that with shortened computation time, the initialisation and finalisation steps may become dominant.
+**Note:** keep in mind that with shortened computation time, the initialisation and finalisation steps may become dominant.
