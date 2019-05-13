@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Profiling with MAP
-permalink: /python-scatter/profiling_MAP
+permalink: /python-scatter/profiling-map
 chapter: python-scatter
 ---
 
@@ -25,15 +25,6 @@ MAP can be used to identify hotspots and load balance problems in parallel codes
 For more details see the [Arm MAP documentation](https://developer.arm.com/docs/101136/latest/map).
 
 In the following, both the GUI and express launch versions are used with the scatter example.
-
-## Choose your test case
-
-As with other profiling tools, choose your profiling case carefully by making sure:
-* the runs is short. Due to a possible large overhead from MAP (especially for tracing experiments), the program could run significantly slower than normal.
-* but the run time should not be too short as this could affect the accuracy of the sampling statistics
-
-**Note:** keep in mind, that with shortened computation time, the initialisation and finalisation steps may become dominant.
-
 
 ## Code example
 
