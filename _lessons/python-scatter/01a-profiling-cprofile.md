@@ -164,39 +164,37 @@ You should see something like this after *line_profiler* has run:
 Wrote profile results to scatter.py.lprof
 Timer unit: 1e-06 s
 
-Total time: 16.5079 s
+Total time: 13.3867 s
 File: scatter.py
 Function: isInsideContour at line 28
 
 Line #      Hits         Time  Per Hit   % Time  Line Contents
 ==============================================================
     28                                           @profile
-    29                                           def isInsideContour(p, xc, yc, tol=0.01):
+    29                                           def isInsideContour(p, xc, yc):
     30                                               """
-    31                                               Check if a point is inside closed contour by summing the
-    32                                               the angles between point p, (xc[i], yc[i]) and (xc[i+1], yc[i+1]).
-    33                                               Point p is declared to be inside if the total angle amounts to
-    34                                               2*pi.
-    35                                           
-    36                                               @param p point (2d array)
-    37                                               @param xc array of x points, anticlockwise and must close
-    38                                               @param yc array of y points, anticlockwise and must close
-    39                                               @param tol tolerance
-    40                                               @return True if p is inside, False otherwise
-    41                                               """
-    42     16641      14072.0      0.8      0.1      tot = 0.0
-    43   2146689     984225.0      0.5      6.0      for i0 in range(len(xc) - 1):
-    44   2130048     971130.0      0.5      5.9          i1 = i0 + 1
-    45   2130048    5104259.0      2.4     30.9          a = numpy.array([xc[i0], yc[i0]]) - p[:2]
-    46   2130048    4860154.0      2.3     29.4          b = numpy.array([xc[i1], yc[i1]]) - p[:2]
-    47   2130048    4548639.0      2.1     27.6          tot += math.atan2(a[0]*b[1] - a[1]*b[0], a.dot(b))
-    48     16641      10751.0      0.6      0.1      tot /= twoPi
-    49     16641      14653.0      0.9      0.1      return (abs(tot) > tol)
+    31                                               Check if a point is inside closed contour
+    32                                           
+    33                                               @param p point (2d array)
+    34                                               @param xc array of x points, anticlockwise and must close
+    35                                               @param yc array of y points, anticlockwise and must close
+    36                                               @return True if p is inside, False otherwise
+    37                                               """
+    38     16641      12437.0      0.7      0.1      inside = True
+    39   2146689     741826.0      0.3      5.5      for i0 in range(len(xc) - 1):
+    40   2130048     766306.0      0.4      5.7          i1 = i0 + 1
+    41   2130048    4790410.0      2.2     35.8          a = numpy.array([xc[i0], yc[i0]]) - p[:2]
+    42   2130048    4702409.0      2.2     35.1          b = numpy.array([xc[i1], yc[i1]]) - p[:2]
+    43                                                   # point is outside if any of the triangle extending from the point to the segment
+    44                                                   # has negative area (cross product < 0)
+    45                                                   # count a point on the contour as being outside (cross product == 0)
+    46   2130048    2367141.0      1.1     17.7          inside &= (a[0]*b[1] - a[1]*b[0] > 1.e-10)
+    47     16641       6180.0      0.4      0.0      return inside
 ```
 
 * Line numbers and the contents of each line are shown
 * The "% Time" column is useful; it shows the percentage of time in that
-  function that was spent on that line
+  function that was spent on that line. Here lines 41-42 dominate.
 * "Hits" shows the number of times that line was run
 * We can see that lines 45, 46 and 47 each take around 30% of the time spent
   in this function.
