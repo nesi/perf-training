@@ -41,7 +41,7 @@ cd mpi
 To use MAP we need to load the *forge* module in our batch script and add `map --profile` in front of the executable statements. For example:
 ```
 module load forge
-map --profile map python scatter.py
+map --profile srun python scatter.py
 ```
 **Note:** command "map" and its arguments (here `--profile`) must precede "srun" in the case of an MPI program. For serial or OpenMP programs we recommend "map" and its options to be after "srun".
 
