@@ -26,14 +26,14 @@ To take this training you will need:
 
 The training requires:
 
- * Python 3 (tested with version 3.6.3)
- * numpy (tested with 1.13.3)
- * scipy (tested with 1.0.0)
- * setuptools (tested with 28.8.0)
- * Boost library (tested with 1.61)
+ * Python 3 (tested with version 3.6.3 and 3.7.3)
+ * numpy (tested with 1.13.3 and 1.16.6)
+ * scipy (tested with 1.0.0 and 1.2.1)
+ * setuptools (tested with 28.8.0 and 40.8.0)
+ * Boost library (tested with 1.61 and 1.69)
  * gprof2dot (tested with 2017.9.19)
  * Graphviz (tested with 2.30.1)
- * mpi4py (tested with 2.0.0)
+ * mpi4py (tested with 2.0.0 and 3.0.1)
  * a C++ compiler with OpenMP support
 
 to be installed and environment variable 
@@ -45,8 +45,7 @@ to be set.
 On NeSI's Mahuika Cray CS400 cluster, all these packages are installed and all you need to do is:
 
 ```
-module load Python/3.6.3-gimkl-2017a
-module load Boost/1.61.0-gimkl-2017a
+ml load Python Boost
 ```
 (`BOOST_DIR` will be set for you).
 
