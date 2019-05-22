@@ -18,9 +18,8 @@ You will:
 On NeSI systems the [Arm MAP](https://www.arm.com/products/development-tools/server-and-hpc/forge/map) profiler is provided as part of the *forge* module (along with the parallel debugger DDT).
 
 MAP is a commercial product, which can profile parallel, multi-threaded and single-threaded C/C++, Fortran, as well as Python code. It can be used without code modification.
-MAP can be launched with a graphical user interface (GUI) and without. The GUI allows the user to navigate through the code and focus on specific source lines. The "Express Launch", without the GUI, makes it easy to submit job scripts and workflows.
 
-MAP can be used to identify hotspots and load balance problems in parallel codes. In contrast to the *cProfiler* described in [here](profiling), MAP can be used to instrument Python, C, C++ and Fortran codes. MAP supports codes with OpenMP threads and/or MPI communication. It comes with a graphical user inteface which makes it easy to drill down into particular code sections or focus on specific time intervals during the run.
+MAP can be used to identify hotspots and load balance problems in parallel codes. In contrast to the *cProfiler* described in [here](profiling), MAP can be used to instrument Python, C, C++ and Fortran codes. In contrast to other profilers, there is no need to recompile the code and MAP supports OpenMP threads and/or MPI communication. It comes with a graphical user interface which makes it easy to drill down into particular code sections or focus on specific time intervals during the run.
 
 For more details see the [Arm MAP documentation](https://developer.arm.com/docs/101136/latest/map).
 
@@ -36,39 +35,25 @@ git checkout solutions
 cd mpi
 ```
 
-## Using the "Express Launch"
+## Using MAP to profile an executable
 
-To use MAP we need to load the *forge* module in our batch script and add `map --profile` in front of the executable statements. For example:
+To use MAP we need to load the *forge* module in our batch script and add `map --profile` in front of the executable. See for example
 ```
-module load forge
+ml forge
 map --profile srun python scatter.py
 ```
-**Note:** command "map" and its arguments (here `--profile`) must precede "srun" in the case of an MPI program. For serial or OpenMP programs we recommend "map" and its options to be after "srun".
+in the Slurm script "scatter_map.sl".
 
-Upon execution, a file with subscript `.map` will be generated. The results can be viewed, for instance, with
+**Note:** command `map --profile` must precede "srun" in the case of an MPI program. For serial or OpenMP programs we recommend "map" and its options to be *after* "srun".
+
+
+## Interpreting the profile information
+
+Upon execution, a file with subscript `.map` will be generated. The results can be viewed with the command `map`, for instance
 ```
 map python3_scatter_py_8p_1n_2019-01-14_00-31.map
 ```
-(the `.map` file name will vary with each run.) See section [MAP Profile](#map-profile) for how to interpret the results.
-
-## Using the graphical interface
-
-The GUI can be started after loading `module load forge` and launching
-```
-map
-```
-
-[![Arm MAP main](images/ARM_MAP_main.png)](images/ARM_MAP_main.png)
-
-Click on "PROFILE". In the profile menu we need to specify the executable (in this case `python`), the arguments (here `scatter.py` and any additional options if present) and a working directory. In addition, we need to specify the number of MPI processes.
-
-[![Arm MAP main](images/ARM_MAP_run.png)](images/ARM_MAP_run.png)
-
-Furthermore, the "submit to queue" parameter needs to be checked, for example the `--hint=nomultithread` can be specified there.
-
-After submitting, MAP will wait until the job is allocated, connect to the processes, run the program and gather all the data. Then the profile information will be presented.
-
-## MAP Profile
+(the `.map` file name will vary with each run.)
 
 The profile window is divided into three main sections (click on picture to enlarge).
 
