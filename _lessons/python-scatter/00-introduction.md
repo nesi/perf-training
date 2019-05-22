@@ -81,9 +81,9 @@ python scatter.py
 ```
 or by submitting a job to the scheduler. On Mahuika
 ```
-srun python scatter.py
+sbatch scatter.sl
 ```
-where you might have to pass `--account="myAccount"` as well as other options to the `srun` command. [See](https://support.nesi.org.nz/hc/en-gb/articles/360000359576-Slurm-Usage-A-Primer) for more information.
+where you might have to edit `scatter.sl` and add `#SBATCH --account="myAccount"` as well as other options. [See](https://support.nesi.org.nz/hc/en-gb/articles/360000359576-Slurm-Usage-A-Primer) for more information.
 
 ### Adjusting the domain size and contour resolution
 
@@ -91,7 +91,7 @@ As you improve the performance of the code, you'll find it useful to increase th
 
 The default values are `-nx 128`, `-ny 128` and `-nc 128`. The execution time scales linearly with the values of options `-nx`, `-ny` and `-nc`. For example:
 ```
-srun python scatter.py -nx 256 -ny 256 -nc 512
+python scatter.py -nx 256 -ny 256 -nc 512
 ```
 will run the code using 256x256 cells and 512 obstacle segments and we expect the code to run `2*2*4 = 16` times longer compared to the default resolution.
 
@@ -100,7 +100,7 @@ will run the code using 256x256 cells and 512 obstacle segments and we expect th
 
 When modifying the code, it is important to check that the results haven't changed. Use
 ```
-srun python scatter.py -c 
+python scatter.py -c 
 ```
 to record the sum of the field values squared (4686.33935546875). Make sure this value does not change after code editing. 
 
@@ -110,10 +110,10 @@ Note: the check sum changes with resolution and other parameters.
 
 You can use the `time` command
 ```
-srun time python scatter.py
+time python scatter.py
 ```
 which may return something like
 ```
 123.36user 0.14system 2:04.67elapsed 99%CPU (0avgtext+0avgdata 49212maxresident)
 ```
-The relevant time is `elapsed`, the wall clock time.
+The relevant time is `elapsed`, the wall clock time. The `time` command will send the output to `stderr` so check your error file when running in batch. 
