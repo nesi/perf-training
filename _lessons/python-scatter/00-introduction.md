@@ -81,39 +81,48 @@ python scatter.py
 ```
 or by submitting a job to the scheduler. On Mahuika
 ```
-srun python scatter.py
+sbatch scatter.sl
 ```
-where you might have to pass `--account="myAccount"` as well as other options to the `srun` command. [See](https://support.nesi.org.nz/hc/en-gb/articles/360000359576-Slurm-Usage-A-Primer) for more information.
-
-### Adjusting the domain size and contour resolution
-
-As you improve the performance of the code, you'll find it useful to increase the problem resolution. This can be done by passing command line options to `scatter.py`. Type `python scatter.py -h` to see the full list of options. The options that control the grid size are `-nx # -ny #` for the number of cells in the x and y direction. Option `-nc #` sets the number of segments. 
-
-The default values are `-nx 128`, `-ny 128` and `-nc 128`. The execution time scales linearly with the values of options `-nx`, `-ny` and `-nc`. For example:
-```
-srun python scatter.py -nx 256 -ny 256 -nc 512
-```
-will run the code using 256x256 cells and 512 obstacle segments and we expect the code to run `2*2*4 = 16` times longer compared to the default resolution.
+where you might have to edit `scatter.sl` and add `#SBATCH --account="myAccount"` as well as other options. [See](https://support.nesi.org.nz/hc/en-gb/articles/360000359576-Slurm-Usage-A-Primer) for more information.
 
 
 ### How to check if the results have changed
 
 When modifying the code, it is important to check that the results haven't changed. Use
 ```
-srun python scatter.py -c 
+python scatter.py -c 
 ```
 to record the sum of the field values squared (4686.33935546875). Make sure this value does not change after code editing. 
 
 Note: the check sum changes with resolution and other parameters. 
 
-## Measuring execution time
+### Measuring execution time
 
 You can use the `time` command
 ```
-srun time python scatter.py
+time python scatter.py
 ```
 which may return something like
 ```
 123.36user 0.14system 2:04.67elapsed 99%CPU (0avgtext+0avgdata 49212maxresident)
 ```
-The relevant time is `elapsed`, the wall clock time.
+The relevant time is `elapsed`, the wall clock time. The `time` command will send the output to `stderr` so check your error file when running in batch. 
+
+### Adjusting the domain size and contour resolution to control the execution time
+
+As you modify the code you will find it useful to reduce the problem size in order to quickly check that the output has not changed. Likewise you may find it useful to increase the resolution as you improve the code's performance. 
+
+Changing the problem size can be done by passing command line options to `scatter.py`. Type `python scatter.py -h` to see the full list of options. The options that control the grid size are `-nx # -ny #` for the number of cells in the x and y direction. Option `-nc #` sets the number of segments. 
+
+The default values are `-nx 128`, `-ny 128` and `-nc 128`. The execution time scales linearly with the values of options `-nx`, `-ny` and `-nc`. For example:
+```
+python scatter.py -nx 64 -ny 64 -nc 32
+```
+will run the code using 64x64 cells and 32 obstacle segments. We expect the code to run `2*2*4 = 16` times faster in this case compared to the default resolution.
+
+## Exercises
+
+ * What is the execution time of the default problem resolution (128x128 and 128 segments)?
+ * Modify the scatter.sl script to run with 256x256 and 128 segments. What is the execution time?
+ * How does the larger problem execution time compare with the default resolution execution time?
+

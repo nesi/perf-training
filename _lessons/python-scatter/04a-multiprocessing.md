@@ -75,16 +75,11 @@ The serial version takes about 50 seconds - there are 5 tasks each taking 10 sec
 
 ## Running the scatter code using multiple threads
 
-We've created a version of `scatter.py` which reads the environment variable `OMP_NUM_THREADS` to set the number of processes. To submit a job with 8 processes on Mahuika, type
-```
-srun --hint=nomultithread --ntasks=1 --cpus-per-task=8 \
-time python scatter.py -checksum
-```
-(with additional `srun` options such as `--account=` required). Option `--hint=nomultithread` ensures that each physical core gets only one process, recommended in most cases for best performance. Without this option two processes may be placed on each core.
+We've created a version of `scatter.py` which reads the environment variable `OMP_NUM_THREADS` to set the number of processes. We've also modified our `scatter.sl` script to set the number of processes using `--cpus-per-task=4`. To prevent two processes to be placed on each core, we use `--hint=nomultithread`. 
 
-To run interactively using 8 processes, type
+To run interactively using 4 processes, type
 ```
-export OMP_NUM_THREADS=8
+export OMP_NUM_THREADS=4
 python scatter.py
 ```
 

@@ -44,6 +44,12 @@ map --profile srun python scatter.py
 ```
 in the Slurm script "scatter_map.sl".
 
+Upon execution, a file with subscript `.map` will be generated. The results can be viewed, for instance, with
+```
+map python3_scatter_py_4p_1n_1t_2019-05-22_00-58.map
+```
+(the `.map` file name will vary with each run.) See section [MAP Profile](#map-profile) for how to interpret the results.
+
 **Note:** command `map --profile` must precede "srun" in the case of an MPI program. For serial or OpenMP programs we recommend "map" and its options to be *after* "srun".
 
 

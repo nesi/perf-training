@@ -110,6 +110,6 @@ where `dsdt`, `g`, etc. are all arrays of size `n - 1` (number of segments).
 
  1. profile the vectorised code and compare to the non-vectorised code
 
- 2. in scatter.py, vectorise function `isInsideContour` by eliminating the loop computing the sum `tot` and report the new timing
+ 2. in scatter.py, vectorise function `isInsideContour` by eliminating the loop computing the boolean variable `inside` and report the new timing
  
 
