@@ -48,7 +48,7 @@ Below is an example of a profiling data obtained by running `python scatter.py -
 [![top-window-map-8t-trace](images/map_8t_trace.png)](images/map_8t_trace.png)
 On top, the activity window shows the time spent between I/O (orange), serial computing (dark green) and parallel computing (light green). The orange parts amount to initialisation, an one off cost that does not increase with problem size and which is therefore not of great interest here. (Loading shared libraries such as `numpy` are responsible for the orange I/O activity.) 
 
-More interestingly, we see that 73 percent of the time is spent in the serial part of the code and 9 percent in the parallel. This suggests that we are close to achieving the maximum scalability of the program with 8 threads. Adding more threads will likely not reduce the execution time much, 9 percent at most.
+More interestingly, we see that 73 percent of the time is spent in the serial part of the code and 9 percent in the parallel part. The parallel part is the one that decreases as we throw more threads to the problem. This suggests that we are close to achieving the maximum scalability of the program with 8 threads - adding more threads can only reduce the execution time much by 9 percent at most.
 
 Also of interest, we observe that more than 50 percent of the execution time involves four lines of code (96, 101, 102 and 105). Lines 96, 101 and 102 all are purely serial and involve casting a numpy array into a C pointer which can be passed to a C function. Together these lines consume 36 percent of the execution time. 
 [![top-window-map-8t-percents](images/map_8t_percents.png)](images/map_8t_percents.png)
