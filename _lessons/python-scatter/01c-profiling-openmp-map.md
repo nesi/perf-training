@@ -57,5 +57,5 @@ Also of interest, we observe that more than 50 percent of the execution time inv
 
 ## Exercises
 
- * move line 96 out of the loop (*kvec* is constant) and regenerate the profiling data using grid resolution `-nx 256 -ny 256` and 8 OpenMP threads
- * compare the newly obtained profiling data with the previously obtained data. What is now the contribution of computing `kvecPtr` to the execution time?
+ * move line 96 out of the loop (*kvec* is constant), remove lines 101 and 102 (which are superfluous) and regenerate the profiling data using grid resolution `-nx 256 -ny 256` and 8 OpenMP threads
+ * compare the newly obtained profiling data with the previously obtained data. What are now the contributions of parallel and serial execution to the total time?
