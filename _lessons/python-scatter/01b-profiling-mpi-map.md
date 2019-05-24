@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Profiling with MAP
-permalink: /python-scatter/profiling-map
+title: Profiling an MPI program with MAP
+permalink: /python-scatter/profiling-mpi-map
 chapter: python-scatter
 ---
 
@@ -9,8 +9,8 @@ chapter: python-scatter
 
 You will:
 
-* learn how to use MAP to profile an MPI code
-* learn how to interpret MAP profiling data
+* learn how to use MAP to profile a parallel MPI code
+* learn how to interpret the profiling data
 
 
 ## MAP profiler
@@ -23,7 +23,6 @@ MAP can be used to identify hotspots and load balance problems in parallel codes
 
 For more details see the [Arm MAP documentation](https://developer.arm.com/docs/101136/latest/map).
 
-In the following, both the GUI and express launch versions are used with the scatter example.
 
 ## Code example
 
@@ -53,7 +52,7 @@ map python3_scatter_py_4p_1n_1t_2019-05-22_00-58.map
 **Note:** command `map --profile` must precede "srun" in the case of an MPI program. For serial or OpenMP programs we recommend "map" and its options to be *after* "srun".
 
 
-## Interpreting the profile information
+## Interpreting the profiling data
 
 Upon execution, a file with subscript `.map` will be generated. The results can be viewed with the command `map`, for instance
 ```
@@ -84,5 +83,5 @@ As an example, "CPU instructions" present the usage of different instruction set
 
 ## Exercises
 
- * profile the scatter code under the openmp directory using 4 OpenMP threads. Increase the problem size by passing options `-nx 256 -ny 256 -nc 256` to *scatter.py* to make the test run longer.
+ * profile the scatter code under the openmp directory using 16 MPI tasks. Increase the problem size by passing options `-nx 256 -ny 256 -nc 256` to *scatter.py* to make the test run longer.
  * what is the amount of time spent in `computeScatteredWave` for the above test case?
