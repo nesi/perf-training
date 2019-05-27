@@ -32,7 +32,7 @@ srun map --profile python scatter.py
 ```
 in the Slurm script "scatter.sl".
 
-**Note:** command `map --profile` must *follow* `srun` in the case of a serial program. (For MPI programs `map --profile` should *precede* `srun`.)
+**Note:** command `map --profile` must *follow* `srun` in the case of a serial/threaded program. (For MPI programs `map --profile` should *precede* `srun`.)
 
 
 ## Interpreting the profiling information
@@ -57,5 +57,6 @@ Also of interest, we observe that more than 50 percent of the execution time inv
 
 ## Exercises
 
+ * modify script `scatter.sl` to profile the code using 8 threads and a resolution of `-nx 256 -ny 256`
  * move line 96 out of the loop (*kvec* is constant), remove lines 101 and 102 (which are superfluous) and regenerate the profiling data using grid resolution `-nx 256 -ny 256` and 8 OpenMP threads
  * compare the newly obtained profiling data with the previously obtained data. What are the contributions of parallel and serial execution times to the total time after the change?
