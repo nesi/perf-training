@@ -34,6 +34,15 @@ in the Slurm script "scatter.sl".
 
 **Note:** command `map --profile` must *follow* `srun` in the case of a serial/threaded program. (For MPI programs `map --profile` should *precede* `srun`.)
 
+> ## Exercises
+>
+> * modify script `scatter.sl` to profile the code using 8 threads and a resolution of `-nx 256 -ny 256`
+>> ## Solution
+>> Add the module _forge_ to the loaded modules:
+>> `ml Python Boost forge`
+>> Add the ARM MAP command to the parallel call
+>> `srun map --profile python scatter.py -c -nx 256 -ny 256`
+
 
 ## Interpreting the profiling information
 
@@ -46,17 +55,18 @@ map python_scatter_py_1p_1n_8t_2019-05-24_00-00.map
 Below is an example of a profiling data obtained by running `python scatter.py -nx 256 -ny 256` and using 8 OpenMP threads.
 
 [![top-window-map-8t-trace](images/map_8t_trace.png)](images/map_8t_trace.png)
-On top, the activity window shows the time spent between I/O (orange), serial computing (dark green) and parallel computing (light green). The orange parts amount to initialisation, an one off cost that does not increase with problem size and which is therefore not of great interest here. (Loading shared libraries such as `numpy` are responsible for the orange I/O activity.) 
+On top, the activity window shows the time spent between I/O (orange), serial computing (dark green) and parallel computing (light green). The orange parts amount to initialisation, an one off cost that does not increase with problem size and which is therefore not of great interest here. (Loading shared libraries such as `numpy` are responsible for the orange I/O activity.)
 
 More interestingly, we see that 73 percent of the time is spent in the serial part of the code and 9 percent in the parallel part. The parallel part is the one that decreases as we throw more threads to the problem. This suggests that we are close to achieving the maximum scalability of the program with 8 threads - adding more threads can only reduce the execution time by 9 percent at most.
 
-Also of interest, we observe that more than 50 percent of the execution time involves four lines of code (96, 101, 102 and 105). Lines 96, 101 and 102 all are purely serial and involve casting a numpy array into a C pointer which can be passed to a C function. Together these lines consume 36 percent of the execution time. 
+Also of interest, we observe that more than 50 percent of the execution time involves four lines of code (96, 101, 102 and 105). Lines 96, 101 and 102 all are purely serial and involve casting a numpy array into a C pointer which can be passed to a C function. Together these lines consume 36 percent of the execution time.
 [![top-window-map-8t-percents](images/map_8t_percents.png)](images/map_8t_percents.png)
 
 
-
-## Exercises
-
- * modify script `scatter.sl` to profile the code using 8 threads and a resolution of `-nx 256 -ny 256`
- * move line 96 out of the loop (*kvec* is constant), remove lines 101 and 102 (which are superfluous) and regenerate the profiling data using grid resolution `-nx 256 -ny 256` and 8 OpenMP threads
- * compare the newly obtained profiling data with the previously obtained data. What are the contributions of parallel and serial execution times to the total time after the change?
+> ## Exercises
+>
+> * move line 96 out of the loop (*kvec* is constant), remove lines 101 and 102 (which are superfluous) and regenerate the profiling data using grid resolution `-nx 256 -ny 256` and 8 OpenMP threads
+> * compare the newly obtained profiling data with the previously obtained data. What are the contributions of parallel and serial execution times to the total time after the change?
+>
+>> ## Solution
+>> In the new profile we can notice the reduced run time. Furthermore, the relative run times now shifts more to an increased portion in OpenMP as well as more time spend in the _computeScatterWave_ function.
