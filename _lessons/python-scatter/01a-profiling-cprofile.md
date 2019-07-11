@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Profiling with cProfile
-permalink: /python-scatter/profiling-cProfile
+title: Profiling with Python tools
+permalink: /python-scatter/profiling-cprofile
 chapter: python-scatter
 ---
 
