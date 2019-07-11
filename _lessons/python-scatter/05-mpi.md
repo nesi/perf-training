@@ -154,9 +154,6 @@ We have written a partial implementation of the scatter code, which computes inc
  * The field computation `computeField(indx)` takes index `indx` as argument, each index mapping to a different point of the grid. Each process computes the incident and scattered fields for a different set of points in parallel. 
  * In its current form, the scatter code will not run with option `-save`, i.e. not able to save the wave field in files. The field from each process needs to be gathered, see exercise below
 
-## Exercises
-
-
- 1. Implement the field gather operation where all the fields values are assembled onto the root process. This is required for the `-save` option of scatter.py to work.
-
- 2. Measure the speedup compared to a single process execution
+> ## Exercises
+> * implement the field gather operation where all the fields values are assembled onto the root process (required for the `-save` option of scatter.py).
+> * measure parallel execution time. How much faster is the code compared to serial?

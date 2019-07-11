@@ -81,7 +81,8 @@ As an example, "CPU instructions" present the usage of different instruction set
 
 [![example-map-scatter_CPU](images/ARM_MAP_scatter_mpi_CPU.png)](images/ARM_MAP_scatter_mpi_CPU.png)
 
-## Exercises
-
- * profile the scatter code under the mpi directory using 16 MPI tasks. Increase the problem size by passing options `-nx 256 -ny 256 -nc 256` to *scatter.py* to make the test run longer.
- * what is the amount of time spent in `computeScatteredWave` for the above test case?
+> ## Exercises
+> * profile the scatter code under the mpi directory:
+    * use 16 MPI tasks
+    * increase the problem size to `-nx 256 -ny 256 -nc 256` to make the test run longer
+> * what is the amount of time spent in `computeScatteredWave` for the above test case?

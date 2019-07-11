@@ -12,6 +12,10 @@ You will learn:
 * how to call C/C++ compiled code from Python using the `ctypes` module
 * how to compile a C++ extension using `setuptools`
 
+We'll use the code under `cext`. Start by 
+```
+cd cext
+```
 
 ## Why extend Python with C/C++
 
@@ -150,19 +154,12 @@ print('sum of array: {}'.format(array_sum))
  * When passing arrays, it is possible to specify extra restrictions on the numpy arrays at the interface level, for example the number of dimensions the array should have or its shape. If an array passed in as an argument does not meet the specified requirements and exception will be raised. A full list of possible options can be found in the `numpy.ctypeslib.ndpointer` [documentation](https://docs.scipy.org/doc/numpy-1.15.0/reference/routines.ctypeslib.html#numpy.ctypeslib.ndpointer).
 
 
-## Exercises
-
-We'll use the code in directory `cext`. Start with
-```
-cd cext
-```
-We've created a version of `scatter.py` that builds and calls a C++ external function `src/wave.cpp`. Compile the code using
-`python setup.py build`. Make sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
-
- 1. profile the code and compare the timings with the results under `original`
- 2. rewrite Python function `isInsideContour` defined in `scatter.py` in C++. To do so:
-   * create a new file called `is_inside_contour.cpp` under the `src` directory and write the C callable function in it. Make optional argument `tol` compulsory in function
-   * add this file to the wave extension in setup.py
-   * compile the extension. 
+> ## Exercises
+> We've created a version of `scatter.py` that builds and calls a C++ external function `src/wave.cpp`. Compile the code using `python setup.py build`. Make sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
+> * profile the code and compare the timings with the results under `original`
+> * rewrite Python function `isInsideContour` defined in `scatter.py` in C++. To do so:
+   * create a new file called `is_inside_contour.cpp` under the `src` directory and write the C callable function in it. Make argument `tol` compulsory in function
+   * add this file to the wave extension in `setup.py`
+   * compile the extension 
 
 
