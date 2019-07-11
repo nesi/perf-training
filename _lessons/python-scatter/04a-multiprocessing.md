@@ -83,14 +83,13 @@ export OMP_NUM_THREADS=4
 python scatter.py
 ```
 
-## Exercises
-
- This version of *scatter.py* has been slightly adapted so that, with a few code changes, you can turn the serial version into one where function `computeField` can execute in parallel. Function `computeField` takes input argument `k`, the flat index into the 2D field arrays representing the incident and scatted fields (i.e. `k = j*nx1 + i`), and returns the incident and scattered field values for each grid node. The incident and scattered field values
+> ## Exercises
+> This version of *scatter.py* has been slightly adapted so that, with a few code changes, you can turn the serial version into one where function `computeField` can execute in parallel. Function `computeField` takes input argument `k`, the flat index into the 2D field arrays representing the incident and scatted fields (i.e. `k = j*nx1 + i`), and returns the incident and scattered field values for each grid node. The incident and scattered field values
 ```python
 # change the following for parallel execution
 res = [computeField(k) for k in range(ny1 * nx1)]
 ```
 can be computed in any order.
 
-1. adapt the code in scatter.py to call `computeField` in parallel (the number of processes is `nproc`)
-2. what is the speedup (timing of `--cpus-per-task=1` over `--cpus-per-task=8`)?
+> * adapt the code in scatter.py to call `computeField` in parallel (the number of processes is `nproc`)
+> * what is the speedup (timing of `--cpus-per-task=1` over `--cpus-per-task=8`)?

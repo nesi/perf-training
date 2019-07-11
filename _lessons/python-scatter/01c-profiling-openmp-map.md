@@ -36,13 +36,11 @@ in the Slurm script "scatter.sl".
 
 > ## Exercises
 >
-> * modify script `scatter.sl` to profile the code using 8 threads and a resolution of `-nx 256 -ny 256`
->> ## Solution
->> Add the module _forge_ to the loaded modules:
->> `ml Python Boost forge`
->> Add the ARM MAP command to the parallel call
->> `srun map --profile python scatter.py -c -nx 256 -ny 256`
-
+> * edit script `scatter.sl`:
+    * apply 8 OpenMP threads
+    * load module `forge`
+    * add command `map --profile` to the executable
+> * submit the job
 
 ## Interpreting the profiling information
 
@@ -64,9 +62,10 @@ Also of interest, we observe that more than 50 percent of the execution time inv
 
 
 > ## Exercises
->
-> * move line 96 out of the loop (*kvec* is constant), remove lines 101 and 102 (which are superfluous) and regenerate the profiling data using grid resolution `-nx 256 -ny 256` and 8 OpenMP threads
-> * compare the newly obtained profiling data with the previously obtained data. What are the contributions of parallel and serial execution times to the total time after the change?
->
->> ## Solution
->> In the new profile we can notice the reduced run time. Furthermore, the relative run times now shifts more to an increased portion in OpenMP as well as more time spend in the _computeScatterWave_ function.
+> * edit scatter.py:
+    * remove lines 101 and 102 (which are superfluous)
+    * move line 96 out of the loop (*kvec* is constant)
+> * regenerate the profiling data and compare the newly obtained profiling data with the previously obtained data
+    * how did the contributions of parallel and serial execution times relative to the total time change?
+    * how did the the contribution of function `computeScatterWave` to the total execution time change?
+

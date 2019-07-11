@@ -119,9 +119,8 @@ python scatter.py -nx 64 -ny 64 -nc 32
 ```
 will run the code using 64x64 cells and 32 obstacle segments. We expect the code to run `2*2*4 = 16` times faster in this case compared to the default resolution.
 
-## Exercises
-
- * What is the execution time of the default problem resolution (128x128 and 128 segments)?
- * Modify the scatter.sl script to run with 256x256 and 128 segments. What is the execution time?
- * How does the larger problem execution time compare with the default resolution execution time?
+> ## Exercises
+> * what is the execution time of the default problem resolution (128x128 and 128 segments)?
+> * modify the scatter.sl script to run with 256x256 and 256 segments. What is the execution time?
+> * how does the larger problem execution time compare with the default resolution execution time?
 

@@ -210,8 +210,7 @@ tell *memory_profiler* which functions you wish to profile.
 We will not cover memory profiler in detail here but more information can be found
 at the page linked above.
 
-## Exercises
-
- * How much self time in percent is spent in `computeScatteredWave`?
- * How much total time in percent is spent in `computeScatteredWave`?
- * Does it make sense to focus optimisation efforts on `computeScatteredWave`?
+> ## Exercises
+> * how much self time in percent is spent in `computeScatteredWave`?
+> * how much total time in percent is spent in `computeScatteredWave`?
+> * does it make sense to focus optimisation efforts on `computeScatteredWave`?

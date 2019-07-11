@@ -86,22 +86,16 @@ but requires that all argument types can be inferred, which may not always be th
 
 
 
-## Exercises
-
-We've created a version of `scatter.py` in the `src/` directory
-to whose functions the numba decorator `@jit` can be freely added.
+> ## Exercises
+> We've created a version of `scatter.py` in the `src/` directory
+to which the numba decorator `@jit` can be freely added to file's functions.
 The original version calls the Hankel function `hankel1` from `scipy.special`
 and this prevents numba from generating jit code.
 In the modified version we call the associated Bessel functions from the C++ Boost library.
-Compile the code under `src/` with
-```
-python setup.py build
-```
-(Make sure you have the `BOOST_DIR` environment set as described [here.](introduction))
+Compile the code under `src/` using 
+`python setup.py build` (make sure you have the `BOOST_DIR` environment set as described [here.](introduction))
 
-
- 1. profile *scatter.py* to get a baseline timing using the approach described [here](profiling)
- 2. incrementally add `@jit` decorators to the most time consuming functions. Start with the lowest level functions and move up the call stack
- 3. compare the performance with the original code
-
+> * profile *scatter.py* to get a baseline timing using the approach described [here](profiling)
+> * incrementally add `@jit` decorators to the most time consuming functions. Start with the lowest level functions and move up the call stack
+> * compare the performance with the original code
 
