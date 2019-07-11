@@ -20,7 +20,7 @@ your code when it runs. These can be functions, loops, or source code lines.
 
 Profiling information is obtained by using profiling tools. More on how to apply
 such tools at:
- * [Profiling with cProfile](profiling-cProfile)
+ * [Profiling with cProfile](profiling-cprofile)
  * [Profiling with MAP](profiling-map)
 
 ## Why should I profile my code?
