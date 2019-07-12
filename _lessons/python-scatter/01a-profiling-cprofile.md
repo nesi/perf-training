@@ -196,8 +196,8 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
 * The "% Time" column is useful; it shows the percentage of time in that
   function that was spent on that line. Here lines 41-42 dominate.
 * "Hits" shows the number of times that line was run
-* We can see that lines 45, 46 and 47 each take around 30% of the time spent
-  in this function.
+* We can see that lines 41, 42 and 46 each take around 35%, 35% and 17% of the time spent
+  in this function respectively.
 
 ## Memory Profiler
 
