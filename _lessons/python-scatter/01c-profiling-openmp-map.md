@@ -15,7 +15,7 @@ You will:
 
 ## Code example
 
-We'll use the *scatter.py* code in directory `mpi` of the *solutions* branch. Start by
+We'll use the *scatter.py* code in directory `openmp` of the *solutions* branch. Start by
 
 ```
 git fetch --all
@@ -53,7 +53,7 @@ map python_scatter_py_1p_1n_8t_2019-05-24_00-00.map
 Below is an example of a profiling data obtained by running `python scatter.py -nx 256 -ny 256` and using 8 OpenMP threads.
 
 [![top-window-map-8t-trace](images/map_8t_trace.png)](images/map_8t_trace.png)
-On top, the activity window shows the time spent between I/O (orange), serial computing (dark green) and parallel computing (light green). The orange parts amount to initialisation, an one off cost that does not increase with problem size and which is therefore not of great interest here. (Loading shared libraries such as `numpy` are responsible for the orange I/O activity.)
+On top, the activity window shows the time spent between I/O (orange), serial computing (dark green) and parallel computing (light green). The orange parts amount to initialisation, a one off cost that does not increase with problem size and which is therefore not of great interest here. (Loading shared libraries such as `numpy` are responsible for the orange I/O activity.)
 
 More interestingly, we see that 73 percent of the time is spent in the serial part of the code and 9 percent in the parallel part. The parallel part is the one that decreases as we throw more threads to the problem. This suggests that we are close to achieving the maximum scalability of the program with 8 threads - adding more threads can only reduce the execution time by 9 percent at most.
 
