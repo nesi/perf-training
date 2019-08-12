@@ -60,6 +60,8 @@ cd scatter/original
 
 The code computes the scattering of a plane wave against a two-dimensional obstacle
 
+[![Waves sloshing on an obstacle](images/waves.png)](images/wave.png)
+
 [Click here to see the incident wave in action](https://youtu.be/FIKSUGk68z8)
 
 As the incoming wave moves from left to right, it encounters the obstacle and gets reflected. 
