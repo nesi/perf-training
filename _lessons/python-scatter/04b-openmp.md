@@ -21,7 +21,7 @@ cd openmp
 
 One way to speed up your application is using the available resources more efficiently. This approach was used while porting our Python code to C/C++ by removing the interpreter's overhead. Here we will improve performance by using more resources instead.
 
-Most modern computers have multi-core CPUs and we can use two or more of these cores to execute instructions in parallel. All cores in one CPU can access the same, shared memory.
+Most modern computers have multi-core CPUs. All cores of a CPU can access the same, shared memory. Furthermore, all the CPUs belonging (36-40 cores) to a node also share the same memory. We can use two or more of these cores to execute multiple instructions in parallel.
 
 ## What is OpenMP
 
@@ -103,6 +103,7 @@ double mySumSq(int n, double* arr) {
 ```
 
 With the `parallel` statement we ask the compiler to spawn threads. The number of threads can be set *during runtime* using environment variable `OMP_NUM_THREADS`, which can be anything between 1 and the number of cores on a node, e.g., `export OMP_NUM_THREADS=36`. Note, typically application do not scale that far. 
+Note, most applications do not scale to the maximum number of cores on a node due to non-uniform memory bandwidth, load balancing and Amdahl's law. The latter states that the maximum speedup is limited by the ratio of parallel to serial parts of the code. As a rule of thumb, if 5 percent of the time is spent in part of the code that cannot be parallelised (that is a critical section or serial part) then the maximum parallel speedup is about 20 (=1/0.05) and there is no point in using more than 20 threads.
 
 The `for` construct specifies that we want to parallelise the `for` loop that immediately follows the pragma. The different iterations of the loop will be then handled by different threads.
 
