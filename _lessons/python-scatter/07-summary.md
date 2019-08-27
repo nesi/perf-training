@@ -17,7 +17,7 @@ The above strategies can be combined. For our test problem, the best results wer
 
 Your mileage may vary - all optimisation techniques presented here are problem type and size dependent. You should not expect the same speedup values for other problems.
 
-![Speedup achieved by applying different high performance computing strategies](https://github.com/pletzer/perf-training/raw/summary/_lessons/python-scatter/images/speedup.png)
+![Speedup achieved by applying different high performance computing strategies](https://github.com/nesi/perf-training/raw/summary/_lessons/python-scatter/images/speedup.png)
 
 
 ## Additional material
