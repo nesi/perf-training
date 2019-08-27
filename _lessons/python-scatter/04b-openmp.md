@@ -19,9 +19,9 @@ cd openmp
 
 ## Why implement OpenMP parallelisation
 
-One way to speed up your application is using the available resources more efficiently. This approach was used while porting our Python code to C++ by removing the interpreter's overhead. Here we will improve performance by using more resources instead.
+One way to speed up your application is using the available resources more efficiently. This approach was used while porting our Python code to C/C++ by removing the interpreter's overhead. Here we will improve performance by using more resources instead.
 
-Most modern computers have multi-core CPUs and we can use two or more of these cores to execute instructions in parallel. All cores can access the same, shared memory.
+Most modern computers have multi-core CPUs and we can use two or more of these cores to execute instructions in parallel. All cores in one CPU can access the same, shared memory.
 
 ## What is OpenMP
 
@@ -92,7 +92,7 @@ As an example, we’ll assume that you have to compute the sum of the square of 
 extern "C"
 double mySumSq(int n, double* arr) {
     double res = 0;
-    #pragma omp parallel for default(none) shared(arr) reduction(+:res)
+    #pragma omp parallel for default(none) shared(arr,n) reduction(+:res)
     for (int i = 0; i < n; ++i) {
         // all variables defined inside the loop (here sq) and also index i are private
         double sq = arr[i] * arr[i];
@@ -102,7 +102,7 @@ double mySumSq(int n, double* arr) {
 }
 ```
 
-With the `parallel` statement we ask the compiler to spawn threads. The number of threads can be set using environment variable `OMP_NUM_THREADS`, which can be anything between 1 and the number of cores on a node, e.g., `export OMP_NUM_THREADS=36`.
+With the `parallel` statement we ask the compiler to spawn threads. The number of threads can be set *during runtime* using environment variable `OMP_NUM_THREADS`, which can be anything between 1 and the number of cores on a node, e.g., `export OMP_NUM_THREADS=36`. Note, typically application do not scale that far. 
 
 The `for` construct specifies that we want to parallelise the `for` loop that immediately follows the pragma. The different iterations of the loop will be then handled by different threads.
 
