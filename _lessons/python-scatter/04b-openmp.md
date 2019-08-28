@@ -102,7 +102,7 @@ double mySumSq(int n, double* arr) {
 }
 ```
 
-With the `parallel` statement we ask the compiler to spawn threads. The number of threads can be set *during runtime* using environment variable `OMP_NUM_THREADS`, which can be anything between 1 and the number of cores on a node, e.g., `export OMP_NUM_THREADS=36`. Note, typically application do not scale that far. 
+With the `parallel` statement we ask the compiler to spawn threads. The number of threads can be set *during runtime* using environment variable `OMP_NUM_THREADS`, which can be anything between 1 and the number of cores on a node, e.g., `export OMP_NUM_THREADS=8`. Note, typically applications do not scale much further. 
 Note, most applications do not scale to the maximum number of cores on a node due to non-uniform memory bandwidth, load balancing and Amdahl's law. The latter states that the maximum speedup is limited by the ratio of parallel to serial parts of the code. As a rule of thumb, if 5 percent of the time is spent in part of the code that cannot be parallelised (that is a critical section or serial part) then the maximum parallel speedup is about 20 (=1/0.05) and there is no point in using more than 20 threads.
 
 The `for` construct specifies that we want to parallelise the `for` loop that immediately follows the pragma. The different iterations of the loop will be then handled by different threads.
