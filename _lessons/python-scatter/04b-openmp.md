@@ -21,7 +21,7 @@ cd openmp
 
 One way to speed up your application is using the available resources more efficiently. This approach was used while porting our Python code to C/C++ by removing the interpreter's overhead. Here we will improve performance by using more resources instead.
 
-Most modern computers have multi-core CPUs. All cores of a CPU can access the same, shared memory. Furthermore, all the CPUs belonging to a node also share the same memory. Given that there are 36 cores per node on Mahuika, up to 36 instructions can be executed simulateneously with OpenMP.
+Most modern computers have multi-core CPUs. All cores of a CPU can access the same, shared memory. Furthermore, all the CPUs belonging to a node also share the same memory. Given that there are 36 cores per node on Mahuika and each core can execute two threads or work loads, up to 72 instructions can potentially be executed simulateneously with OpenMP.
 
 ## What is OpenMP
 
