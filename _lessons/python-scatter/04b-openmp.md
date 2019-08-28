@@ -120,6 +120,6 @@ Variable `res` is special - it has to store the sum across all loop iterations a
 
 > * add OpenMP pragma at line indicated by `// ADD OPENMP PRAGMA HERE` in `src/wave.cpp`
 > ** Assume that function `computeScatteredWaveElement` is thread-safe
-> ** specigy parallelization and all necessary data clauses
+> ** specify which data are to be shared and which are to be private between threads
 > ** instead of using the complex `res` variable, introduce two `double res_real, res_imag` which are private and merged at the end (`reduction`)
 > * measure the speedup vs the number of threads (`OMP_NUM_THREADS` e.g. using values 1, 2, 4, and 8) using problem size `-nx 256 -ny 256 -nc 1024`
