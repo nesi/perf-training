@@ -19,9 +19,9 @@ cd openmp
 
 ## Why implement OpenMP parallelisation
 
-One way to speed up your application is using the available resources more efficiently. This approach was used while porting our Python code to C++ by removing the interpreter's overhead. Here we will improve performance by using more resources instead.
+One way to speed up your application is using the available resources more efficiently. This approach was used while porting our Python code to C/C++ by removing the interpreter's overhead. Here we will improve performance by using more resources instead.
 
-Most modern computers have multi-core CPUs and we can use two or more of these cores to execute instructions in parallel. All cores can access the same, shared memory.
+Most modern computers have multi-core CPUs. All cores of a CPU can access the same, shared memory. Furthermore, all the CPUs belonging to a node also share the same memory. Given that there are 36 cores per node on Mahuika and each core can execute two threads or work loads, up to 72 instructions can potentially be executed simulateneously with OpenMP.
 
 ## What is OpenMP
 
@@ -61,7 +61,7 @@ Use the following compiler switches:
 
 ### Directives
 
-Parallelisation with OpenMP is implemented using directives, which are written as pragmas (C/C++) or specially formatted comments (Fortran). OpenMP also provides an additional Application Program Interface (API) that allows the program to configure and query the runtime environment, e.g., to find out how many threads are running in parallel and which thread ID is running a given parallel section. For more information, have a look at the latest [OpenMP standard](https://www.openmp.org/wp-content/uploads/openmp-4.5.pdf).
+Parallelisation with OpenMP is implemented using directives, which are written as pragmas (C/C++) or specially formatted comments (Fortran). OpenMP also provides an additional Application Program Interface (API) that allows the program to configure and query the run time environment, e.g., to find out how many threads are running in parallel and which thread ID is running a given parallel section. For more information, have a look at the latest [OpenMP standard](https://www.openmp.org/wp-content/uploads/openmp-4.5.pdf).
 
 Here we focus on OpenMP directives in the source code that are interpreted by the compiler. The same source code can be used to build a serial or threaded version of the application by simply turning the OpenMP compiler switch on or off, and a non-OpenMP compiler will ignore the directives as unknown pragmas (C/C++) or as comments (Fortran).
 
@@ -92,7 +92,7 @@ As an example, we’ll assume that you have to compute the sum of the square of 
 extern "C"
 double mySumSq(int n, double* arr) {
     double res = 0;
-    #pragma omp parallel for default(none) shared(arr) reduction(+:res)
+    #pragma omp parallel for default(none) shared(arr,n) reduction(+:res)
     for (int i = 0; i < n; ++i) {
         // all variables defined inside the loop (here sq) and also index i are private
         double sq = arr[i] * arr[i];
@@ -102,7 +102,9 @@ double mySumSq(int n, double* arr) {
 }
 ```
 
-With the `parallel` statement we ask the compiler to spawn threads. The number of threads can be set using environment variable `OMP_NUM_THREADS`, which can be anything between 1 and the number of cores on a node, e.g., `export OMP_NUM_THREADS=36`.
+With the `parallel` statement we ask the compiler to spawn threads. The number of threads can be set *during run time* using the environment variable `OMP_NUM_THREADS`, which can be anything between 1 and the number of cores on a node, e.g., `export OMP_NUM_THREADS=8`. 
+
+Note, most applications do not scale to the maximum number of cores on a node due to non-uniform memory bandwidth, lack of load balancing between tasks and Amdahl's law. The latter states that the maximum speedup is limited by the ratio of parallel to serial parts of the code. As a rule of thumb, if 5 percent of the time is spent in a part of the code that cannot be parallelised (that is a critical section or serial part) then the maximum parallel speedup is about 20 (or 1/0.05). There would be little point in using more than 20 threads in this case.
 
 The `for` construct specifies that we want to parallelise the `for` loop that immediately follows the pragma. The different iterations of the loop will be then handled by different threads.
 
@@ -116,5 +118,8 @@ Variable `res` is special - it has to store the sum across all loop iterations a
 
 > ## Exercises
 
-> * add OpenMP pragma at line indicated by `// ADD OPENMP PRAGMA HERE` in `src/wave.cpp`. Assume that function `computeScatteredWaveElement` is thread-safe.
-> * measure the speedup vs the number of threads (`OMP_NUM_THREADS` values) using problem size `-nx 256 -ny 256 -nc 1024`
+> * add OpenMP pragma at line indicated by `// ADD OPENMP PRAGMA HERE` in `src/wave.cpp`
+> ** Assume that function `computeScatteredWaveElement` is thread-safe
+> ** specify which data are to be shared and which are to be private between threads
+> ** instead of using the complex `res` variable, introduce two `double res_real, res_imag` which are private and merged at the end (`reduction`)
+> * measure the speedup vs the number of threads (`OMP_NUM_THREADS` e.g. using values 1, 2, 4, and 8) using problem size `-nx 256 -ny 256 -nc 1024`
