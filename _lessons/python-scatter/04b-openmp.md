@@ -9,8 +9,9 @@ chapter: python-scatter
 
 You will:
 
-* learn how to spawn OpenMP threads in your C/C++ code
-* how to compile C/C++ code with OpenMP enabled using `setuptools`
+* learn what threads are 
+* learn how to leverage OpenMP to accelerate your C/C++ code 
+* learn to compile C/C++ code with OpenMP enabled using `setuptools`
 
 We will use the code in directory `openmp`. Start by
 ```
@@ -19,9 +20,7 @@ cd openmp
 
 ## Why implement OpenMP parallelisation
 
-One way to speed up your application is using the available resources more efficiently. This approach was used while porting our Python code to C/C++ by removing the interpreter's overhead. Here we will improve performance by using more resources instead.
-
-Most modern computers have multi-core CPUs. All cores of a CPU can access the same, shared memory. Furthermore, all the CPUs belonging to a node also share the same memory. Given that there are 36 cores per node on Mahuika and each core can execute two threads or work loads, up to 72 instructions can potentially be executed simulateneously with OpenMP.
+Most modern computers have multi-core CPUs. All cores of a CPU can access the same, shared memory. Furthermore, all the CPUs belonging to a node also share the same memory. Given that there are 36 cores and each core can execute two threads or work loads, up to 72 instructions can potentially be executed simulateneously with OpenMP on Mahuika.
 
 ## What is OpenMP
 
@@ -32,24 +31,20 @@ Note that the OpenMP standard was recently extended to enable offloading computa
 ### Pros
 
 * supported by a large range of shared memory multicore architectures (virtually all modern CPUs have several cores) and accelerators
-* the same source code can be used to compile in OpenMP and non-OpenMP mode
-* can be easier to implement than MPI parallelisation in existing code - a few lines of code may yield significant speedups
+* the same source can be used to compile OpenMP and non-OpenMP code
+* can be easier to implement than MPI parallelisation - a few lines of code may yield significant speedups
 * can be more efficient than MPI as data in memory can be shared between multiple threads
-* can be used in combination with other parallelisation methods and APIs, e.g., MPI or CUDA
 
 ### Cons
 
 * limited to the resources of a single compute node
-* spawning threads incurs a small overhead - OpenMP code using one thread runs slower than non-OpenMP code
-* it is easy to create "race conditions" where multiple threads overwrite each other's work and such errors can be difficult to debug
-* can thus be very cumbersome to implement safely in complex cases, as the entire parallel region will need to be inspected carefully for potential race conditions
-* some external libraries implement code that is not "thread-safe", which means that these library functions cannot be used by more than one thread in a parallel program - OpenMP offers ways to deal with such cases, but thread-safety always needs to be verified for each individual library function!
+* it is possible to create "race conditions" where multiple threads overwrite each other's work and such errors can be difficult to debug
+* beware of external functions that are not "thread-safe" as these functions are susceptible to race conditions
 
 ## How to use OpenMP
 
 To use OpenMP we need to
-* tell the compiler to apply OpenMP
-* add directives to the code, specifying where and what to parallelise
+* tell the compiler to spawn threads by adding directives to the code, specifying where and what to parallelise
 * set the number of threads to be used at run time
 
 ### Compiler switches
@@ -63,13 +58,13 @@ Use the following compiler switches:
 
 Parallelisation with OpenMP is implemented using directives, which are written as pragmas (C/C++) or specially formatted comments (Fortran). OpenMP also provides an additional Application Program Interface (API) that allows the program to configure and query the run time environment, e.g., to find out how many threads are running in parallel and which thread ID is running a given parallel section. For more information, have a look at the latest [OpenMP standard](https://www.openmp.org/wp-content/uploads/openmp-4.5.pdf).
 
-Here we focus on OpenMP directives in the source code that are interpreted by the compiler. The same source code can be used to build a serial or threaded version of the application by simply turning the OpenMP compiler switch on or off, and a non-OpenMP compiler will ignore the directives as unknown pragmas (C/C++) or as comments (Fortran).
+OpenMP directives in the source code are interpreted by the compiler. The same source code can be used to build a serial or threaded version of the application by simply turning the OpenMP compiler switch on or off, and a non-OpenMP compiler will ignore the directives as unknown pragmas (C/C++) or as comments (Fortran).
 
 OpenMP directives always start with:
 * C/C++: `#pragma omp`
 * Fortran (free form): `!$omp`
 
-These are followed by the _directive names_ and _clauses_, controlling parallelisation and data handling. OpenMP directives can consist of multiple statements and can be extended to multiple lines using line continuation characters such as `&` (Fortran) or `\` (C/C++) at the end of the line.
+Directives are followed by the _directive names_ and _clauses_, controlling parallelisation and data handling. OpenMP directives can consist of multiple statements and can be extended to multiple lines using line continuation characters such as `&` (Fortran) or `\` (C/C++) at the end of the line.
 
 There are various ways to distribute workloads for parallel execution, the most common being the parallel loop represented below:
 
@@ -78,7 +73,7 @@ There are various ways to distribute workloads for parallel execution, the most 
 The application always starts in serial mode on a single thread (single arrow at the top). When requested, multiple threads are created/spawned (multiple arrows at the top). In this particular case, the number of threads is 3 (coloured boxes), and each thread performs three iterations (9 iterations altogether). Results are stored in separate elements of array `a` for each loop index `i`, so we do not create a race condition when the loop is executed in parallel. The program then resumes running on a single thread (single arrow at the bottom).
 
 ### Data handling
-Because OpenMP is based on the shared memory programming model, most variables are shared by default. Other variables like loop index are meant to be private. By private we mean that the variable can take a different value for each thread. The programmer determines which variables are private and which are shared.
+Because OpenMP is based on the shared memory programming model, most variables are shared by default. Other variables like loop index are meant to be private, i.e. the variable can take a different value for each thread. The programmer determines which variables are private and which are shared.
 
 ### Example
 As an example, we’ll assume that you have to compute the sum of the square of each element of an array:
@@ -94,9 +89,8 @@ double mySumSq(int n, double* arr) {
     double res = 0;
     #pragma omp parallel for default(none) shared(arr,n) reduction(+:res)
     for (int i = 0; i < n; ++i) {
-        // all variables defined inside the loop (here sq) and also index i are private
-        double sq = arr[i] * arr[i];
-        res += sq;
+        // all variables defined inside the loop (including i) are private
+        res += arr[i] * arr[i];
     }
     return res;
 }
@@ -108,9 +102,9 @@ Note, most applications do not scale to the maximum number of cores on a node du
 
 The `for` construct specifies that we want to parallelise the `for` loop that immediately follows the pragma. The different iterations of the loop will be then handled by different threads.
 
-It is good practice to always use the `default(none)` clause, which forces us to declare the `shared` or `private` status of each variable defined _above_ the parallel region. Variables that are defined _inside_ the parallel region, such as loop index variable `i` or helper variables `sq`, are automatically private. Each thread gets its own copy of `i`, and `sq`.
+It is good practice to always use the `default(none)` clause, which forces us to declare the `shared` or `private` status of each variable defined _above_ the parallel region. Variables that are defined _inside_ the parallel region, such as loop index variable `i`, are automatically private.
 
-It is generally good practice to define local variables such as `sq` inside the loop where possible. This will make your program easier to read and maintain and you won't have to worry about creating race conditions by erroneously sharing a variable between threads. If you still need to declare, e.g., `myvariable` outside the loop, add the clause `private(myvariable)` to the OpenMP pragma.
+It is generally good practice to define local variables inside the loop where possible. This will make your program easier to read and maintain and you won't have to worry about creating race conditions by erroneously sharing a variable between threads. If you still need to declare, e.g., `myvariable` outside the loop, add the clause `private(myvariable)` to the OpenMP pragma.
 
 Loop trip count `n` and data arrays `arr` can be shared as they are not changed inside the loop. Each thread will access the same data in memory, which is very efficient.
 
@@ -118,8 +112,6 @@ Variable `res` is special - it has to store the sum across all loop iterations a
 
 > ## Exercises
 
-> * add OpenMP pragma at line indicated by `// ADD OPENMP PRAGMA HERE` in `src/wave.cpp`
-> ** Assume that function `computeScatteredWaveElement` is thread-safe
-> ** specify which data are to be shared and which are to be private between threads
-> ** instead of using the complex `res` variable, introduce two `double res_real, res_imag` which are private and merged at the end (`reduction`)
-> * measure the speedup vs the number of threads (`OMP_NUM_THREADS` e.g. using values 1, 2, 4, and 8) using problem size `-nx 256 -ny 256 -nc 1024`
+> * record the execution time for 8 threads
+> * add an OpenMP pragma at line indicated by `// ADD OPENMP PRAGMA HERE` in `src/wave.cpp` (assume function `computeScatteredWaveElement` to be thread-safe)
+> * re-run the code and report the new execution time
