@@ -11,7 +11,7 @@ You will:
 
 * learn what threads are 
 * learn how to leverage OpenMP to accelerate your C/C++ code 
-* learn to compile C/C++ code with OpenMP enabled using `setuptools`
+* learn to compile C/C++ code with OpenMP enabled 
 
 We will use the code in directory `openmp`. Start by
 ```
@@ -111,7 +111,7 @@ Loop trip count `n` and data arrays `arr` can be shared as they are not changed 
 Variable `res` is special - it has to store the sum across all loop iterations at the end of the loop, even though individual iterations are executed by different threads. So `res` needs to be private to each thread at first and store partial sums. These partial sums then need to be collected by the original thread at the end of the loop to compute a grand total, which will be stored in `res` on that thread. The `reduction(+:res)` clause makes sure that the compiler will insert all required code to accomplish this.
 
 > ## Exercises
-
-> * record the execution time for 8 threads
+> The present version is already paralised partially. 
+> * profile the execution for 8 threads and record its time
 > * add an OpenMP pragma at line indicated by `// ADD OPENMP PRAGMA HERE` in `src/wave.cpp` (assume function `computeScatteredWaveElement` to be thread-safe)
 > * re-run the code and report the new execution time
