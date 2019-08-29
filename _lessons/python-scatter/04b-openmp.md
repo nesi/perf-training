@@ -111,7 +111,7 @@ Loop trip count `n` and data arrays `arr` can be shared as they are not changed 
 Variable `res` is special - it has to store the sum across all loop iterations at the end of the loop, even though individual iterations are executed by different threads. So `res` needs to be private to each thread at first and store partial sums. These partial sums then need to be collected by the original thread at the end of the loop to compute a grand total, which will be stored in `res` on that thread. The `reduction(+:res)` clause makes sure that the compiler will insert all required code to accomplish this.
 
 > ## Exercises
-> The present version is already paralised partially. 
+> The version in this directory has been partially parallelised.
 > * profile the execution for 8 threads and record its time
 > * add an OpenMP pragma at line indicated by `// ADD OPENMP PRAGMA HERE` in `src/wave.cpp` (assume function `computeScatteredWaveElement` to be thread-safe)
 > * re-run the code and report the new execution time
