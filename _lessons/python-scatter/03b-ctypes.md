@@ -64,7 +64,7 @@ Save the above in file `mysum.cpp`.
 
 **Note**: the `extern "C"` line ensures that function "mysum" can be called from "C". Because Python is written in C, your external function must be C callable.
 
-To compile *mysum.cpp* we need to write a *setup.py* file.  Open your editor, copy-paste the lines
+To compile `mysum.cpp` we need to write a `setup.py` file.  Open your editor, copy-paste the lines
 ```python
 from setuptools import setup, Extension
 
@@ -85,8 +85,8 @@ This will compile the code and produce a shared library under `build/lib.linux-x
 
 **Notes**: 
 
- * the setup.py file must be called *setup.py*
- * a more realistic example might have *include* directories and libraries listed in *setup.py* if the C++ extension depends on external packages. 
+ * the setup.py file must be called `setup.py`
+ * a more realistic example might have `include` directories and libraries listed in `setup.py` if the C++ extension depends on external packages. 
 An example of a `setup.py` file can be found [here](https://raw.githubusercontent.com/pletzer/scatter/master/cext/setup.py). 
 
 ### Steps required to call an external function from Python
@@ -101,7 +101,7 @@ To call  `mysum` from Python we'll use the `ctypes` module. The steps are:
 
 The following table can be used to translate some common types between Python and C: 
 
-| Python                                              | C type            | Comments                                      |
+| Python                                              | C/C++ type            | Comments                                      |
 |-----------------------------------------------------|-------------------|-----------------------------------------------|
 | `None`                                              | `NULL`            |                                               |
 | `ctypes.char_p`                                     | `char*`           |                                               |
