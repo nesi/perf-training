@@ -37,7 +37,7 @@ cd cext
 
 ## Learn the basics 
 
-Let's go to our example of computing the sum of all the elements of an array. In order not to interfere with the scatter code, let's create a directory `mysum` and go to that directory:
+Let's go to our example of computing the sum of all the elements of an array. In order not to interfere with the scatter code, let's create a directory `mysum_example` and go to that directory:
 ```
 mkdir mysum_example
 cd mysum_example
@@ -62,40 +62,40 @@ long long mysum(int n, int* array) {
 ```
 Save the above in file `mysum.cpp`. 
 
-**Note**: the `extern "C"` line ensures that function "mysum" can be called from "C". Because Python is written in C, your external function must be C callable.
+**Note**: the `extern "C"` line ensures that function `mysum` can be called from "C". Because Python is written in C, your external function must be C callable.
 
 To compile `mysum.cpp` we need to write a `setup.py` file.  Open your editor, copy-paste the lines
 ```python
 from setuptools import setup, Extension
 
-# Compile mysum.cpp into a shared library 
+# Compile *mysum.cpp* into a shared library 
 setup(
     #...
     ext_modules=[Extension('mysum', ['mysum.cpp'],),],
 )
 ```
-an save in file `setup.py`. The fact that *mysum.cpp* has the .cpp extension indicates that the source file is written in C++. 
+and save in file *setup.py*. The fact that *mysum.cpp* has the .cpp extension indicates that the source file is written in C++. 
 
 Compile the code with the command:
 ```
 python setup.py build
 ```
-This will compile the code and produce a shared library under `build/lib.linux-x86_64-3.6`, something like `mysum.cpython-36m-x86_64-linux-gnu.so`. The extension .so indicates that the above is a shared library (also called dynamic-link library or shared object). The advantage of creating a shared library over a static library is that in the former the Python interpreter needs not be recompiled. The good news is that `setuptools` knows how to compile shared library so you won't have to worry about the details.
+This will compile the code and produce a shared library under `build/lib.linux-x86_64-3.6`, something like `mysum.cpython-36m-x86_64-linux-gnu.so`. The extension .so indicates that the above is a shared library (also called dynamic-link library or shared object). The advantage of creating a shared library over a static library is that in the former the Python interpreter needs not be recompiled. The good news is that `setuptools` knows how to compile shared libraries so you won't have to worry about the details.
 
 
 **Notes**: 
 
- * the setup.py file must be called `setup.py`
- * a more realistic example might have `include` directories and libraries listed in `setup.py` if the C++ extension depends on external packages. 
+ * by convention this file should be named `setup.py`
+ * a more realistic example might have `include` directories and libraries listed in *setup.py* if the C++ extension depends on external packages. 
 An example of a `setup.py` file can be found [here](https://raw.githubusercontent.com/pletzer/scatter/master/cext/setup.py). 
 
 ### Steps required to call an external function from Python
 
-To call  `mysum` from Python we'll use the `ctypes` module. The steps are:
+To call `mysum` from Python we'll use the `ctypes` module. The steps are:
 
  1. use function `CDLL` to open the shared library. `CDLL` expects the path to the shared library and returns a shared library object.
  2. tell the argument and result types of the function. The argument types are listed in members `argtypes` (a list) and `restype`, respectively. Use for instance `ctypes.c_int` for a C `int`. See table below to find out how to translate other C types to their corresponding `ctypes` objects.
- 3. call the function, casting the Python objects into ctypes objects. For instance, to pass `double` 1.2, call the function with argument `ctypes.c_double(1.2)`. The table below shows how you can cast some common C/C++ types in corresponding Python objects, which can be handed over to an external C/C++ function
+ 3. call the function, casting the Python objects into ctypes objects **if required**. The table below shows how you can cast some common C/C++ types in corresponding Python objects, which can be handed over to an external C/C++ function
 
 #### Translation table for some Python and C/C++ types
 
@@ -109,11 +109,7 @@ The following table can be used to translate some common types between Python an
 | `ctypes.c_longlong`                                 | `long long`       |                                               |
 | `ctypes.c_double`                                   | `double`          |                                               |
 | `numpy.ctypeslib.ndpointer(dtype=numpy.float64)`    | `double*`         | pass a numpy array of type numpy.float64      |
-| `ctypes.POINTER(ctypes.c_double)`                   | `double*`         | pass a pointer to a double                    |
 | `numpy.ctypeslib.ndpointer(dtype=numpy.int32)`      | `int*`            | pass a numpy array of type numpy.int32        |
-| `ctypes.POINTER(ctypes.c_int)`                      | `int*`            | pass a pointer to an int                      |
-
-Note that the corresponding Python type to `double*` could either be `numpy.ctypeslib.ndpointer(dtype=numpy.float64)` or `ctypes.POINTER(ctypes.c_double)`, depending on whether a numpy array is passed or a pointer to a double (and likewise for `int*`). Return values are often pointers, essentially an address to the value. For instance, the pointer to `double x;` would be `&x`, that is the address of `x`. To get the return value `x` from  function `foo(double &x);` you would declare on the Python side `x` to be `ctypes.c_double`, the signature of `foo` would be `ctypes.POINTER(ctypes.c_double)` and the value passed to the function would then be `ctypes.byref(x)`.
 
 
 For a complete list of C to ctypes type mapping see the Python [documentation](https://docs.python.org/3/library/ctypes.html).
@@ -159,11 +155,13 @@ print('sum of array: {}'.format(array_sum))
 
 
 > ## Exercises
-> We've created a version of `scatter.py` that builds and calls a C++ external function `src/wave.cpp`. Compile the code using `python setup.py build`. Make sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
-> * profile the code and compare the timings with the results under `original`
+> We've created a version of *scatter.py* that builds and calls a C++ external function `src/wave.cpp`. Compile the code using `python setup.py build`. Make sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
+> * run and time or profile `scatter.py`, making note of the checksum
 > * rewrite Python function `isInsideContour` defined in `scatter.py` in C++. To do so:
-   * create a new file called `is_inside_contour.cpp` under the `src` directory and write the C callable function in it. Make argument `tol` compulsory in function
+   * look into `src/is_inside_contour.cpp` to determine the interface of the function
    * add this file to the wave extension in `setup.py`
-   * compile the extension 
+   * modify `scatter.py` to define the C++ function interface
+   * modify `scatter.py` to call the C++ function
+   * re-run and time or profile `scatter.py`, making sure the checksum has not changed
 
 
