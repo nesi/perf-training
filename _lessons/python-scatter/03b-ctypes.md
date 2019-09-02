@@ -109,11 +109,7 @@ The following table can be used to translate some common types between Python an
 | `ctypes.c_longlong`                                 | `long long`       |                                               |
 | `ctypes.c_double`                                   | `double`          |                                               |
 | `numpy.ctypeslib.ndpointer(dtype=numpy.float64)`    | `double*`         | pass a numpy array of type numpy.float64      |
-| `ctypes.POINTER(ctypes.c_double)`                   | `double*`         | pass a pointer to a double                    |
 | `numpy.ctypeslib.ndpointer(dtype=numpy.int32)`      | `int*`            | pass a numpy array of type numpy.int32        |
-| `ctypes.POINTER(ctypes.c_int)`                      | `int*`            | pass a pointer to an int                      |
-
-Note that the corresponding Python type to `double*` could either be `numpy.ctypeslib.ndpointer(dtype=numpy.float64)` or `ctypes.POINTER(ctypes.c_double)`, depending on whether a numpy array is passed or a pointer to a double (and likewise for `int*`). Return values are often pointers, essentially an address to the value. For instance, the pointer to `double x;` would be `&x`, that is the address of `x`. To get the return value `x` from  function `foo(double &x);` you would declare on the Python side `x` to be `ctypes.c_double`, the signature of `foo` would be `ctypes.POINTER(ctypes.c_double)` and the value passed to the function would then be `ctypes.byref(x)`.
 
 
 For a complete list of C to ctypes type mapping see the Python [documentation](https://docs.python.org/3/library/ctypes.html).
@@ -160,7 +156,7 @@ print('sum of array: {}'.format(array_sum))
 
 > ## Exercises
 > We've created a version of `scatter.py` that builds and calls a C++ external function `src/wave.cpp`. Compile the code using `python setup.py build`. Make sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
-> * profile the code and compare the timings with the results under `original`
+> * run and time or profile `scatter.py`, making note of the checksum
 > * rewrite Python function `isInsideContour` defined in `scatter.py` in C++. To do so:
    * create a new file called `is_inside_contour.cpp` under the `src` directory and write the C callable function in it. Make argument `tol` compulsory in function
    * add this file to the wave extension in `setup.py`
