@@ -74,7 +74,7 @@ setup(
     ext_modules=[Extension('mysum', ['mysum.cpp'],),],
 )
 ```
-an save in file *setup.py*. The fact that *mysum.cpp* has the .cpp extension indicates that the source file is written in C++. 
+and save in file *setup.py*. The fact that *mysum.cpp* has the .cpp extension indicates that the source file is written in C++. 
 
 Compile the code with the command:
 ```
