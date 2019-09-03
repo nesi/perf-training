@@ -155,13 +155,12 @@ print('sum of array: {}'.format(array_sum))
 
 
 > ## Exercises
-> We've created a version of *scatter.py* that builds and calls a C++ external function `src/wave.cpp`. Compile the code using `python setup.py build`. Make sure you have the `BOOST_DIR` environment set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction))
-> * run and time or profile `scatter.py`, making note of the checksum
-> * rewrite Python function `isInsideContour` defined in `scatter.py` in C++. To do so:
-   * look into `src/is_inside_contour.cpp` to determine the interface of the function
-   * add this file to the wave extension in `setup.py`
-   * modify `scatter.py` to define the C++ function interface
-   * modify `scatter.py` to call the C++ function
-   * re-run and time or profile `scatter.py`, making sure the checksum has not changed
+> We've created a version of `scatter.py` that compute the scattered wave from a contour segment in C++. Compile the code using `python setup.py build`. (Make sure you have the `BOOST_DIR` environment variable set as described [here.](https://nesi.github.io/perf-training/python-scatter/introduction)). The code runs faster than the pure Python code under `original/`; however, there is still room for improvement. Your task will be to replace the computation in Python function `isInsideContour` defined in `scatter.py` with the C++ version implemented in `src/is_inside_contour.cpp`.
+> * run and time/profile `scatter.py`, making note of the checksum
+> * look into `src/is_inside_contour.h` to determine the interface of the function
+> * in `setup.py`, add `src/is_inside_contour.cpp` to the `wave` library extension
+> * define the C++ function interface in `scatter.py`
+> * modify `scatter.py` to call the C++ function
+> * re-run and time/profile `scatter.py`, making sure the checksum has not changed
 
 
