@@ -70,7 +70,7 @@ Note: you might have to edit `scatter.sl` and add `#SBATCH --account="myAccount"
 
 ### Complexity of the scatter code
 
-At the core of the scatter algorithm are two nested loops, over the vertical `j` and horizontal `i` grid indices. For each node point of the grid, the incident and scattered wave components are computed. The scattered component is the sum of the contributions from all line segments making up the obstacle contour. Hence, the complexity of the code is N^3 where N is the number of x and y grid points, and the number of segments.
+At the core of the scatter algorithm are two nested loops, over the vertical `j` and horizontal `i` grid indices. For each node of the grid, the incident and scattered wave components are computed. The scattered component is the sum of the contributions from all line segments making up the obstacle contour. Hence, the complexity of the code is N^3 where N is the number of x and y grid points, and the number of segments.
 
 ```python
 for j in range(ny + 1):
