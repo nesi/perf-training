@@ -72,7 +72,6 @@ Note that the vectorised version requires more memory since a temporary array wi
 ### Example 2: total sum
 
 ```python
-import numpy
 n = 10000000
 s = 0
 for i in range(n):
