@@ -63,17 +63,17 @@ The equivalent, vectorised version
 import numpy
 
 n = 10000000
-a = numpy.sin(numpy.linspace(0, n - 1, n))
+ivals = numpy.arange(0, n)
+a = numpy.sin(ivals)
 ```
-runs 20 or more times faster.
+runs 10-20 or more times faster.
 
-Note that the vectorised version requires more memory since a temporary array will need to be created to hold `numpy.linspace(0, n - 1, n)`. In general, the vectorised version may contain many more temporary arrays, so a trade-off must be made between memory usage and performance.
+Note that the vectorised version requires more memory since a temporary array (ivals) will need to be created. In general, the vectorised version may contain many more temporary arrays, so a trade-off must be made between memory usage and performance.
 
 ### Example 2: total sum
 
 ```python
-import numpy
-n = 10000000
+n = 100000000
 s = 0
 for i in range(n):
   s += i
@@ -81,10 +81,11 @@ for i in range(n):
 can be rewritten as
 ```python
 import numpy
-n = 10000000
-s = numpy.linspace(0, n-1, n).sum()
+
+n = 100000000
+s = numpy.sum(numpy.arange(0, n))
 ```
-As in the previous case, the vectorised code is more concise.
+The vectorised code is not only faster but also more more concise.
 
 ## Vectorising the scatter code
 
