@@ -46,7 +46,7 @@ When considering nested loops, start by vectorising the innermost loop, unless t
 
 On the other hand, `numpy` supports elementwise and reduction operations on arrays.
 
-Use `numpy` arrays in place of lists if you don't need the flexibility of lists. Vectorised Python code using large `numpy` arrays typically runs much faster than plain Python code with loops - as fast as C code. 
+Use `numpy` arrays in place of lists if you don't need the flexibility of lists. Vectorised Python code using large `numpy` arrays typically runs much faster than plain Python code with loops - often as fast as compiled code. 
 
 If your algorithm has high "algorithmic intensity", where many operations are done on the same piece of data, you may find that implementing loops with [numba](https://nesi.github.io/perf-training/python-scatter/numba) or [ctypes](https://nesi.github.io/perf-training/python-scatter/ctypes) can give yet better performance. These methods may use fast processor caches more efficiently, avoiding the cost of repeatedly fetching data from memory. They may also avoid temporary arrays that `numpy` sometimes creates.
 
