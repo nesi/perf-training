@@ -21,9 +21,9 @@ cd vect
 
 ## What is vectorisation
 
-Vectorisation in Python is a programming style where operations on a single piece of data, typically in a loop, are replaced by operations on entire arrays. Vectorisation can improve the performance of a code and can make the code more concise and easier to maintain.
+Vectorisation in Python is a programming style where operations on a single piece of data, typically in a loop, are replaced by operations on entire **arrays**. Vectorisation can improve the performance of a code and can make the code more concise and easier to maintain.
 
-In scripting languages, loops can be slow to execute because of the overhead of the interpreter, which may need to parse each expression, perform various input data checks and more. These overheads add up when expressions are repeated many times in a loop. Vectorisation avoids the issue by replacing the loop with a single array operation, which can significantly boost performance. 
+In scripting languages, **loops can be slow** to execute because of the overhead of the interpreter, which may need to parse each expression, perform various input data checks and more. These overheads add up when expressions are repeated many times in a loop. Vectorisation avoids the issue by replacing the loop with a single array operation. This can significantly boost performance if the array operation is implemented in a compiled language such as C. 
 
 ## Identifying code sections for vectorisation
 
@@ -37,18 +37,22 @@ Good candidates are loops where the same function is applied to each element. Re
 
 When considering nested loops, start by vectorising the innermost loop, unless the innermost loop only performs very few iterations.
 
-Array operations are available through the `numpy` Python module. `numpy` arrays in many respects behave like lists with the following caveats:
+## Use numpy for fast array operations
+
+ Array operations are available through the `numpy` Python module. `numpy` arrays behave in many respects like lists with the following restrictions:
 
  * all array elements must have the **same type** (integer, float, etc.)
  * array elements cannot be added or removed (without having to recreate the array)
 
-On the other hand, `numpy` arrays support elementwise operations.
+On the other hand, `numpy` supports elementwise and reduction operations on arrays.
 
-Vectorised Python code using large `numpy` arrays should almost always run much faster than plain Python code with loops, and it can run as fast as C code in some cases. If your algorithm has high "algorithmic intensity", where many operations are done on the same piece of data, you may find that implementing loops with Numba or a low-level language like C provides yet better performance - these methods can often use fast processor caches more efficiently, avoiding the cost of repeatedly fetching data form memory. They also avoid temporary arrays that `numpy` code sometimes requires.
+Use `numpy` arrays in place of lists if you don't need the flexibility of lists. Vectorised Python code using large `numpy` arrays typically runs much faster than plain Python code with loops - often as fast as compiled code. 
+
+If your algorithm has high "algorithmic intensity", where many operations are done on the same piece of data, you may find that implementing loops with [numba](https://nesi.github.io/perf-training/python-scatter/numba) or [ctypes](https://nesi.github.io/perf-training/python-scatter/ctypes) can give yet better performance. These methods may use fast processor caches more efficiently, avoiding the cost of repeatedly fetching data from memory. They may also avoid temporary arrays that `numpy` sometimes creates.
 
 ### Example 1: function applied to each array element
 
-Consider computing the sine function of 10 million elements and storing the result in a list
+Consider computing the sine function of 10 million elements and storing the result in an array
 ```python
 import numpy
 
@@ -72,6 +76,7 @@ Note that the vectorised version requires more memory since a temporary array (i
 
 ### Example 2: total sum
 
+
 ```python
 n = 100000000
 s = 0
@@ -85,29 +90,12 @@ import numpy
 n = 100000000
 s = numpy.sum(numpy.arange(0, n))
 ```
-The vectorised code is not only faster but also more more concise.
-
-## Vectorising the scatter code
-
-We have written a partially vectorised version of `scatter`. In `wave.py`, 
-```python
-  res = 0j
-  n = len(xc)
-  for i0 in range(n - 1):
-    #...
-    res += computeScatteredWaveElement(kvec, p0, p1, point)
-  return res
-```
-was replaced with:
-```python
-    #...
-    return numpy.sum( dsdt * (-g * gradIncident(kvec, nDotK, pmid) + \
-                              shadow * dgdn * incident(kvec, pmid)) )  
-```
-where `dsdt`, `g`, etc. are all arrays of size `n - 1` (number of segments). 
+The vectorised code is not only faster but also more concise.
 
 
 > ## Exercises
-> * profile the vectorised code and compare to the non-vectorised code
-> * in scatter.py, vectorise function `isInsideContour` by eliminating the loop computing the boolean variable `inside` and report the new timing
+> We have written a partially vectorised version of `scatter` under the `vect` directory. 
+> * profile or time the vectorised code and compare the timing to the non-vectorised code under `orig`
+> * in scatter.py, vectorise function `isInsideContour` by eliminating the loop computing the boolean variable `inside` and report the new timing. 
+    > > Hint: create array `area = a[0, :]*b[1, :] - a[1, :]*b[0, :]` and check that all elements of `area` must be strictly positive (`> 1.e-10`) for the point to be inside
  
