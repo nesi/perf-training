@@ -98,4 +98,5 @@ The vectorised code is not only faster but also more concise.
 > * profile or time the vectorised code and compare the timing to the non-vectorised code under `orig`
 > * in scatter.py, vectorise function `isInsideContour` by eliminating the loop computing the boolean variable `inside` and report the new timing. 
     > > Hint: create array `area = a[0, :]*b[1, :] - a[1, :]*b[0, :]` and check that all elements of `area` must be strictly positive (`> 1.e-10`) for the point to be inside
- 
+
+![Speedup from vectorisation over the original code](images/speedupVect.png) 
